@@ -1,0 +1,66 @@
+name: Deploy 100 TikTok MP4 to public GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'TikTok_100_Video_Thu_Thuat_Cong_Nghe.zip'
+      - '.github/workflows/deploy-media-pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify and unpack exactly 100 original MP4s
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import zipfile
+          from pathlib import Path
+          source = Path('TikTok_100_Video_Thu_Thuat_Cong_Nghe.zip')
+          if not source.is_file():
+              raise SystemExit('ZIP_MISSING: upload the 100-video ZIP to the repository root')
+          public = Path('_site')
+          public.mkdir(exist_ok=True)
+          with zipfile.ZipFile(source) as z:
+              names = z.namelist()
+              required = [f'videos/CN{i:03d}.mp4' for i in range(1,101)]
+              if any(n not in names for n in required):
+                  raise SystemExit('ZIP_MISSING_ONE_OR_MORE_OF_100_MP4')
+              manifest = json.loads(z.read('100_video_scripts.json').decode('utf-8'))
+              if not isinstance(manifest, list) or len(manifest) != 100:
+                  raise SystemExit('INVALID_100_VIDEO_MANIFEST')
+              if [m.get('id') for m in manifest] != [f'CN{i:03d}' for i in range(1,101)]:
+                  raise SystemExit('MANIFEST_ID_ORDER_MISMATCH')
+              (public / '100_video_scripts.json').write_text(json.dumps(manifest,ensure_ascii=False),encoding='utf-8')
+              for index, name in enumerate(required, 1):
+                  payload = z.read(name)
+                  if len(payload) < 40000 or b'ftyp' not in payload[:128]:
+                      raise SystemExit(f'INVALID_MP4_AT_CN{index:03d}')
+                  (public / f'CN{index:03d}.mp4').write_bytes(payload)
+          (public / '.nojekyll').write_text('')
+          (public / 'index.html').write_text('<!doctype html><meta charset="utf-8"><title>TikTok tech video media</title><p>100 public MP4 videos for Buffer</p>',encoding='utf-8')
+          print('VERIFIED_AND_EXTRACTED_100_PUBLIC_MP4')
+          PY
+      - name: Configure GitHub Pages automatically where allowed
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Publish 100 MP4 with stable URLs
+        id: deployment
+        uses: actions/deploy-pages@v4
