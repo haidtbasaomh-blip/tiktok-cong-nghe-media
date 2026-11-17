@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'TikTok_100_Video_Thu_Thuat_Cong_Nghe.zip'
+      - 'media-parts/**'
       - '.github/workflows/deploy-media-pages.yml'
   workflow_dispatch:
 permissions:
@@ -27,11 +28,18 @@ jobs:
           python3 - <<'PY'
           import json
           import os
+          import base64
           import zipfile
           from pathlib import Path
           source = Path('TikTok_100_Video_Thu_Thuat_Cong_Nghe.zip')
           if not source.is_file():
-              raise SystemExit('ZIP_MISSING: upload the 100-video ZIP to the repository root')
+              pieces = sorted(Path('media-parts').glob('part*.b64'))
+              if not pieces:
+                  raise SystemExit('MEDIA_PARTS_MISSING')
+              # Parts are ASCII slices of one complete base64 ZIP; never log content.
+              encoded = ''.join(piece.read_text(encoding='ascii') for piece in pieces)
+              source.write_bytes(base64.b64decode(encoded, validate=True))
+              print('ZIP_RECONSTRUCTED_FROM_GITHUB_BLOBS', len(pieces))
           public = Path('_site')
           public.mkdir(exist_ok=True)
           with zipfile.ZipFile(source) as z:
