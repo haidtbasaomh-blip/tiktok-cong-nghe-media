@@ -1,0 +1,51 @@
+name: Extract TikTok media to public repository (fallback delivery)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'media-parts/**'
+      - '.github/workflows/extract-media.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: tiktok-extract-public
+  cancel-in-progress: false
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Assemble original ZIP and validate 100 MP4
+        run: |
+          python3 - <<'PY'
+          import base64,json,zipfile
+          from pathlib import Path
+          parts=sorted(Path('media-parts').glob('part*.b64'))
+          if len(parts)!=26:raise SystemExit('EXPECTED_26_BASE64_PARTS')
+          packed=base64.b64decode(''.join(p.read_text() for p in parts),validate=True)
+          from io import BytesIO
+          with zipfile.ZipFile(BytesIO(packed)) as z:
+              manifest=json.loads(z.read('100_video_scripts.json'))
+              if len(manifest)!=100:raise SystemExit('EXPECTED_100_SCRIPTS')
+              out=Path('media')
+              out.mkdir(exist_ok=True)
+              (out/'100_video_scripts.json').write_text(json.dumps(manifest,ensure_ascii=False),encoding='utf-8')
+              for i in range(1,101):
+                  k=f'CN{i:03d}'
+                  blob=z.read(f'videos/{k}.mp4')
+                  if len(blob)<40000 or b'ftyp' not in blob[:128]:raise SystemExit('INVALID_MP4_'+k)
+                  (out/f'{k}.mp4').write_bytes(blob)
+          print('PUBLIC_MEDIA_READY: 100 MP4 and manifest')
+          PY
+      - name: Commit media to main for public raw HTTPS URLs
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add media
+          if git diff --cached --quiet; then echo "No media changes"; exit 0; fi
+          git commit -m "media(tiktok): publish 100 validated MP4 files for Buffer"
+          git push
