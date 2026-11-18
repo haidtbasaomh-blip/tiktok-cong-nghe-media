@@ -9,7 +9,7 @@
 """
 from __future__ import annotations
 import datetime as dt
-import hashlib, html, json, os, re, shutil, subprocess, tempfile, urllib.parse, urllib.request
+import hashlib, html, json, os, re, shutil, subprocess, tempfile, time, urllib.parse, urllib.request, urllib.error
 from pathlib import Path
 
 OUT=Path("media-editorial")
@@ -40,12 +40,25 @@ def downloaded(url, limit=MAX_DOWNLOAD):
     if urllib.parse.urlsplit(url).scheme!="https":
         raise RuntimeError("INVALID_SOURCE_NOT_HTTPS")
     req=urllib.request.Request(url,headers=UA)
-    with urllib.request.urlopen(req,timeout=55) as res:
-        if res.status!=200 or not res.geturl().startswith("https://"):
-            raise RuntimeError("SOURCE_REDIRECT_UNSAFE")
-        raw=res.read(limit+1)
-        if len(raw)>limit:raise RuntimeError("SOURCE_TOO_LARGE")
-        return raw
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(req,timeout=55) as res:
+                if res.status!=200 or not res.geturl().startswith("https://"):
+                    raise RuntimeError("SOURCE_REDIRECT_UNSAFE")
+                raw=res.read(limit+1)
+                if len(raw)>limit:raise RuntimeError("SOURCE_TOO_LARGE")
+                return raw
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (429,503) or attempt==3:
+                raise
+            try:
+                delay=int(exc.headers.get("Retry-After") or "0")
+            except (TypeError,ValueError):
+                delay=0
+            delay=max(8,min(90,delay)) if delay else (8,18,35)[attempt]
+            print("WIKIMEDIA_RATE_LIMIT_RESPECT_RETRY_AFTER",delay,"SECONDS",flush=True)
+            time.sleep(delay)
+    raise RuntimeError("SOURCE_RETRY_EXHAUSTED")
 
 def resolve_cc(title, expected):
     params={"action":"query","titles":title,"prop":"imageinfo","iiprop":"url|mime|size|extmetadata","format":"json"}
