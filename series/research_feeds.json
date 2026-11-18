@@ -1,0 +1,53 @@
+{
+  "updated_at": "2026-11-18",
+  "purpose": "Research discovery only, never republish full RSS content, never download source article images or videos.",
+  "feeds": [
+    {
+      "tag": "cong_nghe_vn",
+      "topic": "Công nghệ Việt Nam",
+      "url": "https://vnexpress.net/rss/khoa-hoc-cong-nghe.rss"
+    },
+    {
+      "tag": "thoi_su_vn",
+      "topic": "Thời sự Việt Nam",
+      "url": "https://vnexpress.net/rss/thoi-su.rss"
+    },
+    {
+      "tag": "the_gioi_vn",
+      "topic": "Thế giới",
+      "url": "https://vnexpress.net/rss/the-gioi.rss"
+    },
+    {
+      "tag": "the_thao",
+      "topic": "Thể thao",
+      "url": "https://vnexpress.net/rss/the-thao.rss"
+    },
+    {
+      "tag": "du_lich",
+      "topic": "Du lịch và Tây Bắc",
+      "url": "https://vnexpress.net/rss/du-lich.rss"
+    },
+    {
+      "tag": "doi_song",
+      "topic": "Xã hội và đời sống",
+      "url": "https://vnexpress.net/rss/doi-song.rss"
+    },
+    {
+      "tag": "the_gioi_bbc",
+      "topic": "Thời sự quốc tế",
+      "url": "https://feeds.bbci.co.uk/news/world/rss.xml"
+    },
+    {
+      "tag": "cong_nghe_bbc",
+      "topic": "Công nghệ thế giới",
+      "url": "https://feeds.bbci.co.uk/news/technology/rss.xml"
+    },
+    {
+      "tag": "khoa_hoc_nasa",
+      "topic": "Khoa học và vũ trụ",
+      "url": "https://www.nasa.gov/news-release/feed/"
+    }
+  ],
+  "hot_news_requires": "Verify the event with at least two independent primary or reputable sources; high-risk events such as fires and disasters require authoritative updates and clear dates.",
+  "publishing_rule": "Discovery is NOT editorial clearance; candidates are NOT scripts, video files or publication permission."
+}
