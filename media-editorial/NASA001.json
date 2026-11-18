@@ -2,7 +2,7 @@
   "video_id": "NASA001",
   "title": "Trái Đất qua góc nhìn Trạm Vũ trụ Quốc tế",
   "file": "media-editorial/NASA001.mp4",
-  "video_sha256": "6ab7299c0cc64f02b124db4005a159249ae1a47784327d1cee9d7e93cb26f7e6",
+  "video_sha256": "cdfbbe588e4c2745fa48c5f1d85deba7b7b93c8ccaea29d930f6642f459f6e28",
   "duration_seconds": 26.0,
   "resolution": "720x1280",
   "shots": 5,
@@ -16,7 +16,7 @@
     "dataset_url": "https://creativecommons.org/licenses/by/4.0/",
     "required_attribution": "VAIS-1000 Vietnamese Speech Synthesis Corpus (CC BY 4.0); Piper model from rhasspy/piper-voices"
   },
-  "narration_duration": 24.17,
+  "narration_duration": 24.46,
   "source_video_credits": [
     {
       "id": "iss_earth",
@@ -72,5 +72,5 @@
   "requires_human_audio_visual_rights_fact_review": true,
   "approved_for_publication": false,
   "status": "PILOT_ARCHIVED_NOT_POSTED",
-  "generated_at_utc": "2026-11-18T15:18:32.486698+00:00"
+  "generated_at_utc": "2026-11-18T15:36:46.115280+00:00"
 }
