@@ -43,6 +43,13 @@ TOPIC_PRIORITIES={
  "Thời sự quốc tế":1.4,"Thế giới":1.4,"Du lịch và Tây Bắc":1.5,
  "Thể thao":1.3,"Xã hội và đời sống":1.2
 }
+SENSITIVE_TERMS=("bốc cháy","cháy","hỏa hoạn","thiệt mạng","tử vong","tai nạn",
+                 "đánh bom","khủng bố","chiến tranh","nổ lớn","bạo lực","shooting",
+                 "deaths","killed","earthquake victims","terror attack")
+def needs_sensitive_review(row):
+    title=str(row.get("headline_reference") or "").casefold()
+    return any(token in title for token in SENSITIVE_TERMS)
+
 SAFE_ASSET_CHOICES={
  "Công nghệ":"quay màn hình/mô phỏng tự tạo hoặc hình thiết bị được phép dùng",
  "Thời sự":"đồ họa bản đồ tự dựng; chỉ dùng clip minh họa có phép và ghi rõ minh họa",
@@ -67,6 +74,8 @@ def pick_candidates(rows,limit=MAX_PER_DAY):
     for row in rows:
         if row.get("state")!="RESEARCH_ONLY_NEEDS_FACT_CHECK_AND_RIGHTS_REVIEW":
             continue
+        if needs_sensitive_review(row):
+            continue  # Can research separately, never place in routine automatic top-five.
         if not safe_https(row.get("source_url")):
             continue
         if not row.get("headline_reference") or row.get("source_url") in seen_urls:
@@ -132,6 +141,12 @@ def main():
     news=json.loads(CANDIDATES.read_text(encoding="utf8"))
     creators=json.loads(CREATORS.read_text(encoding="utf8"))
     selection=pick_candidates(news.get("items") or [])
+    sensitive_review=[{
+        "topic":row.get("topic"),
+        "headline_for_manual_review":row.get("headline_reference"),
+        "source_url":row.get("source_url"),
+        "status":"HIGH_RISK_NEWS_REQUIRES_MANUAL_EDITORIAL_FACT_CHECK"
+    } for row in (news.get("items") or []) if needs_sensitive_review(row) and safe_https(row.get("source_url"))][:10]
     if not selection:raise SystemExit("NO_VALID_FRESH_FACT_SOURCES")
     names=[item["name"] for item in creators.get("creator_examples",[]) if item.get("name")]
     if not names: names=["Original visual storytelling"]
@@ -144,6 +159,8 @@ def main():
        "source_type":"fresh_RSS_headline_metadata_only",
        "real_tiktok_or_youtube_viral_view_counts_retrieved":False,
        "no_fake_viral_stats":True,
+       "sensitive_news_separate_review":sensitive_review,
+       "high_view_video_benchmark_not_yet_automatically_measured":True,
        "examples_of_high_performing_creators_are_format_inspiration_only":True,
        "publication_authorized":False,
        "not_a_finished_video_count":True,
