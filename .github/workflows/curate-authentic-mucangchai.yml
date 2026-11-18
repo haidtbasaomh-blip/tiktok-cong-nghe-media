@@ -1,0 +1,38 @@
+name: Research genuine Mu Cang Chai photos with license evidence - no posting
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/curate_authentic_mucangchai.py
+      - .github/workflows/curate-authentic-mucangchai.yml
+permissions:
+  contents: write
+concurrency:
+  group: real-taybac-footage-curation
+  cancel-in-progress: false
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install image decoder
+        run: python3 -m pip install --user pillow
+      - name: Fetch photographic imagery only, inspect Commons license records
+        run: python3 tools/curate_authentic_mucangchai.py
+      - name: Save licensed image gallery as GitHub archive, no TikTok publication
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add series/authentic_mucangchai
+          if git diff --cached --quiet; then echo "NO_CHANGE"; exit 0; fi
+          git commit -m "assets(tiktok): research authentic Mu Cang Chai photography and per-image licensing"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then echo "AUTHENTIC_IMAGES_SAVED"; exit 0; fi
+            sleep 3
+          done
+          exit 1
