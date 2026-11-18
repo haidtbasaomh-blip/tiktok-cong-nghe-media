@@ -88,6 +88,10 @@ def main():
             issues.append("creator_footage_or_screenshot_reuse_not_cleared")
         if approval.get("independent_storyboard_pass") is not True:
             issues.append("independent_original_storyboard_not_verified")
+        if approval.get("no_disguised_unlicensed_reuse_pass") is not True:
+            issues.append("hidden_logo_watermark_or_disguised_reuse_not_cleared")
+        if approval.get("global_source_license_or_original_media_pass") is not True:
+            issues.append("global_media_usage_rights_not_verified")
         # Authentic, human-first documentary gate: real footage and genuine
         # sound matter more than cosmetic slides or simulated vlog claims.
         if approval.get("human_first_story_review_pass") is not True:
