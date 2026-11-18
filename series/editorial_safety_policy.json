@@ -85,8 +85,38 @@
       "rights_cleared",
       "caption_safe",
       "brand_safe",
-      "human_reviewed_for_high_risk_news"
-    ]
+      "human_reviewed_for_high_risk_news",
+      "authenticity_and_source_footage_review",
+      "not_unlicensed_reused_vlogger_clip",
+      "natural_audio_and_edit_review",
+      "video_is_not_mislabelled_as_firsthand_vlog"
+    ],
+    "human_first_style": {
+      "creative_goal": "Tự nhiên như vlog/phóng sự quay thật; ưu tiên hình ảnh có người, hoạt động và cảnh đời sống, không làm slideshow chữ hoặc clip AI giả thực tế.",
+      "preferred": [
+        "actual licensed camera footage",
+        "natural ambience and unobtrusive editing",
+        "original conversational narration",
+        "three or more camera framing scales",
+        "specific authentic human activity or local context"
+      ],
+      "must_label": [
+        "illustrative stock used for news events",
+        "archival footage when dates differ",
+        "synthetic realistic AI content when TikTok requires disclosure"
+      ],
+      "never_claim_firsthand_experience_without_real_recording": true,
+      "photo_montage_is_not_a_vlog": true,
+      "real_camera_video_scene_minimum_for_vlog": 4,
+      "needs_credible_audio_narration": true,
+      "prohibited_style": [
+        "full-screen text panels dominating all scenes",
+        "30 seconds of droning synthetic sine tone without voice or natural sound",
+        "pretending stock illustrations depict real breaking news",
+        "cutting other vloggers' videos without a clear reuse licence"
+      ],
+      "review_reference": "series/vlog_benchmark_2026.md"
+    }
   },
   "approval_policy": "NO video in MX queue may be published until all checks pass, QA flags are true and associated actual MP4 exists. Content drafts do not represent publishing authorization."
 }
