@@ -22,6 +22,11 @@ class DailyIdeaLabTests(unittest.TestCase):
         selected=m.pick_candidates(rows,3)
         self.assertEqual(len(selected),3)
         self.assertEqual(len({x["topic"] for x in selected}),3)
+    def test_sensitive_breaking_news_goes_to_review(self):
+        sensitive=row("Thời sự Việt Nam","emergency")
+        sensitive["headline_reference"]="Một vụ cháy đang gây chú ý"
+        self.assertTrue(m.needs_sensitive_review(sensitive))
+        self.assertEqual(m.pick_candidates([sensitive]),[])
     def test_bad_urls_rejected(self):
         rows=[row("Thể thao","1")]
         rows[0]["source_url"]="http://example.org/not-secure"
