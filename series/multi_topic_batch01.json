@@ -1,0 +1,123 @@
+{
+  "channel": "@goccongnghetienich",
+  "format": "original_video_editorial_2026",
+  "created": "2026-11-18",
+  "status": "stage_only_no_publication_until_visual_QA",
+  "rules": [
+    "Viết lại hoàn toàn bằng tiếng Việt, không sao chép nguyên văn bản tin.",
+    "Tin nóng chỉ phát hành sau khi kiểm tra thời gian và ít nhất hai nguồn đáng tin cậy độc lập.",
+    "Không dùng ảnh, video không có quyền tái sử dụng; ghi công tác giả và giấy phép khi cần.",
+    "Không ghi hình ảnh minh họa là tư liệu ghi trực tiếp sự kiện.",
+    "Không thay đổi hoặc đăng trùng 100 video công nghệ đã lên lịch."
+  ],
+  "items": [
+    {
+      "id": "MX001",
+      "pillar": "Viễn thông",
+      "title": "5G và Wi-Fi 5 GHz: ĐỪNG NHẦM!",
+      "hook": "Cùng số 5, nhưng hai công nghệ khác nhau!",
+      "facts": [
+        "5G là mạng di động thế hệ thứ năm.",
+        "Wi-Fi 5 GHz là băng tần của mạng Wi-Fi, không phải 5G.",
+        "Dùng 5G cần sóng di động và gói cước phù hợp."
+      ],
+      "close": "Bạn đang dùng 5G hay Wi-Fi?",
+      "source": "https://www.itu.int/net4/mob/ituemf/en/emfguide_m.html",
+      "image_file": "Cell Tower.png",
+      "image_license": "CC0 1.0",
+      "image_author": "Yq2Yq",
+      "image_page": "https://commons.wikimedia.org/wiki/File:Cell_Tower.png",
+      "color": "#10E4D1"
+    },
+    {
+      "id": "MX002",
+      "pillar": "Thể thao",
+      "title": "VAR có thể xem lại mọi pha bóng?",
+      "hook": "Không! VAR không thay trọng tài!",
+      "facts": [
+        "VAR chỉ hỗ trợ một số tình huống theo luật.",
+        "Trong nhiều trường hợp, trọng tài xem lại hình ảnh.",
+        "Quyết định cuối cùng vẫn thuộc trọng tài."
+      ],
+      "close": "Bạn có đồng tình với VAR?",
+      "source": "https://www.theifab.com/laws/latest/video-assistant-referee-var-protocol/",
+      "image_file": "TCSoccerField.png",
+      "image_license": "CC0 1.0",
+      "image_author": "IacobusAntonius2",
+      "image_page": "https://commons.wikimedia.org/wiki/File:TCSoccerField.png",
+      "color": "#A5FF48"
+    },
+    {
+      "id": "MX003",
+      "pillar": "Khám phá Tây Bắc",
+      "title": "Mù Cang Chải – sóng lúa trên núi",
+      "hook": "Ai đã tạo nên những dải ruộng đẹp đến vậy?",
+      "facts": [
+        "Ruộng bậc thang được tạo qua nhiều thế hệ.",
+        "Mùa nước đổ và mùa lúa chín có vẻ đẹp khác nhau.",
+        "Phong cảnh gắn với đời sống cộng đồng vùng cao."
+      ],
+      "close": "Bạn muốn khám phá Tây Bắc ở đâu tiếp?",
+      "source": "https://govietnam.travel/destination/mu-cang-chai-rice-terraces/",
+      "image_file": "Mu Cang Chai 02.JPG",
+      "image_license": "Public Domain",
+      "image_author": "Gió Đông",
+      "image_page": "https://commons.wikimedia.org/wiki/File:Mu_Cang_Chai_02.JPG",
+      "color": "#FFD150"
+    },
+    {
+      "id": "MX004",
+      "pillar": "Ẩm thực",
+      "title": "Bún chả Hà Nội có gì cuốn hút?",
+      "hook": "Một món ăn khiến du khách nhớ Hà Nội!",
+      "facts": [
+        "Thịt nướng được ăn kèm bún và rau thơm.",
+        "Nước chấm tạo điểm nhấn cho món ăn.",
+        "Vị khói nướng và rau tươi tạo sự cân bằng."
+      ],
+      "close": "Bạn thích bún chả hay phở hơn?",
+      "source": "https://vietnam.travel/things-to-do/recipes-from-vietnam/",
+      "image_file": "Bun cha Hanoi.jpg",
+      "image_license": "CC BY-SA 4.0",
+      "image_author": "Weetjesman",
+      "image_page": "https://commons.wikimedia.org/wiki/File:Bun_cha_Hanoi.jpg",
+      "color": "#FF9E56"
+    },
+    {
+      "id": "MX005",
+      "pillar": "Đời sống xã hội",
+      "title": "Tin giật gân: kiểm tra trước khi chia sẻ!",
+      "hook": "Đừng để một tiêu đề khiến bạn mắc bẫy!",
+      "facts": [
+        "Đọc kỹ ngày đăng và tên nguồn tin.",
+        "Kiểm tra tên miền, ảnh và thông tin gốc.",
+        "Tìm nguồn thứ hai trước khi chia sẻ."
+      ],
+      "close": "Lưu lại để tránh tin giả nhé!",
+      "source": "https://spdv.mic.gov.vn/phong-chong-tin-tuc-gia-mao-trach-nhiem-cua-moi-cu-dan-mang-197120109.htm",
+      "image_file": null,
+      "image_license": "Original motion graphics",
+      "image_author": "Góc Công Nghệ Tiện Ích",
+      "image_page": null,
+      "color": "#FE548F"
+    },
+    {
+      "id": "MX006",
+      "pillar": "Du lịch Việt Nam",
+      "title": "Sa Pa: khám phá không chỉ là săn mây",
+      "hook": "Tây Bắc còn rất nhiều điều đáng xem!",
+      "facts": [
+        "Sa Pa có cảnh quan núi và thung lũng đặc trưng.",
+        "Khám phá bản làng nên tôn trọng văn hóa địa phương.",
+        "Chuẩn bị trang phục và dự báo thời tiết trước chuyến đi."
+      ],
+      "close": "Bạn thích núi rừng hay biển xanh?",
+      "source": "https://vietnam.travel/",
+      "image_file": "Sa-pa-3006284.jpg",
+      "image_license": "CC0 1.0",
+      "image_author": "Quangpraha",
+      "image_page": "https://commons.wikimedia.org/wiki/File:Sa-pa-3006284.jpg",
+      "color": "#60CFFF"
+    }
+  ]
+}
