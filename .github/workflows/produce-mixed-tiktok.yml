@@ -1,0 +1,107 @@
+name: Produce and archive six mixed-topic TikTok MP4 videos
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/render_mixed_videos.py
+      - .github/workflows/produce-mixed-tiktok.yml
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: archive-mixed-tiktok-batch01
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        id: [MX001, MX002, MX003, MX004, MX005, MX006]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Pillow, portable FFmpeg and image support
+        run: python3 -m pip install --user pillow imageio-ffmpeg
+      - name: Render 30s 720x1280 vertical video with visual attribution
+        env:
+          VIDEO_ID: ${{ matrix.id }}
+        run: |
+          python3 - <<'PY'
+          import imageio_ffmpeg, os
+          print("FFMPEG_BINARY_READY:",imageio_ffmpeg.get_ffmpeg_exe())
+          with open(os.environ["GITHUB_ENV"],"a") as f:
+              f.write("FFMPEG_BIN="+imageio_ffmpeg.get_ffmpeg_exe()+"\n")
+          PY
+          python3 tools/render_mixed_videos.py --id "$VIDEO_ID"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mixed-tiktok-${{ matrix.id }}
+          path: media-mixed/MX*.mp4
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mixed-meta-${{ matrix.id }}
+          path: media-mixed/MX*.json
+          if-no-files-found: error
+          retention-days: 7
+  archive:
+    needs: render
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Collect MP4 and rights metadata into separate archive folder
+        uses: actions/download-artifact@v4
+        with:
+          pattern: mixed-*
+          path: media-mixed
+          merge-multiple: true
+      - name: Check exactly six playable videos and six license manifests
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          folder=Path("media-mixed")
+          ids=[f"MX{i:03d}" for i in range(1,7)]
+          expected={i+".mp4" for i in ids}|{i+".json" for i in ids}
+          actual={p.name for p in folder.iterdir() if p.is_file()}
+          if actual!=expected:
+              raise SystemExit("EXPECTED_6_MP4_AND_6_METADATA; FOUND:"+str(sorted(actual)))
+          for vid in ids:
+              video=folder/(vid+".mp4")
+              record=json.loads((folder/(vid+".json")).read_text(encoding="utf-8"))
+              if record.get("sha256")!=hashlib.sha256(video.read_bytes()).hexdigest():
+                  raise SystemExit("SHA256_MISMATCH_"+vid)
+              if record.get("publication_status")!="ARCHIVED_NOT_PUBLISHED":
+                  raise SystemExit("MUST_NOT_AUTOPUBLISH_"+vid)
+              if video.stat().st_size<100000:raise SystemExit("MP4_TOO_SMALL_"+vid)
+              print("ARCHIVE_VERIFIED:",vid,"SIZE",video.stat().st_size)
+          print("ALL_SIX_MIXED_VIDEO_ASSETS_VERIFIED")
+          PY
+      - name: Store finished files in persistent public GitHub media archive
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add media-mixed/MX*.mp4 media-mixed/MX*.json
+          if git diff --cached --quiet; then
+            echo "ALREADY_ARCHIVED"
+            exit 0
+          fi
+          git commit -m "media(tiktok): archive 6 original mixed-topic MP4 videos and rights"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "SIX_MIXED_MP4_ARCHIVED"
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
