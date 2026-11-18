@@ -1,0 +1,25 @@
+name: Research alternate NASA genuine videos from NASA Image Library - no posting
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/discover_nasa_library_video.py
+      - .github/workflows/discover-nasa-library-video.yml
+permissions:
+  contents: read
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Query public NASA Library video metadata with no API secret
+        run: python3 tools/discover_nasa_library_video.py
+      - name: Save metadata (not an authorized download or post)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-nasa-video-candidates
+          path: series/nasa_video_candidates.json
+          if-no-files-found: warn
+          retention-days: 14
