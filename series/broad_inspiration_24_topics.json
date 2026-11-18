@@ -1,0 +1,269 @@
+{
+  "channel": "@goccongnghetienich",
+  "updated_at": "2026-11-18",
+  "scope": "BROAD_VIDEO_IDEA_RESEARCH_NOT_LIMITED_TO_VLOGS",
+  "status": "IDEAS_ONLY_NOT_RENDERED_NOT_QUEUED",
+  "research_platforms": [
+    {
+      "name": "TikTok Creative Center VN",
+      "url": "https://ads.tiktok.com/creative/creativeCenter/trends?region=VN",
+      "role": "trend and format reference only"
+    },
+    {
+      "name": "YouTube trends VN",
+      "url": "https://vidiq.com/youtube-trends/vn/",
+      "role": "broad category and topic reference only"
+    }
+  ],
+  "selection_rules": [
+    "Learn topic angles and pacing only; never download, screenshot, sample frames or extract audio from creators' videos for a new upload.",
+    "Create an independently written script and storyboard; do not restage another creator's distinctive expression shot for shot.",
+    "Use owner-shot footage, original animation/screen recordings, or separately verified and licensed stock media.",
+    "If photos/footage come from licensed stock, record the original asset URL, author, full license terms and credit obligations; do not claim it was filmed firsthand.",
+    "Do not describe ideas as confirmed recent facts without dated primary source verification; sensitive breaking news requires independent corroboration.",
+    "Store inspiration and licensed source evidence separately. A source video is never a publication asset merely because it is trending.",
+    "Never automatically promote a research idea into the Buffer/TikTok queue."
+  ],
+  "ideas": [
+    {
+      "id": "TN01",
+      "topic": "Thời sự Việt Nam",
+      "title": "Tin đáng chú ý trong 30 giây",
+      "angle": "Chọn 1 sự kiện đã được xác nhận, trả lời chuyện gì, xảy ra ở đâu, ảnh hưởng thế nào",
+      "original_visual_plan": "Bản đồ/đồ họa tự dựng, nếu sử dụng tư liệu phải có quyền và ghi rõ minh họa",
+      "production_method": "official_news_verified",
+      "verification": "factcheck_2_sources",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "TN02",
+      "topic": "Thời sự thế giới",
+      "title": "Bản tin quốc tế dễ hiểu",
+      "angle": "Tóm tắt 1 vấn đề đang được chú ý, giải thích bối cảnh bằng lời kể riêng",
+      "original_visual_plan": "Bản đồ tự dựng và biểu đồ, không reup clip thời sự",
+      "production_method": "original_graphics",
+      "verification": "factcheck_2_sources",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "CG01",
+      "topic": "Công nghệ",
+      "title": "Mẹo dùng điện thoại ít ai biết",
+      "angle": "Trình diễn tính năng trên máy và giao diện tự quay/ghi hình hợp lệ",
+      "original_visual_plan": "Quay màn hình thiết bị tự sở hữu, che dữ liệu cá nhân",
+      "production_method": "original_screenrecord",
+      "verification": "evergreen",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "CG02",
+      "topic": "Công nghệ",
+      "title": "Thử nghiệm công nghệ thực tế",
+      "angle": "Đưa ra câu hỏi và kết luận dựa trên phép thử có thể tự thực hiện",
+      "original_visual_plan": "Quay tay thao tác/thiết bị của mình, không lấy video review khác",
+      "production_method": "self_filmed",
+      "verification": "evergreen",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "VT01",
+      "topic": "Viễn thông",
+      "title": "5G có thật sự nhanh hơn Wi-Fi?",
+      "angle": "Phân biệt mạng di động, mạng Wi-Fi và điều kiện dùng thực tế",
+      "original_visual_plan": "Đồ họa/đo tốc độ do người làm thực hiện, không mượn ảnh người khác",
+      "production_method": "original_demo",
+      "verification": "factcheck",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "KH01",
+      "topic": "Khoa học",
+      "title": "Một thí nghiệm vật lý ai cũng hiểu",
+      "angle": "Chỉ dẫn thí nghiệm an toàn và giải thích nguyên lý",
+      "original_visual_plan": "Đồ họa chuyển động tự tạo hoặc footage được cấp phép",
+      "production_method": "original_animation",
+      "verification": "safety_review",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "KH02",
+      "topic": "Vũ trụ",
+      "title": "Một phát hiện thiên văn mới",
+      "angle": "Trình bày điều phát hiện, điều chưa rõ và nguồn công bố",
+      "original_visual_plan": "Ảnh NASA/ESA chỉ nếu được phép theo điều kiện từng tài sản; ghi nguồn",
+      "production_method": "licensed_educational_media",
+      "verification": "factcheck_primary",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "DV01",
+      "topic": "Động vật",
+      "title": "Một hành vi thú vị của động vật",
+      "angle": "Kể chuyện dựa trên tập tính đã kiểm chứng, không nhân hóa sai",
+      "original_visual_plan": "Footage động vật có quyền sử dụng; âm môi trường thật",
+      "production_method": "licensed_stock_camera",
+      "verification": "evergreen",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "TN03",
+      "topic": "Thiên nhiên",
+      "title": "Cảnh đẹp lạ ở Việt Nam",
+      "angle": "Nêu vị trí, mùa phù hợp, điều thú vị về cảnh quan",
+      "original_visual_plan": "Cảnh quay thực do chủ sở hữu đồng ý/stock được cấp phép",
+      "production_method": "licensed_stock_camera",
+      "verification": "location_check",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "DL01",
+      "topic": "Du lịch Tây Bắc",
+      "title": "Khau Phạ từ trên cao",
+      "angle": "Kể câu chuyện đường đèo, cảnh quan và trải nghiệm đáng chú ý",
+      "original_visual_plan": "Cảnh quay thực đủ giấy phép; tuyệt đối không giả vờ tự có mặt",
+      "production_method": "licensed_stock_camera",
+      "verification": "location_check",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "DL02",
+      "topic": "Du lịch Việt Nam",
+      "title": "48 giờ ở một vùng đất",
+      "angle": "Mô hình itinerary gợi ý, nêu rõ hình minh họa nếu dùng tư liệu stock",
+      "original_visual_plan": "Bản đồ riêng, cảnh quay thực được cấp phép, không lấy vlog khác",
+      "production_method": "original_map_plus_licensed_media",
+      "verification": "location_check",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "AU01",
+      "topic": "Ẩm thực",
+      "title": "Món ăn một phút",
+      "angle": "Giới thiệu nguyên liệu, công đoạn và thành phẩm dưới góc nhìn riêng",
+      "original_visual_plan": "Quay tay nấu thật hoặc xin footage từ tác giả có quyền",
+      "production_method": "self_filmed_or_permission",
+      "verification": "recipe_check",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "AU02",
+      "topic": "Ẩm thực",
+      "title": "Vì sao một món ăn nổi tiếng?",
+      "angle": "Kể câu chuyện văn hóa và hương vị, không khẳng định sai nguồn gốc",
+      "original_visual_plan": "Minh họa hợp pháp từ hình/clip nấu ăn gốc hoặc đã cấp phép",
+      "production_method": "original_plus_licensed",
+      "verification": "cultural_factcheck",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "DS01",
+      "topic": "Đời sống",
+      "title": "Mẹo sống thông minh",
+      "angle": "Giải quyết tình huống thường gặp bằng minh họa dễ hiểu",
+      "original_visual_plan": "Quay thao tác thật, tránh cảnh cắt từ video mẹo viral khác",
+      "production_method": "self_filmed",
+      "verification": "safety_review",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "DS02",
+      "topic": "Câu chuyện xã hội",
+      "title": "Một chuyện tử tế đáng suy ngẫm",
+      "angle": "Tường thuật câu chuyện xác minh được, không chiếm dụng hình ảnh người thật",
+      "original_visual_plan": "Sơ đồ/tranh gốc; chỉ dùng ảnh cá nhân nếu đồng ý",
+      "production_method": "original_graphics",
+      "verification": "privacy_and_factcheck",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "TT01",
+      "topic": "Thể thao",
+      "title": "Một luật bóng đá hay bị hiểu sai",
+      "angle": "Giải thích tình huống bằng sơ đồ chuyển động tự tạo",
+      "original_visual_plan": "Sân bóng/hình cầu thủ minh họa tự dựng, không dùng bản quyền truyền hình",
+      "production_method": "original_animation",
+      "verification": "rules_primary_source",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "TT02",
+      "topic": "Thể thao",
+      "title": "Bài tập thể lực phù hợp người mới",
+      "angle": "Hướng dẫn động tác cơ bản có lưu ý an toàn",
+      "original_visual_plan": "Quay người hướng dẫn tự nguyện/có giấy phép, không lấy clip vận động viên",
+      "production_method": "self_filmed_or_permission",
+      "verification": "safety_review",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "NT01",
+      "topic": "Nghệ thuật",
+      "title": "Từ phác thảo đến tác phẩm",
+      "angle": "Quan sát quy trình sáng tác và lựa chọn chất liệu",
+      "original_visual_plan": "Tác giả tự quay tác phẩm của mình, hoặc hợp tác có văn bản cho phép",
+      "production_method": "self_filmed_or_permission",
+      "verification": "artist_rights",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "AN01",
+      "topic": "Âm nhạc",
+      "title": "Nhạc cụ phát ra âm thanh thế nào?",
+      "angle": "Giải thích nguyên lý và kỹ thuật đơn giản, không phát lại ca khúc có bản quyền",
+      "original_visual_plan": "Tự thu âm nhạc cụ hoặc dùng âm thanh được cấp phép thương mại",
+      "production_method": "self_recorded_audio",
+      "verification": "music_clearance",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "LC01",
+      "topic": "Làng nghề",
+      "title": "Một nghề thủ công truyền thống",
+      "angle": "Kể 3 bước làm sản phẩm và giá trị lao động địa phương",
+      "original_visual_plan": "Cảnh quay được tác giả và người được quay đồng ý",
+      "production_method": "permission_based_camera",
+      "verification": "privacy_and_location",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "OT01",
+      "topic": "Ô tô, xe cộ",
+      "title": "Công nghệ trên xe có gì đáng chú ý?",
+      "angle": "Giải thích công nghệ, tránh giật tít xe bay khi chưa có chứng cứ",
+      "original_visual_plan": "Đồ họa cắt lớp gốc + hình sản phẩm theo quyền sử dụng",
+      "production_method": "original_animation",
+      "verification": "manufacturer_factcheck",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "MT01",
+      "topic": "Môi trường",
+      "title": "Một hành động nhỏ giúp giảm rác thải",
+      "angle": "Thực hiện thử một thay đổi và giải thích tác dụng hợp lý",
+      "original_visual_plan": "Thao tác tự quay, số liệu có nguồn",
+      "production_method": "self_filmed",
+      "verification": "factcheck",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "NN01",
+      "topic": "Nông nghiệp",
+      "title": "Cánh đồng và mùa vụ Việt Nam",
+      "angle": "Giới thiệu một kỹ thuật sản xuất và hoàn cảnh địa phương",
+      "original_visual_plan": "Cảnh quay thực có giấy phép, không lấy vlog nông dân khác",
+      "production_method": "licensed_stock_camera",
+      "verification": "location_check",
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "KT01",
+      "topic": "Kiến trúc, di sản",
+      "title": "Bí mật sau một công trình",
+      "angle": "Giải thích chi tiết kiến trúc đã xác minh, ghi nguồn di sản",
+      "original_visual_plan": "Hình quay công trình được phép + sơ đồ đồ họa riêng",
+      "production_method": "licensed_plus_original",
+      "verification": "historical_factcheck",
+      "status": "IDEA_ONLY"
+    }
+  ]
+}
