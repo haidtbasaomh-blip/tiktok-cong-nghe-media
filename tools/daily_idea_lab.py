@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Daily original TikTok concept lab from fresh cross-topic news metadata.
+"""Daily original TikTok concept lab for up to 25 distinct source-backed candidates from fresh cross-topic news metadata.
 
 This only writes a RESEARCH artifact. It never downloads creators' footage,
 claims verified TikTok/YouTube view counts, fabricates facts, edits videos,
@@ -19,7 +19,7 @@ CANDIDATES=ROOT/"research_candidates.json"
 CREATORS=ROOT/"global_tiktok_youtube_creator_inspiration.json"
 OUT=ROOT/"daily_ideas_latest.json"
 REPORT=ROOT/"daily_ideas_latest.md"
-MAX_PER_DAY=5
+MAX_PER_DAY=25
 SAFE_FORMATS=[
     {"id":"question_experiment","name":"Câu hỏi – ví dụ tự dựng – kết luận",
      "opening":"Điều gì khiến chuyện này đáng chú ý?",
