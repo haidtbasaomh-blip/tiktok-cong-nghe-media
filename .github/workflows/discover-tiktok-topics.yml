@@ -6,6 +6,9 @@ on:
   push:
     paths:
       - tools/discover_topics.py
+      - tools/daily_idea_lab.py
+      - tests/test_daily_idea_lab.py
+      - series/global_tiktok_youtube_creator_inspiration.json
       - series/research_feeds.json
       - .github/workflows/discover-tiktok-topics.yml
 permissions:
@@ -18,11 +21,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Collect RSS headlines, timestamps and source links only
         run: python3 tools/discover_topics.py
+      - name: Check that the creator-inspired lab does not publish or fabricate view counts
+        run: python3 -m unittest discover -s tests -p test_daily_idea_lab.py -v
+      - name: Propose five different video ideas, each needing fact and rights verification
+        run: python3 tools/daily_idea_lab.py
       - name: Save research candidates as an internal QA artifact, NOT a post
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: mixed-topics-research
-          path: series/research_candidates.json
-          retention-days: 7
+          path: |
+            series/research_candidates.json
+            series/daily_ideas_latest.json
+            series/daily_ideas_latest.md
+          retention-days: 21
           if-no-files-found: warn
