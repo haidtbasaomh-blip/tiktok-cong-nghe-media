@@ -1,0 +1,33 @@
+name: TikTok mixed-content editorial preflight (read-only)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - series/editorial_safety_policy.json
+      - series/multi_topic_batch01.json
+      - series/rights_verified_footage.json
+      - series/approved_publications.json
+      - tools/verify_mixed_preflight.py
+      - .github/workflows/verify-tiktok-mixed.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg probe
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - name: Perform fail-closed rights, publication, and visual preflight
+        run: python3 tools/verify_mixed_preflight.py
+      - name: Save report without publishing anything
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mixed-video-editorial-preflight
+          path: series/editorial_qa_latest.json
+          if-no-files-found: warn
+          retention-days: 30
