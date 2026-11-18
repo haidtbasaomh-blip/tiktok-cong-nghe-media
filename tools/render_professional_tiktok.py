@@ -166,7 +166,7 @@ def main():
     for item in items[args.start-1:args.end]:
         if len(item.get("steps",[]))!=3:
             raise ValueError("Expected 3 steps in "+item["id"])
-        render(item,Path("media")/(item["id"]+".mp4"))
+        render(item,Path("media-pro")/(item["id"]+".mp4"))
     print("BATCH_RENDERED",args.start,args.end,flush=True)
 
 if __name__=="__main__":
