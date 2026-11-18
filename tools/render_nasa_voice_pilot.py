@@ -10,6 +10,7 @@ import hashlib
 import json
 import math
 import subprocess
+import ssl
 import tempfile
 import urllib.request
 import urllib.error
@@ -45,15 +46,29 @@ def download_video(item,dest):
     if not url.startswith("https://svs.gsfc.nasa.gov/vis/"):
         raise ValueError("UNAPPROVED_SOURCE_DOMAIN")
     request=urllib.request.Request(url,headers={"User-Agent":"GocCongNgheTienIch/1.0 source-licensed educational film"})
-    with urllib.request.urlopen(request,timeout=60) as reply:
-        if reply.status!=200 or not reply.geturl().startswith("https://svs.gsfc.nasa.gov/"):
-            raise RuntimeError("NASA_SOURCE_REDIRECT_FAILED")
-        raw=reply.read(27_000_000)
-    if not 300_000 < len(raw) < 27_000_000:
-        raise RuntimeError("NASA_CLIP_INVALID_OR_TOO_LARGE")
-    if raw[:4] != bytes.fromhex("1a45dfa3"):
-        raise RuntimeError("NOT_VALID_WEBM_CONTAINER")
-    dest.write_bytes(raw)
+    import certifi
+    try:
+        trusted=ssl.create_default_context(cafile=certifi.where())
+        with urllib.request.urlopen(request,timeout=60,context=trusted) as reply:
+            if reply.status!=200 or not reply.geturl().startswith("https://svs.gsfc.nasa.gov/"):
+                raise RuntimeError("NASA_SOURCE_REDIRECT_FAILED")
+            raw=reply.read(27_000_000)
+        if not 300_000 < len(raw) < 27_000_000:
+            raise RuntimeError("NASA_CLIP_INVALID_OR_TOO_LARGE")
+        dest.write_bytes(raw)
+    except (urllib.error.URLError,ssl.SSLError) as exc:
+        print("TRY_VERIFIED_OS_CA_CURL_FALLBACK",type(exc).__name__,flush=True)
+        # Curl uses OS-trusted CA store; it does NOT disable TLS verification.
+        shell(["curl","--fail","--location","--silent","--show-error",
+               "--proto","=https","--proto-redir","=https",
+               "--connect-timeout","25","--max-time","120",
+               "--max-filesize","27000000",
+               "--output",str(dest),url],capture_output=True,text=True)
+    if not dest.is_file() or not 300_000 < dest.stat().st_size < 27_000_000:
+        raise RuntimeError("NASA_CLIP_MISSING_OR_TOO_LARGE")
+    with dest.open("rb") as stream:
+        if stream.read(4)!=bytes.fromhex("1a45dfa3"):
+            raise RuntimeError("NOT_VALID_WEBM_CONTAINER")
     p=probe(dest)
     if p["width"]<640 or p["height"]<360 or p["seconds"]<15:
         raise RuntimeError("NASA_CLIP_TOO_SHORT_OR_LOW_QUALITY")
