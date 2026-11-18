@@ -10,7 +10,7 @@ OUT=Path("series/nasa_video_candidates.json")
 def request(url):
     r=urllib.request.Request(url,headers=UA)
     with urllib.request.urlopen(r,timeout=22) as res:
-        if not res.geturl().startswith("https://images-api.nasa.gov/"):
+        if not (res.geturl().startswith("https://images-api.nasa.gov/") or res.geturl().startswith("https://images-assets.nasa.gov/")):
             raise RuntimeError("UNTRUSTED_NASA_REDIRECT")
         return json.load(res)
 
@@ -29,7 +29,8 @@ def main():
             info=(item.get("data") or [{}])[0]
             id=str(info.get("nasa_id") or "")
             href=str(item.get("href") or "")
-            if not id or not href.startswith("https://images-api.nasa.gov/"):
+            if not id or not (href.startswith("https://images-api.nasa.gov/") or href.startswith("https://images-assets.nasa.gov/")):
+                print("NASA_ASSET_INDEX_URL_NOT_ALLOWED",id,href[:140],flush=True)
                 continue
             try:
                 assets=request(href)
