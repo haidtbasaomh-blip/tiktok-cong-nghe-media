@@ -30,8 +30,11 @@ jobs:
           - {start: 92, end: 100}
     steps:
       - uses: actions/checkout@v4
-      - name: Install Pillow
-        run: python3 -m pip install --user pillow
+      - name: Install video rendering dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python3 -m pip install --user pillow
       - name: Render original safe-zone MP4 (720x1280, 30 fps)
         run: python3 tools/render_professional_tiktok.py --start ${{ matrix.start }} --end ${{ matrix.end }}
       - name: Upload individually verified MP4 files
