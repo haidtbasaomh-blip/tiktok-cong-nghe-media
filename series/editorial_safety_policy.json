@@ -68,12 +68,14 @@
       "avoid_repeat_near_duplicate_content": true
     },
     "posting": {
-      "max_daily_posts": 2,
+      "max_daily_posts": 3,
       "queue_reserve": 2,
       "one_publisher": "Buffer",
       "manual_review_gate_for_new_mixed_content": true,
       "zero_autopublish_on_push": true,
-      "never_duplicate_already_posted": true
+      "never_duplicate_already_posted": true,
+      "hard_max_daily_posts": 5,
+      "scaling_policy": "Start at 3/day across all formats. Consider 5/day only after at least 7 days of live public-post and account-quality checks; never 25/day automatically. No quality guarantee from frequency alone."
     },
     "checklists": [
       "video_qa_ok",
