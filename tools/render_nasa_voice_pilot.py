@@ -137,7 +137,7 @@ def make_scene(source, dest, textfile, seconds, offset):
            "-c:v","libx264","-preset","veryfast","-crf","24",
            "-r","25","-movflags","+faststart",str(dest)])
     print("NARRATED_PILOT_SCENE",dest.name,"BYTES",dest.stat().st_size,flush=True)
-    if dest.stat().st_size<15000:raise RuntimeError("RENDERED_SCENE_TOO_SMALL")
+    if dest.stat().st_size<60000:raise RuntimeError("RENDERED_SCENE_LOW_MOTION_OR_TOO_DARK")
 
 def main():
     data=json.loads(PILOT.read_text(encoding="utf8"))
@@ -159,7 +159,8 @@ def main():
         if not 24<=duration<=40:
             raise RuntimeError("NARRATION_TIMING_NEEDS_EDITING:"+str(duration))
         segments=[]
-        original_shots=[("iss_earth",0),("iss_other",8),("iss_earth",15),
+        # Skip the dark lead-in so the opening has an immediate visual hook.
+        original_shots=[("iss_earth",12),("iss_other",8),("iss_earth",23),
                         ("iss_other",22),("iss_earth",32)]
         per_scene=duration/5
         for i,(clip_id,offset) in enumerate(original_shots):
