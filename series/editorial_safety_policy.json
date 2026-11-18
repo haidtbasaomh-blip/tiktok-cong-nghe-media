@@ -1,0 +1,90 @@
+{
+  "channel": "@goccongnghetienich",
+  "updated_at": "2026-11-18",
+  "status": "editorial_review_gate_enforced_for_mixed_topics",
+  "notes": "This policy is for new mixed-topic videos (MX codes). It does not alter the existing CN001-CN100 Buffer scheduling workflow.",
+  "topics": [
+    "Công nghệ VN & thế giới",
+    "Viễn thông / mạng",
+    "Đời sống / xã hội",
+    "Thời sự VN & thế giới",
+    "Thể thao",
+    "Du lịch / Tây Bắc",
+    "Ẩm thực / văn hóa",
+    "Khoa học / khám phá"
+  ],
+  "editorial": {
+    "target_seconds": [
+      24,
+      35
+    ],
+    "visual_principles": [
+      "Visual B-roll or original animated demonstrations matching the topic",
+      "First 2 seconds: vivid visual hook; large readable text",
+      "No full-screen static slides or prolonged text-only scenes",
+      "Narration and movement or sound design; no unlicensed music",
+      "All important text in safe zone (no lower caption strip or right-side controls)"
+    ],
+    "freshness": {
+      "breaking_max_hours": 48,
+      "breaking_min_independent_sources": 2,
+      "never_say_latest_without_dates": true,
+      "never_present_unverified_as_confirmed": true
+    },
+    "accuracy": [
+      "Time-zone aware event dates",
+      "Clearly label archival or illustrative media",
+      "No synthetic reenactments misleadingly passed off as footage",
+      "No speculation about victims or identities in accidents"
+    ],
+    "licensing": {
+      "required_per_asset": [
+        "origin_url",
+        "license_url",
+        "creator",
+        "license_type",
+        "evidence_checked_at",
+        "sha256"
+      ],
+      "allowed": [
+        "self_created",
+        "CC0_verified",
+        "CC_BY_with_attribution",
+        "commercial_stock_verified"
+      ],
+      "denied": [
+        "unknown_ownership",
+        "reuploaded_news_footage",
+        "watermarked",
+        "downloaded_tiktok_without_permission"
+      ],
+      "audio_require_license": true
+    },
+    "safety": {
+      "hate_violence_disinformation_ban": true,
+      "privacy_doxxing_ban": true,
+      "no_misleading_thumbnails": true,
+      "no_exaggerated_deaths": true,
+      "avoid_repeat_near_duplicate_content": true
+    },
+    "posting": {
+      "max_daily_posts": 2,
+      "queue_reserve": 2,
+      "one_publisher": "Buffer",
+      "manual_review_gate_for_new_mixed_content": true,
+      "zero_autopublish_on_push": true,
+      "never_duplicate_already_posted": true
+    },
+    "checklists": [
+      "video_qa_ok",
+      "duration_qa_ok",
+      "original_script_ok",
+      "sources_checked",
+      "rights_cleared",
+      "caption_safe",
+      "brand_safe",
+      "human_reviewed_for_high_risk_news"
+    ]
+  },
+  "approval_policy": "NO video in MX queue may be published until all checks pass, QA flags are true and associated actual MP4 exists. Content drafts do not represent publishing authorization."
+}
