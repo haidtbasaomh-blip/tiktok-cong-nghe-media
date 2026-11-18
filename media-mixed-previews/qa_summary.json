@@ -1,0 +1,71 @@
+{
+  "videos": [
+    {
+      "id": "MX001",
+      "duration": 30.0,
+      "fps": 24.0,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1122463,
+      "licence": "CC BY 2.0",
+      "sha256": "5fe7d1c557a48b10f31c68a56b6b0e6b33b72db50c50e9b12d970e8e46bb4cde",
+      "preview": "media-mixed-previews/MX001.jpg"
+    },
+    {
+      "id": "MX002",
+      "duration": 30.0,
+      "fps": 24.0,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1797692,
+      "licence": "CC0",
+      "sha256": "c58fe758f412b047a845d7c1d72468e84f785c9b77c53a8944cae53da4c9c516",
+      "preview": "media-mixed-previews/MX002.jpg"
+    },
+    {
+      "id": "MX003",
+      "duration": 30.0,
+      "fps": 24.0,
+      "width": 720,
+      "height": 1280,
+      "bytes": 3154360,
+      "licence": "CC BY-SA 4.0",
+      "sha256": "a6152e812ec94b316735b98a4b6b4ed4ba3d1c6f3aae8ef2dda4ed8972b4fc1a",
+      "preview": "media-mixed-previews/MX003.jpg"
+    },
+    {
+      "id": "MX004",
+      "duration": 30.0,
+      "fps": 24.0,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1630153,
+      "licence": "CC BY-SA 4.0",
+      "sha256": "18110f1321261e7e1b39faa68c5917748573b61e199ea11277a4c34c17dc7342",
+      "preview": "media-mixed-previews/MX004.jpg"
+    },
+    {
+      "id": "MX005",
+      "duration": 30.0,
+      "fps": 24.0,
+      "width": 720,
+      "height": 1280,
+      "bytes": 451303,
+      "licence": "Original",
+      "sha256": "64c7f65adfcffdf23c5acba67e2a17f24588e663d38623fa3c8608deab78d1a3",
+      "preview": "media-mixed-previews/MX005.jpg"
+    },
+    {
+      "id": "MX006",
+      "duration": 30.0,
+      "fps": 24.0,
+      "width": 720,
+      "height": 1280,
+      "bytes": 4343991,
+      "licence": "CC0",
+      "sha256": "ad2dc22ce84885f39a389115022f336d9533ee11711f0fb0ec44caa453582add",
+      "preview": "media-mixed-previews/MX006.jpg"
+    }
+  ],
+  "publication_status": "ARCHIVED_ONLY_NOT_POSTED"
+}
