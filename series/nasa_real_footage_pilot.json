@@ -1,0 +1,54 @@
+{
+  "video_id": "NASA001",
+  "title": "Cực quang nhìn từ Trạm Vũ trụ Quốc tế",
+  "topic": "Khoa học và khám phá",
+  "status": "DRAFT_NOT_APPROVED",
+  "narration": "Nhìn từ vũ trụ, bầu trời Trái Đất có thể sáng rực như thế này. Đây là cực quang, được ghi lại từ Trạm Vũ trụ Quốc tế. Các hạt mang điện từ Mặt Trời tương tác với từ trường và khí quyển, tạo nên những dải sáng màu. Trong đoạn hình khác, phi hành gia ghi lại mây và bề mặt Trái Đất. Đây là tư liệu do NASA công bố. Bạn muốn khám phá điều gì tiếp theo?",
+  "captions": [
+    "BẠN ĐÃ TỪNG THẤY CẢNH NÀY?",
+    "CỰC QUANG NHÌN TỪ TRẠM ISS",
+    "VÌ SAO BẦU TRỜI PHÁT SÁNG?",
+    "TRÁI ĐẤT NHÌN TỪ QUỸ ĐẠO",
+    "HÌNH THẬT DO NASA CÔNG BỐ"
+  ],
+  "sources": [
+    {
+      "id": "iss_aurora",
+      "source_page": "https://svs.gsfc.nasa.gov/31281/",
+      "media_url": "https://svs.gsfc.nasa.gov/vis/a030000/a031200/a031281/ISS067_20220817_aurora_1080p25.webm",
+      "credit": "Earth Science and Remote Sensing Unit, NASA Johnson Space Center",
+      "license": "NASA public domain - verify individual source; no source audio reused",
+      "format": "webm",
+      "source_type": "real ISS photography time-lapse"
+    },
+    {
+      "id": "iss_earth",
+      "source_page": "https://svs.gsfc.nasa.gov/30771/",
+      "media_url": "https://svs.gsfc.nasa.gov/vis/a030000/a030700/a030771/ISS_View_of_Planet_Earth_720p.webm",
+      "credit": "NASA Johnson",
+      "license": "NASA public domain - verify individual source; no source audio reused",
+      "format": "webm",
+      "source_type": "real ISS camera observation"
+    }
+  ],
+  "voice": {
+    "provider": "Piper offline",
+    "model": "rhasspy/piper-voices/vi_VN-vais1000-medium",
+    "model_card": "https://huggingface.co/rhasspy/piper-voices/blob/main/vi/vi_VN/vais1000/medium/MODEL_CARD",
+    "dataset_license": "CC BY 4.0",
+    "dataset_url": "https://creativecommons.org/licenses/by/4.0/",
+    "required_attribution": "VAIS-1000 Vietnamese Speech Synthesis Corpus (CC BY 4.0); Piper model from rhasspy/piper-voices"
+  },
+  "accuracy_sources": [
+    "https://svs.gsfc.nasa.gov/31281/",
+    "https://svs.gsfc.nasa.gov/30771/",
+    "https://science.nasa.gov/sun/auroras/"
+  ],
+  "rules": {
+    "no_external_music": true,
+    "no_reused_creator_footage": true,
+    "no_claim_firsthand": true,
+    "needs_manual_review": true,
+    "no_publish_without_signoffs": true
+  }
+}
