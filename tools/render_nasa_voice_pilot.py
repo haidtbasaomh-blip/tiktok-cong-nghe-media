@@ -43,14 +43,14 @@ def probe(path):
 
 def download_video(item,dest):
     url=item["media_url"]
-    if not url.startswith("https://svs.gsfc.nasa.gov/vis/"):
+    if not (url.startswith("https://svs.gsfc.nasa.gov/vis/") or url.startswith("https://images-assets.nasa.gov/video/")):
         raise ValueError("UNAPPROVED_SOURCE_DOMAIN")
     request=urllib.request.Request(url,headers={"User-Agent":"GocCongNgheTienIch/1.0 source-licensed educational film"})
     import certifi
     try:
         trusted=ssl.create_default_context(cafile=certifi.where())
         with urllib.request.urlopen(request,timeout=60,context=trusted) as reply:
-            if reply.status!=200 or not reply.geturl().startswith("https://svs.gsfc.nasa.gov/"):
+            if reply.status!=200 or not (reply.geturl().startswith("https://svs.gsfc.nasa.gov/") or reply.geturl().startswith("https://images-assets.nasa.gov/")):
                 raise RuntimeError("NASA_SOURCE_REDIRECT_FAILED")
             raw=reply.read(27_000_000)
         if not 300_000 < len(raw) < 27_000_000:
@@ -67,8 +67,9 @@ def download_video(item,dest):
     if not dest.is_file() or not 300_000 < dest.stat().st_size < 27_000_000:
         raise RuntimeError("NASA_CLIP_MISSING_OR_TOO_LARGE")
     with dest.open("rb") as stream:
-        if stream.read(4)!=bytes.fromhex("1a45dfa3"):
-            raise RuntimeError("NOT_VALID_WEBM_CONTAINER")
+        signature=stream.read(12)
+    if not (signature[:4]==bytes.fromhex("1a45dfa3") or signature[4:8]==b"ftyp"):
+        raise RuntimeError("NOT_VALID_MP4_OR_WEBM_CONTAINER")
     p=probe(dest)
     if p["width"]<640 or p["height"]<360 or p["seconds"]<15:
         raise RuntimeError("NASA_CLIP_TOO_SHORT_OR_LOW_QUALITY")
@@ -129,7 +130,7 @@ def main():
         paths={}
         rights=[]
         for index,item in enumerate(data["sources"],1):
-            clip=work/("source"+str(index)+".webm")
+            clip=work/("source"+str(index)+"."+item.get("format","webm"))
             rights.append(download_video(item,clip))
             paths[item["id"]]=clip
             print("REAL_CAMERA_CLIP_ACQUIRED",item["id"],rights[-1]["downloaded_bytes"],flush=True)
@@ -139,8 +140,8 @@ def main():
         if not 24<=duration<=40:
             raise RuntimeError("NARRATION_TIMING_NEEDS_EDITING:"+str(duration))
         segments=[]
-        original_shots=[("iss_aurora",0),("iss_aurora",16),("iss_earth",4),
-                        ("iss_aurora",32),("iss_earth",20)]
+        original_shots=[("iss_earth",0),("iss_other",8),("iss_earth",15),
+                        ("iss_other",22),("iss_earth",32)]
         per_scene=duration/5
         for i,(clip_id,offset) in enumerate(original_shots):
             cap=work/("cap"+str(i)+".txt")
@@ -170,7 +171,7 @@ def main():
           "video_id":data["video_id"],"title":data["title"],"file":str(output),
           "video_sha256":file_sha(output),"duration_seconds":spec["seconds"],
           "resolution":"720x1280","shots":5,
-          "footage":"REAL NASA ISS photographic timelapse, 2 original source assets, 5 edited shots",
+          "footage":"NASA ISS real Earth-observation footage from 2 original source assets, 5 edited shots",
           "narration":"Vietnamese offline Piper TTS voice, source script authored for this channel",
           "voice_model":data["voice"],"narration_duration":ainfo["seconds"],
           "source_video_credits":rights,"accuracy_sources":data["accuracy_sources"],
