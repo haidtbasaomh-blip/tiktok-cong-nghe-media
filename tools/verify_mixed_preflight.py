@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+"""Fail-closed mixed-topic TikTok publication QA.
+
+Outputs a comprehensive per-item report. This script never publishes or edits
+TikTok/Buffer. Only an item with actual MP4 + cleared source licenses + source
+validation + scene/audio QC + explicit approval may be marked publish_ready.
+"""
+from __future__ import annotations
+import json
+import subprocess
+import re
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+from urllib.parse import urlsplit
+
+CONFIG=Path("series/editorial_safety_policy.json")
+DRAFTS=Path("series/multi_topic_batch01.json")
+RIGHTS=Path("series/rights_verified_footage.json")
+APPROVALS=Path("series/approved_publications.json")
+RESULT=Path("series/editorial_qa_latest.json")
+MEDIA=Path("media-mixed")
+
+def is_https(url):
+    try:
+        p=urlsplit(str(url))
+        return p.scheme=="https" and bool(p.hostname) and not p.username and not p.password
+    except ValueError:
+        return False
+
+def mp4_quality(path, min_sec=24, max_sec=35):
+    if not path.exists() or path.stat().st_size < 80000:
+        return ["mp4_missing_or_too_small"]
+    issues=[]
+    try:
+        p=subprocess.run(["ffprobe","-v","error","-show_entries","format=duration:stream=width,height,r_frame_rate","-of","json",str(path)],capture_output=True,text=True,timeout=15)
+        if p.returncode:
+            issues.append("ffprobe_failed")
+        else:
+            result=json.loads(p.stdout)
+            streams=[s for s in result.get("streams",[]) if s.get("width") and s.get("height")]
+            if not streams:issues.append("no_video_stream")
+            else:
+                width,height=int(streams[0]["width"]),int(streams[0]["height"])
+                if width<540 or height<960 or height <= width:issues.append("not_portrait_9_16_hd")
+            duration=float(result.get("format",{}).get("duration",0))
+            if not min_sec<=duration<=max_sec:issues.append("duration_outside_24_35")
+    except (OSError,ValueError,subprocess.TimeoutExpired):
+        issues.append("mp4_probe_unavailable")
+    return issues
+
+def main():
+    cfg=json.loads(CONFIG.read_text(encoding="utf8"))
+    drafts=json.loads(DRAFTS.read_text(encoding="utf8"))
+    rights=json.loads(RIGHTS.read_text(encoding="utf8")) if RIGHTS.exists() else {"candidates":[]}
+    approvals=json.loads(APPROVALS.read_text(encoding="utf8")) if APPROVALS.exists() else {"approved":[]}
+    licensed={a.get("id"):a for a in rights.get("candidates",[])}
+    approved={a.get("video_id"):a for a in approvals.get("approved",[])}
+    ids=set();reports=[]
+    for obj in drafts.get("items",[]):
+        vid=obj.get("id","")
+        issues=[]
+        if not re.fullmatch("MX[0-9]{3}",vid):issues.append("invalid_video_id")
+        if vid in ids:issues.append("duplicate_video_id")
+        ids.add(vid)
+        if not obj.get("hook") or not obj.get("close") or len(obj.get("facts",[]))<2:
+            issues.append("incomplete_original_script")
+        if not is_https(obj.get("source","")):
+            issues.append("missing_fact_source")
+        asset=MEDIA/(vid+".mp4")
+        issues+=mp4_quality(asset)
+        approval=approved.get(vid) or {}
+        if approval.get("status")!="approved":
+            issues.append("not_editorially_approved")
+        if approval.get("visual_qa_pass") is not True:
+            issues.append("visual_qa_not_approved")
+        if approval.get("original_script_pass") is not True:
+            issues.append("originality_not_verified")
+        if approval.get("audio_rights_pass") is not True:
+            issues.append("audio_rights_not_verified")
+        if approval.get("factual_review_pass") is not True:
+            issues.append("facts_not_reviewed")
+        if approval.get("no_duplicate_pass") is not True:
+            issues.append("duplicates_not_checked")
+        asset_ids=approval.get("licensed_asset_ids") or []
+        if not asset_ids:
+            issues.append("missing_video_asset_rights_ledger")
+        for media_id in asset_ids:
+            entry=licensed.get(media_id)
+            if not entry or entry.get("clearance_status")!="approved":
+                issues.append("uncleared_media_"+str(media_id))
+            elif not is_https(entry.get("source_page","")) or not is_https(entry.get("license_url","")):
+                issues.append("invalid_media_license_link")
+            elif not re.fullmatch("[a-f0-9]{64}",str(entry.get("file_sha256") or "")):
+                issues.append("missing_licensed_media_checksum")
+        if approval.get("news_kind")=="breaking":
+            sources=approval.get("independent_sources") or []
+            domains={urlsplit(str(url)).hostname for url in sources if is_https(url)}
+            if len(domains)<2:issues.append("breaking_requires_two_independent_sources")
+            when=approval.get("last_verified_at_utc")
+            try:
+                parsed=datetime.fromisoformat(str(when).replace("Z","+00:00"))
+                if datetime.now(timezone.utc)-parsed>timedelta(hours=24):issues.append("breaking_fact_check_stale")
+            except ValueError:issues.append("breaking_requires_verification_time")
+        issues=list(dict.fromkeys(issues))
+        reports.append({"video_id":vid,"topic":obj.get("pillar"),"publish_ready":not issues,"blocking_reasons":issues})
+    result={"checked_at_utc":datetime.now(timezone.utc).isoformat(),"channel":cfg["channel"],"checked_count":len(reports),
+            "publish_ready":sum(x["publish_ready"] for x in reports),"blocked":sum(not x["publish_ready"] for x in reports),
+            "items":reports,"note":"Only QA; never triggers TikTok/Buffer publication."}
+    RESULT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf8")
+    print("EDITORIAL_QA_CHECKED",len(reports),"READY",result["publish_ready"],"BLOCKED",result["blocked"])
+    for row in reports:
+        print(row["video_id"],"READY" if row["publish_ready"] else "BLOCKED",",".join(row["blocking_reasons"]))
+if __name__=="__main__":
+    main()
