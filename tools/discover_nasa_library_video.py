@@ -37,7 +37,12 @@ def main():
             except Exception as e:
                 print("ASSET_INDEX_ERROR",id,type(e).__name__,flush=True)
                 continue
-            options=(assets.get("collection") or {}).get("items") or []
+            if isinstance(assets,list):
+                options=assets
+            elif isinstance(assets,dict):
+                options=(assets.get("collection") or {}).get("items") or []
+            else:
+                options=[]
             urls=[x.get("href") for x in options if isinstance(x,dict) and str(x.get("href") or "").lower().endswith((".mp4",".webm"))]
             if not urls:continue
             small=sorted(urls,key=lambda x:("~mobile" not in x and "~small" not in x and "~preview" not in x, len(x)))
