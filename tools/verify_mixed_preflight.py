@@ -7,7 +7,6 @@ validation + scene/audio QC + explicit approval may be marked publish_ready.
 """
 from __future__ import annotations
 import json
-import subprocess
 import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -32,19 +31,21 @@ def mp4_quality(path, min_sec=24, max_sec=35):
         return ["mp4_missing_or_too_small"]
     issues=[]
     try:
-        p=subprocess.run(["ffprobe","-v","error","-show_entries","format=duration:stream=width,height,r_frame_rate","-of","json",str(path)],capture_output=True,text=True,timeout=15)
-        if p.returncode:
-            issues.append("ffprobe_failed")
-        else:
-            result=json.loads(p.stdout)
-            streams=[s for s in result.get("streams",[]) if s.get("width") and s.get("height")]
-            if not streams:issues.append("no_video_stream")
-            else:
-                width,height=int(streams[0]["width"]),int(streams[0]["height"])
-                if width<540 or height<960 or height <= width:issues.append("not_portrait_9_16_hd")
-            duration=float(result.get("format",{}).get("duration",0))
-            if not min_sec<=duration<=max_sec:issues.append("duration_outside_24_35")
-    except (OSError,ValueError,subprocess.TimeoutExpired):
+        import imageio_ffmpeg
+        reader=imageio_ffmpeg.read_frames(str(path))
+        try:
+            result=next(reader)
+        finally:
+            reader.close()
+        width,height=map(int,result.get("size") or (0,0))
+        if width<540 or height<960 or height<=width:
+            issues.append("not_portrait_9_16_hd")
+        duration=float(result.get("duration") or 0)
+        if not min_sec<=duration<=max_sec:
+            issues.append("duration_outside_24_35")
+        if float(result.get("fps") or 0)<24:
+            issues.append("framerate_below_24fps")
+    except (OSError,ValueError,RuntimeError):
         issues.append("mp4_probe_unavailable")
     return issues
 
