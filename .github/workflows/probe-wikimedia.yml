@@ -1,0 +1,15 @@
+name: TikTok test Wikimedia CC-licensed imagery access (no publication)
+on:
+  push:
+    paths: [tools/probe_wikimedia.py, .github/workflows/probe-wikimedia.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify license metadata and image access
+        run: python3 tools/probe_wikimedia.py
