@@ -53,7 +53,8 @@ def download_video(item,dest):
             if reply.status!=200 or not (reply.geturl().startswith("https://svs.gsfc.nasa.gov/") or reply.geturl().startswith("https://images-assets.nasa.gov/")):
                 raise RuntimeError("NASA_SOURCE_REDIRECT_FAILED")
             raw=reply.read(27_000_000)
-        if not 300_000 < len(raw) < 27_000_000:
+        print("NASA_DOWNLOADED_BODY_BYTES",len(raw),"PREFIX",raw[:16].hex(),flush=True)
+        if not 60_000 < len(raw) < 27_000_000:
             raise RuntimeError("NASA_CLIP_INVALID_OR_TOO_LARGE")
         dest.write_bytes(raw)
     except (urllib.error.URLError,ssl.SSLError) as exc:
@@ -64,14 +65,14 @@ def download_video(item,dest):
                "--connect-timeout","25","--max-time","120",
                "--max-filesize","27000000",
                "--output",str(dest),url],capture_output=True,text=True)
-    if not dest.is_file() or not 300_000 < dest.stat().st_size < 27_000_000:
+    if not dest.is_file() or not 60_000 < dest.stat().st_size < 27_000_000:
         raise RuntimeError("NASA_CLIP_MISSING_OR_TOO_LARGE")
     with dest.open("rb") as stream:
         signature=stream.read(12)
     if not (signature[:4]==bytes.fromhex("1a45dfa3") or signature[4:8]==b"ftyp"):
         raise RuntimeError("NOT_VALID_MP4_OR_WEBM_CONTAINER")
     p=probe(dest)
-    if p["width"]<640 or p["height"]<360 or p["seconds"]<15:
+    if p["width"]<480 or p["height"]<270 or p["seconds"]<8:
         raise RuntimeError("NASA_CLIP_TOO_SHORT_OR_LOW_QUALITY")
     return {**item,"sha256":file_sha(dest),"downloaded_bytes":len(raw),"probe":p}
 
