@@ -1,0 +1,99 @@
+name: Render professional TikTok safe-area videos (CN002-CN100)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/render_professional_tiktok.py
+      - .github/workflows/render-professional-tiktok.yml
+permissions:
+  contents: write
+concurrency:
+  group: tiktok-professional-safearea-render
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {start: 2, end: 11}
+          - {start: 12, end: 21}
+          - {start: 22, end: 31}
+          - {start: 32, end: 41}
+          - {start: 42, end: 51}
+          - {start: 52, end: 61}
+          - {start: 62, end: 71}
+          - {start: 72, end: 81}
+          - {start: 82, end: 91}
+          - {start: 92, end: 100}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Pillow
+        run: python3 -m pip install --user pillow
+      - name: Render original safe-zone MP4 (720x1280, 30 fps)
+        run: python3 tools/render_professional_tiktok.py --start ${{ matrix.start }} --end ${{ matrix.end }}
+      - name: Upload individually verified MP4 files
+        uses: actions/upload-artifact@v4
+        with:
+          name: professional-tiktok-${{ matrix.start }}-${{ matrix.end }}
+          path: media-pro/*.mp4
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    needs: render
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download verified professional MP4 outputs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: professional-tiktok-*
+          path: media-pro
+          merge-multiple: true
+      - name: Validate exactly CN002-CN100 and identical script manifest
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          folder=Path('media-pro')
+          files=sorted(p.name for p in folder.glob('*.mp4'))
+          expected=[f'CN{i:03d}.mp4' for i in range(2,101)]
+          if files!=expected:raise SystemExit('EXPECTED_99_UNPUBLISHED_FILES_GOT_'+str(len(files)))
+          manifest=json.loads(Path('media/100_video_scripts.json').read_text())
+          if len(manifest)!=100:raise SystemExit('MANIFEST_COUNT_WRONG')
+          for path in folder.glob('*.mp4'):
+              with path.open('rb') as f:
+                  head=f.read(100)
+              if path.stat().st_size<40000 or b'ftyp' not in head:raise SystemExit('BAD_MP4_'+path.name)
+          if (folder/'CN001.mp4').exists():raise SystemExit('MUST_NOT_REPLACE_PUBLISHED_CN001')
+          print('99_PROFESSIONAL_MP4_VERIFIED_AND_CN001_PROTECTED')
+          PY
+      - name: Commit only safe-area replacements, preserving original media
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add media-pro/*.mp4
+          if git diff --cached --quiet; then
+            echo "All professional videos already committed"
+            exit 0
+          fi
+          git commit -m "media(tiktok): stage 99 professional safe-area MP4 videos"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "PROFESSIONAL_MEDIA_PUBLISHED"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "::error::Professional video commit did not persist"
+          exit 1
