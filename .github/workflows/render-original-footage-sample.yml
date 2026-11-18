@@ -1,0 +1,40 @@
+name: Produce first genuine-footage TikTok video sample - archive only
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/render_original_licensed_waterfalls.py
+      - .github/workflows/render-original-footage-sample.yml
+permissions:
+  contents: write
+concurrency:
+  group: tiktok-original-footage-sample
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install free FFmpeg and ffprobe
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - name: Render original 27s montage with actual CC/Public-domain camera clips
+        run: python3 tools/render_original_licensed_waterfalls.py
+      - name: Archive verified MP4, provenance and preview without any TikTok post
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media-editorial/WD001.mp4 media-editorial/WD001.json media-editorial/WD001-preview.jpg
+          if git diff --cached --quiet; then echo "SAMPLE_ALREADY_EXISTS"; exit 0; fi
+          git commit -m "media(tiktok): archive original 27s licensed real-footage montage WD001 (not posted)"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then echo "ORIGINAL_FOOTAGE_SAMPLE_ARCHIVED"; exit 0; fi
+            sleep 3
+          done
+          exit 1
