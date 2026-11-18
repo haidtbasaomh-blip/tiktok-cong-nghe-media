@@ -46,6 +46,23 @@ def download_video(item,dest):
     if not (url.startswith("https://svs.gsfc.nasa.gov/vis/") or url.startswith("https://images-assets.nasa.gov/video/")):
         raise ValueError("UNAPPROVED_SOURCE_DOMAIN")
     request=urllib.request.Request(url,headers={"User-Agent":"GocCongNgheTienIch/1.0 source-licensed educational film"})
+    if url.startswith("https://images-assets.nasa.gov/video/"):
+        # NASA's ~small.mp4 can still be a long (>27MB) movie.
+        # Directly transcode a 43s excerpt, without cloning the whole movie.
+        shell(["ffmpeg","-hide_banner","-nostdin","-loglevel","error","-y",
+               "-i",url,"-t","43","-map","0:v:0","-an",
+               "-vf","scale=960:-2","-c:v","libx264",
+               "-preset","ultrafast","-crf","28",str(dest)])
+        if not dest.is_file() or dest.stat().st_size<150000:
+            raise RuntimeError("NASA_STREAMING_EXCERPT_FAILED")
+        p=probe(dest)
+        if p["seconds"]<38 or p["width"]<480 or p["height"]<270:
+            raise RuntimeError("NASA_STREAMING_EXCERPT_BAD_FORMAT:"+str(p))
+        return {**item,"sha256":file_sha(dest),"downloaded_bytes":None,
+                "excerpt_bytes":dest.stat().st_size,"probe":p,
+                "sha256_is_transcoded_excerpt_not_full_nasa_source":True,
+                "source_audio_removed":True}
+
     import certifi
     try:
         trusted=ssl.create_default_context(cafile=certifi.where())
