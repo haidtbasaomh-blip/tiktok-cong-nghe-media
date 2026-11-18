@@ -82,6 +82,24 @@ def main():
             issues.append("facts_not_reviewed")
         if approval.get("no_duplicate_pass") is not True:
             issues.append("duplicates_not_checked")
+        # Authentic, human-first documentary gate: real footage and genuine
+        # sound matter more than cosmetic slides or simulated vlog claims.
+        if approval.get("human_first_story_review_pass") is not True:
+            issues.append("human_first_story_not_reviewed")
+        if approval.get("natural_sound_or_narration_pass") is not True:
+            issues.append("natural_audio_not_verified")
+        if approval.get("truthful_visual_label_pass") is not True:
+            issues.append("documentary_label_not_verified")
+        claimed_format = str(approval.get("editorial_format") or "")
+        if claimed_format not in ("field_vlog", "licensed_footage_documentary", "photo_essay", "hands_on_tutorial", "original_infographic"):
+            issues.append("editorial_format_not_declared")
+        if claimed_format in ("field_vlog","licensed_footage_documentary"):
+            if int(approval.get("genuine_moving_shot_count") or 0) < 4:
+                issues.append("fewer_than_four_genuine_video_shots")
+            if approval.get("genuine_footage_rights_pass") is not True:
+                issues.append("genuine_video_footage_rights_not_verified")
+        if claimed_format == "field_vlog" and approval.get("firsthand_experience_confirmed") is not True:
+            issues.append("falsely_or_unverified_firsthand_vlog")
         asset_ids=approval.get("licensed_asset_ids") or []
         if not asset_ids:
             issues.append("missing_video_asset_rights_ledger")
