@@ -10,7 +10,8 @@ from pathlib import Path
 from PIL import Image,ImageDraw,ImageFont,ImageFilter,ImageOps
 
 W,H=720,1280
-FFMPEG=os.environ.get("FFMPEG_BIN","ffmpeg")
+import imageio_ffmpeg
+FFMPEG=os.environ.get("FFMPEG_BIN") or imageio_ffmpeg.get_ffmpeg_exe()
 SCRIPT=Path("series/multi_topic_batch01.json")
 OUT=Path("media-mixed")
 FONT_ROOT=Path("/usr/share/fonts/truetype/dejavu")
