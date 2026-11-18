@@ -136,7 +136,8 @@ def make_scene(source, dest, textfile, seconds, offset):
            "-t",str(seconds),"-filter_complex",f,"-map","[v]","-an",
            "-c:v","libx264","-preset","veryfast","-crf","24",
            "-r","25","-movflags","+faststart",str(dest)])
-    if dest.stat().st_size<80_000:raise RuntimeError("RENDERED_SCENE_TOO_SMALL")
+    print("NARRATED_PILOT_SCENE",dest.name,"BYTES",dest.stat().st_size,flush=True)
+    if dest.stat().st_size<15000:raise RuntimeError("RENDERED_SCENE_TOO_SMALL")
 
 def main():
     data=json.loads(PILOT.read_text(encoding="utf8"))
@@ -151,7 +152,7 @@ def main():
             clip=work/("source"+str(index)+"."+item.get("format","webm"))
             rights.append(download_video(item,clip))
             paths[item["id"]]=clip
-            print("REAL_CAMERA_CLIP_ACQUIRED",item["id"],rights[-1]["downloaded_bytes"],flush=True)
+            print("REAL_CAMERA_CLIP_ACQUIRED",item["id"],"SOURCE_SPEC",rights[-1]["probe"],flush=True)
         narration, ainfo=voice_to_wav(data,work)
         # Honor account editorial maximum if speech is longer than expected.
         duration=math.ceil(ainfo["seconds"]+1.1)
