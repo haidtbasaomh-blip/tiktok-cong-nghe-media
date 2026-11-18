@@ -10,8 +10,11 @@ BASE=Path("media-editorial")
 VIDEO=BASE/"MC001.mp4"
 OUT=BASE/"MC002.mp4"
 SCRIPT=("Bạn đã từng thấy ruộng bậc thang Mù Cang Chải từ trên cao chưa? "
-        "Những dải ruộng uốn theo sườn núi, thay đổi sắc màu theo mùa vụ. "
-        "Vẻ đẹp ấy không chỉ nằm ở phong cảnh, mà còn ở công sức lao động của người dân vùng cao. "
+        "Những dải ruộng uốn theo sườn núi như những đường sóng, đổi màu theo mùa. "
+        "Khi nước đổ vào ruộng, mặt đất có thể phản chiếu bầu trời. "
+        "Đến mùa lúa chín, màu vàng trải dài khắp những triền núi. "
+        "Phía sau khung cảnh ấy là công sức của bao thế hệ người dân vùng cao. "
+        "Đây là những bức ảnh thật được tác giả chia sẻ theo giấy phép mở, không phải cảnh chúng tôi tự ghi hình. "
         "Bạn muốn khám phá địa điểm nào tiếp theo?")
 MODEL="vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx"
 def sha(p):
@@ -33,7 +36,7 @@ def main():
                     check=True,timeout=240)
     length=probe(wav)
     print("PIPER_REAL_VIETNAMESE_TTS_CREATED_SECONDS",length,flush=True)
-    if not 12<length<30:raise RuntimeError("VOICE_DURATION_NOT_FIT_28_SECOND_CLIP")
+    if not 20<length<29:raise RuntimeError("VOICE_DURATION_NOT_FIT_28_SECOND_CLIP")
     subprocess.run(["ffmpeg","-hide_banner","-nostdin","-loglevel","error","-y",
      "-i",str(VIDEO),"-i",str(wav),"-map","0:v:0","-map","1:a:0",
      "-c:v","copy","-c:a","aac","-b:a","128k",
