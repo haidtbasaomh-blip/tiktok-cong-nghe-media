@@ -1,0 +1,65 @@
+{
+  "video_id": "MC001",
+  "title": "Mù Cang Chải qua năm khung hình thật",
+  "type": "photo_essay_from_real_cc_photographs",
+  "no_actual_camera_motion_claim": true,
+  "no_fake_vlog_claim": true,
+  "duration_seconds": 28.0,
+  "video_file": "media-editorial/MC001.mp4",
+  "video_sha256": "5d521a0fa921b49f29c263042da268135d7c324ce256f2622c73f1dbeb6f206d",
+  "licensed_image_sources": [
+    {
+      "image": "series/authentic_mucangchai/ref01.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Terraces_in_Che_Cu_Nha_commune,_Mu_Cang_Chai_(Unsplash).jpg",
+      "creator": "Doan Tuan danny_pham93",
+      "license": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "preview_derivative_sha256": "7bc0431a105fe9931c667a9bd197461daeafc2fa64d047a142b844e798577dfe",
+      "source_image_sha256_recorded_at_research": "001cf261464050fad84e3c4a7cf8a60c66d382dd7f404c0d0e48105072801e78"
+    },
+    {
+      "image": "series/authentic_mucangchai/ref02.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Tandem_paragliding_over_rice_terraces,_Khau_Pha_Pass,_Mu_Cang_Chai.jpg",
+      "creator": "Mebayluon Paragliding",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "preview_derivative_sha256": "90501a314215292e45f3eadefee6897b7debcdae809606b325df0bb8ec2e75df",
+      "source_image_sha256_recorded_at_research": "d2051b43a94f6a8e24b550b8ddad67032b9f2b3cfc0475aafc71f76068ab396a"
+    },
+    {
+      "image": "series/authentic_mucangchai/ref03.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Tandem_paragliding_over_golden_rice_terraces,_Lim_Mong,_Mu_Cang_Chai.jpg",
+      "creator": "Mebayluon Paragliding",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "preview_derivative_sha256": "ff5cf61bc26b149a2a3e950dcc75b54df17d72d8c2b75b2a3a9e527683779455",
+      "source_image_sha256_recorded_at_research": "b57b575d5244fcc065193ea52aaa87f0569122c92a5140054e7bdc132d79d9d3"
+    },
+    {
+      "image": "series/authentic_mucangchai/ref04.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Rice_terraces_of_Lim_Mong_valley_seen_from_a_paraglider,_Mu_Cang_Chai.jpg",
+      "creator": "Mebayluon Paragliding",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "preview_derivative_sha256": "8008cec106e3c840d448fefcc527a2f5f56c45964646b87a2a3c028bec852af8",
+      "source_image_sha256_recorded_at_research": "af78cec73c10584ba92670295211965609dfdb32b99c6f2aea415217cf7e61eb"
+    },
+    {
+      "image": "series/authentic_mucangchai/ref05.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Paraglider_above_the_top_of_Khau_Pha_Pass,_Mu_Cang_Chai.jpg",
+      "creator": "Mebayluon Paragliding",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "preview_derivative_sha256": "e85ab426cb6d856a5c35228df5b66f213f97ec078a117aedc232bc4c0de746f3",
+      "source_image_sha256_recorded_at_research": "196e6fdc3316dce3fca37446d58c01540d217d34d419424221b3d655687fa0d9"
+    }
+  ],
+  "audio": "original synthesized subtle ambience, NOT a real location recording",
+  "creative_notes": "Five real locations photos; Ken Burns, no unlicensed source videos; needs natural narration and human review",
+  "derivative_sharealike_note": "CC BY-SA 4.0 images incorporated: any adapted material based on those images needs compliant attribution and sharealike licensing; review before distribution.",
+  "publication_status": "ARCHIVED_NOT_PUBLISHED",
+  "passes_automated_technical_export": true,
+  "passes_manual_editorial_review": false,
+  "approved_for_buffer": false,
+  "generated_utc": "2026-11-18T14:37:34.896360+00:00"
+}
