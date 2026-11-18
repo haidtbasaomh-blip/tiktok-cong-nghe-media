@@ -1,0 +1,41 @@
+name: TikTok real-photo pilot - archive only, no posts
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/render_real_photoessay.py
+      - .github/workflows/render-real-photoessay.yml
+permissions:
+  contents: write
+concurrency:
+  group: real-photoessay-pilot
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install free video tools and photo decoder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python3 -m pip install --user pillow
+      - name: Make 28-second video photo essay from five archived real licensed images
+        run: python3 tools/render_real_photoessay.py
+      - name: Preserve the video, provenance, contact sheet and no-posting status
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media-editorial/MC001.mp4 media-editorial/MC001.json media-editorial/MC001-preview.jpg
+          if git diff --cached --quiet; then echo "ARCHIVE_ALREADY_PRESENT"; exit 0; fi
+          git commit -m "media(tiktok): real photoessay MC001 with five licensed photos, not published"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then echo "PHOTOESSAY_ARCHIVED_NO_TIKTOK_POST"; exit 0; fi
+            sleep 2
+          done
+          exit 1
