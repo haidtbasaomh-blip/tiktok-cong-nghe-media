@@ -1,0 +1,229 @@
+{
+  "title": "Tham khảo ý tưởng sáng tạo từ kênh TikTok và YouTube toàn cầu",
+  "date": "2026-11-18",
+  "status": "INSPIRATION_ONLY_NOT_ASSET_PERMISSION",
+  "notes": "Channel handles and URLs are for creative-format research, not verified current ranking or copyright clearance. Do not infer video rights from public availability.",
+  "selection_criteria": [
+    "Hook mở đầu 1–2 giây",
+    "Bố cục mở–phát triển–kết",
+    "Cảnh hành động hoặc thử nghiệm có bằng chứng",
+    "Độ hấp dẫn không phụ thuộc logo người khác",
+    "Giá trị giáo dục, cảm xúc, giải trí hợp pháp",
+    "Có cách sản xuất độc lập bằng video riêng hoặc footage được cấp phép"
+  ],
+  "creator_examples": [
+    {
+      "platform": "TikTok",
+      "name": "Khaby Lame",
+      "url": "https://www.tiktok.com/@khaby.lame",
+      "genre": "mẹo sống/hài hình ảnh",
+      "learn": "Trực quan, làm rõ vấn đề bằng một tình huống rất ngắn",
+      "original_implementation": "Dựng mẹo công nghệ/đời sống của riêng kênh bằng màn hình và đồ họa gốc",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "TikTok",
+      "name": "Zach King",
+      "url": "https://www.tiktok.com/@zachking",
+      "genre": "ảo giác điện ảnh",
+      "learn": "Hook bằng hình lạ, tiết lộ bí mật ở cuối",
+      "original_implementation": "Biến cảnh chuyển kỹ thuật số thành một câu chuyện khám phá; không sao chép trò/khung hình",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "TikTok/YouTube",
+      "name": "MrBeast",
+      "url": "https://www.youtube.com/@MrBeast",
+      "genre": "thử thách/giải trí",
+      "learn": "Mục tiêu trong những giây đầu, mỗi đoạn đều góp vào kết quả",
+      "original_implementation": "Thử nghiệm 3 mẹo điện thoại/3 ứng dụng hữu ích và đưa kết quả có bằng chứng",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "TikTok",
+      "name": "Dylan Page",
+      "url": "https://www.tiktok.com/@dylan.page",
+      "genre": "tin nóng giải thích",
+      "learn": "Bắt đầu bằng câu hỏi và lý do tin quan trọng",
+      "original_implementation": "Tóm tắt bản tin chính xác qua 2 nguồn đáng tin và sơ đồ riêng, không dùng footage tin thời sự không phép",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Mark Rober",
+      "url": "https://www.youtube.com/@MarkRober",
+      "genre": "khoa học ứng dụng",
+      "learn": "Đặt câu hỏi rồi giải bằng thử nghiệm thực tế",
+      "original_implementation": "Dùng mô phỏng riêng, số đo có chứng cứ và lời kể giản dị; tránh thử nghiệm nguy hiểm",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Veritasium",
+      "url": "https://www.youtube.com/@veritasium",
+      "genre": "khoa học và khám phá",
+      "learn": "Lật lại một hiểu lầm phổ biến bằng bằng chứng",
+      "original_implementation": "Giải thích hiểu lầm về Wi-Fi, điện thoại, quang học bằng kịch bản độc lập",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Kurzgesagt – In a Nutshell",
+      "url": "https://www.youtube.com/@kurzgesagt",
+      "genre": "khoa học hoạt họa",
+      "learn": "Lối dẫn có luận điểm, mạch vấn đề rõ, hình riêng nhất quán",
+      "original_implementation": "Dùng đồ họa tự sáng tạo và nguồn khoa học rõ; không bắt chước phong cách đồ họa nhận diện",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Nas Daily",
+      "url": "https://www.youtube.com/@NasDaily",
+      "genre": "chuyện người thật / thế giới",
+      "learn": "Một câu chuyện có thông điệp riêng, diễn tiến nhanh",
+      "original_implementation": "Phóng sự ngắn về nghề, cuộc sống, điểm đến với footage độc lập hoặc cấp phép",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "BRIGHT SIDE",
+      "url": "https://www.youtube.com/@BRIGHTSIDEOFFICIAL",
+      "genre": "kiến thức / chuyện lạ",
+      "learn": "Chủ đề rộng và câu hỏi thu hút",
+      "original_implementation": "Tuyển đề tài đa lĩnh vực nhưng kiểm chứng kỹ; tránh câu giật tít hoặc thông tin chưa rõ",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Khoai Lang Thang",
+      "url": "https://www.youtube.com/@KhoaiLangThang",
+      "genre": "du lịch / văn hóa / ẩm thực",
+      "learn": "Tập trung bối cảnh thật, người thật, không khí đời sống",
+      "original_implementation": "Clip khám phá Việt Nam dùng tư liệu có quyền và lời kể tự nhiên; không giả mình có mặt tại điểm quay",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Chan La Cà",
+      "url": "https://www.youtube.com/@hi.chanlaca",
+      "genre": "du lịch khám phá",
+      "learn": "Toàn–trung–cận, tiết tấu chậm nhanh để giữ cảm xúc",
+      "original_implementation": "Kể chuyện Tây Bắc bằng nhiều cảnh quay thật hợp pháp, không chỉ ảnh động",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Great Big Story",
+      "url": "https://www.youtube.com/@GreatBigStory",
+      "genre": "phim tài liệu ngắn",
+      "learn": "Nhân vật/địa điểm nhỏ nhưng có chi tiết thú vị",
+      "original_implementation": "Khám phá nghề lạ, thủ công, thiên nhiên qua câu hỏi độc lập",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "The Slow Mo Guys",
+      "url": "https://www.youtube.com/@theslowmoguys",
+      "genre": "khoa học hình ảnh",
+      "learn": "Quan sát hiện tượng quen thuộc dưới góc nhìn khác",
+      "original_implementation": "Tự làm mô phỏng chuyển động chậm hoặc dùng footage cấp phép kèm giải thích",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "WIRED",
+      "url": "https://www.youtube.com/@WIRED",
+      "genre": "công nghệ / chuyên gia",
+      "learn": "Chuyên gia giải thích câu hỏi phổ biến, minh họa cụ thể",
+      "original_implementation": "Hỏi–đáp CNTT/AI ngắn dựa trên tài liệu kỹ thuật, không giả mạo chuyên gia",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Vox",
+      "url": "https://www.youtube.com/@Vox",
+      "genre": "giải thích thời sự",
+      "learn": "Sử dụng sơ đồ/bản đồ để làm rõ vấn đề phức tạp",
+      "original_implementation": "Tự làm bản đồ, biểu đồ mới và lời dẫn có nguồn, không trích clip tin tức trái phép",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    },
+    {
+      "platform": "YouTube",
+      "name": "Primitive Technology",
+      "url": "https://www.youtube.com/@primitivetechnology9550",
+      "genre": "đời sống/kỹ năng",
+      "learn": "Âm thanh môi trường, ít lời, hành động thật",
+      "original_implementation": "Ưu tiên âm thanh tự nhiên với tư liệu được phép dùng, không giả thực nghiệm đã tự làm",
+      "reuse_source_footage": false,
+      "reuse_source_audio": false,
+      "reuse_source_script": false
+    }
+  ],
+  "pilot_video_ideas": [
+    {
+      "idea": "3 hiện tượng công nghệ tưởng giống nhưng khác nhau",
+      "genre": "giải thích",
+      "referenced_technique": "đặt hiểu lầm → mô phỏng/đo → kết luận",
+      "assets": "đồ họa và quay màn hình tự tạo",
+      "status": "IDEA"
+    },
+    {
+      "idea": "Một nghề truyền thống có công đoạn bất ngờ",
+      "genre": "phóng sự",
+      "referenced_technique": "mở bằng hành động → giải thích kết quả",
+      "assets": "footage quay thật có quyền sử dụng",
+      "status": "IDEA"
+    },
+    {
+      "idea": "Một sự thật thú vị ở Tây Bắc",
+      "genre": "khám phá",
+      "referenced_technique": "cảnh mở đẹp → thông tin đã xác minh → góc nhìn văn hóa",
+      "assets": "footage có giấy phép và thông tin địa điểm kiểm chứng",
+      "status": "IDEA"
+    },
+    {
+      "idea": "Một câu hỏi khoa học có thể kiểm chứng",
+      "genre": "kiến thức",
+      "referenced_technique": "giả thuyết → phép thử/mô phỏng có nguồn → kết luận",
+      "assets": "đồ họa 100% tạo mới",
+      "status": "IDEA"
+    }
+  ],
+  "nonnegotiables": [
+    "Không tải, trích khung hình, cắt ghép hoặc che dấu nhận diện video của người khác nếu không có quyền",
+    "Học ý tưởng chung, tuyệt đối không sao chép cách thể hiện cụ thể",
+    "Dùng kịch bản độc lập, cảnh tự sản xuất hoặc footage mua/xin quyền",
+    "Tin nóng và dữ kiện phải kiểm chứng riêng",
+    "Ý tưởng chưa là video, video chưa là quyền đăng"
+  ]
+}
