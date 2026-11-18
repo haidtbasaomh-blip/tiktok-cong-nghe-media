@@ -1,0 +1,17 @@
+name: TikTok Pexels licensed B-roll acquisition feasibility (read only)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/probe_pexels_download.py
+      - .github/workflows/probe-pexels-download.yml
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Pexels video redirect and content type, never publish
+        run: python3 tools/probe_pexels_download.py
