@@ -35,6 +35,10 @@ jobs:
           cache-dependency-path: tools/requirements-free-toolchain.txt
       - name: Install free video tools
         run: python -m pip install -r tools/requirements-free-toolchain.txt
+      - name: Install FFmpeg and ffprobe binary tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
       - name: Verify FFmpeg, PySceneDetect, Pillow and Auto-Editor installed
         run: |
           ffmpeg -version | head -n 1
