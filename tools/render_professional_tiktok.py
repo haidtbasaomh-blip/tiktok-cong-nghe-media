@@ -163,6 +163,7 @@ def main():
     items=json.loads(src.read_text(encoding="utf-8"))
     if len(items)!=100 or [x.get("id") for x in items]!=["CN"+str(i).zfill(3) for i in range(1,101)]:
         raise SystemExit("Manifest sequence invalid")
+    Path("media-pro").mkdir(parents=True, exist_ok=True)
     for item in items[args.start-1:args.end]:
         if len(item.get("steps",[]))!=3:
             raise ValueError("Expected 3 steps in "+item["id"])
