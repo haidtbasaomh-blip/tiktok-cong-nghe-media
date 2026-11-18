@@ -1,0 +1,98 @@
+name: Finish missing TikTok professional video batches with portable FFmpeg
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/render_professional_fallback.py
+      - .github/workflows/render-professional-fallback.yml
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: tiktok-portable-finalisation
+  cancel-in-progress: false
+jobs:
+  missing-batches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {start: 2, end: 11}
+          - {start: 82, end: 91}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install portable FFmpeg and Pillow
+        run: python3 -m pip install --user pillow imageio-ffmpeg
+      - name: Render missing MP4 batches with original safe-area template
+        run: python3 tools/render_professional_fallback.py --start ${{ matrix.start }} --end ${{ matrix.end }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portable-professional-${{ matrix.start }}-${{ matrix.end }}
+          path: media-pro/*.mp4
+          if-no-files-found: error
+          retention-days: 7
+  deploy-99:
+    needs: missing-batches
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download eight already-successful batches from original rendering run
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 44231320257
+          github-token: ${{ github.token }}
+          pattern: professional-tiktok-*
+          merge-multiple: true
+          path: media-pro
+      - name: Download remaining two video batches
+        uses: actions/download-artifact@v4
+        with:
+          pattern: portable-professional-*
+          merge-multiple: true
+          path: media-pro
+      - name: Verify all 99 MP4 and that published CN001 is protected
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          folder=Path('media-pro')
+          actual=sorted(p.name for p in folder.glob('*.mp4'))
+          required=[f'CN{i:03d}.mp4' for i in range(2,101)]
+          if actual!=required:
+              raise SystemExit(f'EXPECTED_99_MP4_GOT_{len(actual)}')
+          manifest=json.loads(Path('media/100_video_scripts.json').read_text(encoding='utf8'))
+          if len(manifest)!=100:raise SystemExit('EXPECTED_100_SCRIPTS')
+          for f in folder.glob('*.mp4'):
+              if f.stat().st_size<40000 or b'ftyp' not in f.open('rb').read(100):
+                  raise SystemExit('INVALID_MP4_'+f.name)
+          if (folder/'CN001.mp4').exists():raise SystemExit('PUBLISHED_CN001_MUST_NOT_CHANGE')
+          print('ALL_99_SAFE_ZONE_PROFESSIONAL_VIDEOS_VALIDATED')
+          PY
+      - name: Commit staging media files without altering published or previously queued originals
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add media-pro/*.mp4
+          if git diff --cached --quiet; then
+            echo "PROFESSIONAL_MEDIA_ALREADY_PRESENT"
+            exit 0
+          fi
+          git commit -m "media(tiktok): publish safe-zone professional versions CN002-CN100"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "PROFESSIONAL_MEDIA_DEPLOYED"
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
