@@ -1,0 +1,57 @@
+name: Pilot - real NASA video with offline Vietnamese narration (never auto-post)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/render_nasa_voice_pilot.py
+      - series/nasa_real_footage_pilot.json
+      - .github/workflows/render-nasa-voice-pilot.yml
+permissions:
+  contents: write
+concurrency:
+  group: tiktok-nasa-voice-pilot
+  cancel-in-progress: false
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install FFmpeg, Vietnamese font, and offline Piper voice tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install 'piper-tts==1.8.0' 'huggingface_hub>=0.30,<2'
+      - name: Render original 9:16 footage plus real voiced Vietnamese narration
+        run: python tools/render_nasa_voice_pilot.py
+      - name: Archive preview + MP4 + source license metadata (not approved/published)
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media-editorial/NASA001.mp4 media-editorial/NASA001.json media-editorial/NASA001-preview.jpg
+          if git diff --cached --quiet; then echo "NARRATED_PILOT_ALREADY_ARCHIVED"; exit 0; fi
+          git commit -m "media(tiktok): archive real NASA footage with original Vietnamese voice NASA001, no posting"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then echo "NARRATED_REAL_FOOTAGE_PILOT_ARCHIVED"; exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Save pilot receipt even if output could not be committed
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nasa001-narration-pilot-needs-review
+          path: |
+            media-editorial/NASA001.mp4
+            media-editorial/NASA001.json
+            media-editorial/NASA001-preview.jpg
+          if-no-files-found: warn
+          retention-days: 14
