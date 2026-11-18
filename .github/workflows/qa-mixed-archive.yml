@@ -1,0 +1,44 @@
+name: Inspect archived six TikTok videos and build preview gallery
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/qa_mixed_archive.py
+      - .github/workflows/qa-mixed-archive.yml
+permissions:
+  contents: write
+concurrency:
+  group: qa-mixed-tiktok-gallery
+  cancel-in-progress: false
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install video metadata reader and Pillow
+        run: python3 -m pip install --user imageio-ffmpeg pillow
+      - name: Verify all 6 archived videos and create first-frame previews
+        run: python3 tools/qa_mixed_archive.py
+      - name: Save previews, QA report
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add media-mixed-previews
+          if git diff --cached --quiet; then
+            echo "ALL_PREVIEWS_ALREADY_SAVED"
+            exit 0
+          fi
+          git commit -m "qa(tiktok): six verified video previews and media specifications"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "SIX_PREVIEWS_SAVED"
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
