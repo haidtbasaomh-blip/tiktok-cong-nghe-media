@@ -97,7 +97,9 @@
       "natural_audio_and_edit_review",
       "video_is_not_mislabelled_as_firsthand_vlog",
       "no_creator_video_frames_or_screenshots_reused",
-      "independent_original_storyboard_verified"
+      "independent_original_storyboard_verified",
+      "no_disguised_unlicensed_video_or_watermark_removal",
+      "global_idea_not_reproduced_as_original_creator_footage"
     ],
     "human_first_style": {
       "creative_goal": "Tự nhiên như vlog/phóng sự quay thật; ưu tiên hình ảnh có người, hoạt động và cảnh đời sống, không làm slideshow chữ hoặc clip AI giả thực tế.",
@@ -147,5 +149,55 @@
       "reference_catalog": "series/broad_inspiration_24_topics.json"
     }
   },
-  "approval_policy": "NO video in MX queue may be published until all checks pass, QA flags are true and associated actual MP4 exists. Content drafts do not represent publishing authorization."
+  "approval_policy": "NO video in MX queue may be published until all checks pass, QA flags are true and associated actual MP4 exists. Content drafts do not represent publishing authorization.",
+  "global_inspiration_scope": {
+    "scope": "GLOBAL_ALL_CATEGORIES",
+    "discovery_only": true,
+    "examples": [
+      "technology",
+      "telecommunications",
+      "world news",
+      "science",
+      "society",
+      "travel and local cultures",
+      "nature and animals",
+      "arts and crafts",
+      "sports",
+      "music education",
+      "everyday life",
+      "food",
+      "documentaries",
+      "public history",
+      "automotive and mobility",
+      "space",
+      "architecture"
+    ],
+    "sources": [
+      "TikTok Creative Center",
+      "YouTube Trends",
+      "Vimeo Staff Picks",
+      "reputable news and public research institutions",
+      "original blogs and educational websites"
+    ],
+    "not_a_permission_to_use_media": true,
+    "required_pipeline": [
+      "research idea",
+      "verify facts",
+      "write new independent concept",
+      "produce new visuals and audio or secure explicit license",
+      "manual editorial and copyright checks",
+      "queue only after approvals"
+    ],
+    "restricted_transformations": [
+      "remove or blur watermarks, logos, titles or creator identifiers to disguise third-party footage",
+      "reframe, crop, filter, mirror, speed-shift or replace audio to pass copied footage off as original",
+      "extract frames from unlicensed videos to make an image slideshow",
+      "replicate another creator's script or distinctive sequence shot-by-shot"
+    ],
+    "permission_based_exception": "Genuine rights-cleared footage can be edited within license scope; attribution and other license terms remain mandatory.",
+    "official_policy_sources": [
+      "https://t.tiktok.com/legal/page/global/copyright-policy/en",
+      "https://seller-ph.tiktok.com/university/essay?default_language=en&identity=1&knowledge_id=7654197957084929"
+    ]
+  }
 }
