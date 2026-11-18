@@ -11,7 +11,13 @@
     "Thể thao",
     "Du lịch / Tây Bắc",
     "Ẩm thực / văn hóa",
-    "Khoa học / khám phá"
+    "Khoa học / khám phá",
+    "Động vật và thiên nhiên",
+    "Nông nghiệp và làng nghề",
+    "Ô tô, giao thông và di sản",
+    "Nghệ thuật và âm nhạc",
+    "Thí nghiệm và mẹo đời sống",
+    "Môi trường và kiến trúc"
   ],
   "editorial": {
     "target_seconds": [
@@ -89,7 +95,9 @@
       "authenticity_and_source_footage_review",
       "not_unlicensed_reused_vlogger_clip",
       "natural_audio_and_edit_review",
-      "video_is_not_mislabelled_as_firsthand_vlog"
+      "video_is_not_mislabelled_as_firsthand_vlog",
+      "no_creator_video_frames_or_screenshots_reused",
+      "independent_original_storyboard_verified"
     ],
     "human_first_style": {
       "creative_goal": "Tự nhiên như vlog/phóng sự quay thật; ưu tiên hình ảnh có người, hoạt động và cảnh đời sống, không làm slideshow chữ hoặc clip AI giả thực tế.",
@@ -116,6 +124,27 @@
         "cutting other vloggers' videos without a clear reuse licence"
       ],
       "review_reference": "series/vlog_benchmark_2026.md"
+    },
+    "inspiration_only": {
+      "inspiration_sources": [
+        "TikTok Creative Center",
+        "YouTube trends and original creators",
+        "editorial news and factual sources"
+      ],
+      "extract_video_frames_from_creators": false,
+      "screenshot_creators_videos": false,
+      "download_repost_creators_videos": false,
+      "reuse_creators_voice_or_audio": false,
+      "recreate_distinctive_shots_or_script": false,
+      "allowed_independent_production": [
+        "creator-owned camera footage",
+        "original animation or graphics",
+        "original screen recording",
+        "separately licensed stock photos/footage with rights ledger",
+        "explicit footage-license permission from original owner"
+      ],
+      "separate_metadata_from_assets": true,
+      "reference_catalog": "series/broad_inspiration_24_topics.json"
     }
   },
   "approval_policy": "NO video in MX queue may be published until all checks pass, QA flags are true and associated actual MP4 exists. Content drafts do not represent publishing authorization."
