@@ -1,0 +1,25 @@
+name: Research real licensed moving footage - metadata only
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/find_licensed_footage.py"
+      - ".github/workflows/find-licensed-footage.yml"
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find real video files and verify per-file Commons licence metadata
+        run: python3 tools/find_licensed_footage.py
+      - name: Save candidate metadata for production review, never post
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: licensed-camera-video-candidates
+          path: series/verified_clip_candidates.json
+          if-no-files-found: warn
+          retention-days: 21
