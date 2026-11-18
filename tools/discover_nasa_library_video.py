@@ -8,7 +8,7 @@ QUERIES=["aurora international space station","earth from international space st
 OUT=Path("series/nasa_video_candidates.json")
 
 def request(url):
-    url=url.replace(" ","%20")
+    url=urllib.parse.quote(url,safe=":/?&=%")
     r=urllib.request.Request(url,headers=UA)
     with urllib.request.urlopen(r,timeout=22) as res:
         if not (res.geturl().startswith("https://images-api.nasa.gov/") or res.geturl().startswith("https://images-assets.nasa.gov/")):
@@ -44,7 +44,8 @@ def main():
                 options=(assets.get("collection") or {}).get("items") or []
             else:
                 options=[]
-            urls=[x.get("href") for x in options if isinstance(x,dict) and str(x.get("href") or "").lower().endswith((".mp4",".webm"))]
+            urls=[(x if isinstance(x,str) else x.get("href")) for x in options
+                  if isinstance(x,(str,dict)) and str(x if isinstance(x,str) else x.get("href") or "").lower().endswith((".mp4",".webm"))]
             if not urls:continue
             small=sorted(urls,key=lambda x:("~mobile" not in x and "~small" not in x and "~preview" not in x, len(x)))
             result={"nasa_id":id,"title":str(info.get("title") or "")[:160],"description":str(info.get("description") or "")[:800],
