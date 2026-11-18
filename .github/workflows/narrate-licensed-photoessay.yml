@@ -1,0 +1,44 @@
+name: TikTok Piper Vietnamese narration upgrade to real-photo pilot (no posting)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/narrate_licensed_photoessay.py
+      - .github/workflows/narrate-licensed-photoessay.yml
+permissions:
+  contents: write
+concurrency:
+  group: tiktok-mc002-narration
+  cancel-in-progress: false
+jobs:
+  narrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install FFmpeg and commercially attributable Vietnamese Piper voice runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install 'piper-tts==1.8.0' 'huggingface_hub>=0.30,<2'
+      - name: Create real Vietnamese narration and remux into existing 28s real-photo video
+        run: python tools/narrate_licensed_photoessay.py
+      - name: Archive voiceover version separately without replacing original clip or posting
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media-editorial/MC002.mp4 media-editorial/MC002.json
+          if git diff --cached --quiet; then echo "VOICEOVER_ALREADY_ARCHIVED"; exit 0; fi
+          git commit -m "media(tiktok): MC002 Vietnamese Piper narration licensed photo essay, not posted"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then echo "MC002_VIETNAMESE_VOICE_SAMPLE_ARCHIVED"; exit 0; fi
+            sleep 2
+          done
+          exit 1
