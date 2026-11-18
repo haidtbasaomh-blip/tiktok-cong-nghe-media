@@ -8,7 +8,7 @@ QUERIES=["aurora international space station","earth from international space st
 OUT=Path("series/nasa_video_candidates.json")
 
 def request(url):
-    url=urllib.parse.quote(url,safe=":/?&=%")
+    url=urllib.parse.quote(url,safe=":/?&=%+")
     r=urllib.request.Request(url,headers=UA)
     with urllib.request.urlopen(r,timeout=22) as res:
         if not (res.geturl().startswith("https://images-api.nasa.gov/") or res.geturl().startswith("https://images-assets.nasa.gov/")):
