@@ -1,0 +1,30 @@
+{
+  "video_id": "MX003",
+  "title": "Mù Cang Chải – sóng lúa trên núi",
+  "topic": "Khám phá Tây Bắc",
+  "video_file": "media-mixed/MX003.mp4",
+  "seconds": 30,
+  "resolution": "720x1280",
+  "fps": 24,
+  "source_story_url": "https://govietnam.travel/destination/mu-cang-chai-rice-terraces/",
+  "original_script": [
+    "Ruộng bậc thang được tạo qua nhiều thế hệ.",
+    "Mùa nước đổ và mùa lúa chín có vẻ đẹp khác nhau.",
+    "Phong cảnh gắn với đời sống cộng đồng vùng cao."
+  ],
+  "image_rights": {
+    "creator": "Mebayluon Paragliding",
+    "original_file": "Rice terraces of Lim Mong valley seen from a paraglider, Mu Cang Chai.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Rice_terraces_of_Lim_Mong_valley_seen_from_a_paraglider,_Mu_Cang_Chai.jpg",
+    "sha256": "ecbd5afea20fcd3a06f253b01b42fb4679c9f2df7bcec0092108b8e78e736617",
+    "source_type": "Wikimedia Commons; image is background illustration, not live news footage",
+    "source_checked_utc": "2026-11-18T05:17:33Z"
+  },
+  "audio": "Original synthesized tone from ffmpeg lavfi sine; no third-party music",
+  "visual_edit": "Original typographic video scenes with photo motion, tinted gradients, animated progress",
+  "license_note": "CC BY-SA 4.0: derivative video share-alike applies to graphical adaptation; attribution in video and accompanying JSON.",
+  "sha256": "a6152e812ec94b316735b98a4b6b4ed4ba3d1c6f3aae8ef2dda4ed8972b4fc1a",
+  "publication_status": "ARCHIVED_NOT_PUBLISHED"
+}

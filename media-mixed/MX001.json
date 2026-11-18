@@ -1,0 +1,30 @@
+{
+  "video_id": "MX001",
+  "title": "5G và Wi-Fi 5 GHz: ĐỪNG NHẦM!",
+  "topic": "Viễn thông",
+  "video_file": "media-mixed/MX001.mp4",
+  "seconds": 30,
+  "resolution": "720x1280",
+  "fps": 24,
+  "source_story_url": "https://www.itu.int/net4/mob/ituemf/en/emfguide_m.html",
+  "original_script": [
+    "5G là mạng di động thế hệ thứ năm.",
+    "Wi-Fi 5 GHz là băng tần của mạng Wi-Fi, không phải 5G.",
+    "Dùng 5G cần sóng di động và gói cước phù hợp."
+  ],
+  "image_rights": {
+    "creator": "Tony Webster",
+    "original_file": "Cellular 5G Equipment - Cell Tower Antennas.jpg",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Cellular_5G_Equipment_-_Cell_Tower_Antennas.jpg",
+    "sha256": "6ad776443d9f233615a94d7729bfa0501953eb4660438453078ec522e71b38cf",
+    "source_type": "Wikimedia Commons; image is background illustration, not live news footage",
+    "source_checked_utc": "2026-11-18T05:17:32Z"
+  },
+  "audio": "Original synthesized tone from ffmpeg lavfi sine; no third-party music",
+  "visual_edit": "Original typographic video scenes with photo motion, tinted gradients, animated progress",
+  "license_note": "Original visuals with attribution as required.",
+  "sha256": "5fe7d1c557a48b10f31c68a56b6b0e6b33b72db50c50e9b12d970e8e46bb4cde",
+  "publication_status": "ARCHIVED_NOT_PUBLISHED"
+}

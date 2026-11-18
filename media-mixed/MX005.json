@@ -1,0 +1,21 @@
+{
+  "video_id": "MX005",
+  "title": "Tin giật gân: kiểm tra trước khi chia sẻ!",
+  "topic": "Đời sống xã hội",
+  "video_file": "media-mixed/MX005.mp4",
+  "seconds": 30,
+  "resolution": "720x1280",
+  "fps": 24,
+  "source_story_url": "https://spdv.mic.gov.vn/phong-chong-tin-tuc-gia-mao-trach-nhiem-cua-moi-cu-dan-mang-197120109.htm",
+  "original_script": [
+    "Đọc kỹ ngày đăng và tên nguồn tin.",
+    "Kiểm tra tên miền, ảnh và thông tin gốc.",
+    "Tìm nguồn thứ hai trước khi chia sẻ."
+  ],
+  "image_rights": null,
+  "audio": "Original synthesized tone from ffmpeg lavfi sine; no third-party music",
+  "visual_edit": "Original typographic video scenes with photo motion, tinted gradients, animated progress",
+  "license_note": "Original visuals with attribution as required.",
+  "sha256": "64c7f65adfcffdf23c5acba67e2a17f24588e663d38623fa3c8608deab78d1a3",
+  "publication_status": "ARCHIVED_NOT_PUBLISHED"
+}

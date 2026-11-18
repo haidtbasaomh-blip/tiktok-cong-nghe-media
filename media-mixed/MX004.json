@@ -1,0 +1,30 @@
+{
+  "video_id": "MX004",
+  "title": "Bún chả Hà Nội có gì cuốn hút?",
+  "topic": "Ẩm thực",
+  "video_file": "media-mixed/MX004.mp4",
+  "seconds": 30,
+  "resolution": "720x1280",
+  "fps": 24,
+  "source_story_url": "https://vietnam.travel/things-to-do/recipes-from-vietnam/",
+  "original_script": [
+    "Thịt nướng được ăn kèm bún và rau thơm.",
+    "Nước chấm tạo điểm nhấn cho món ăn.",
+    "Vị khói nướng và rau tươi tạo sự cân bằng."
+  ],
+  "image_rights": {
+    "creator": "Weetjesman",
+    "original_file": "Bun cha Hanoi.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bun_cha_Hanoi.jpg",
+    "sha256": "92e18a431fff36f48e3d1dc44111c7cd94cfe61dd367adfe18675c017efaf61e",
+    "source_type": "Wikimedia Commons; image is background illustration, not live news footage",
+    "source_checked_utc": "2026-11-18T05:17:32Z"
+  },
+  "audio": "Original synthesized tone from ffmpeg lavfi sine; no third-party music",
+  "visual_edit": "Original typographic video scenes with photo motion, tinted gradients, animated progress",
+  "license_note": "CC BY-SA 4.0: derivative video share-alike applies to graphical adaptation; attribution in video and accompanying JSON.",
+  "sha256": "18110f1321261e7e1b39faa68c5917748573b61e199ea11277a4c34c17dc7342",
+  "publication_status": "ARCHIVED_NOT_PUBLISHED"
+}

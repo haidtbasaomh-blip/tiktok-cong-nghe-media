@@ -1,0 +1,30 @@
+{
+  "video_id": "MX002",
+  "title": "VAR có thể xem lại mọi pha bóng?",
+  "topic": "Thể thao",
+  "video_file": "media-mixed/MX002.mp4",
+  "seconds": 30,
+  "resolution": "720x1280",
+  "fps": 24,
+  "source_story_url": "https://www.theifab.com/laws/latest/video-assistant-referee-var-protocol/",
+  "original_script": [
+    "VAR chỉ hỗ trợ một số tình huống theo luật.",
+    "Trong nhiều trường hợp, trọng tài xem lại hình ảnh.",
+    "Quyết định cuối cùng vẫn thuộc trọng tài."
+  ],
+  "image_rights": {
+    "creator": "Samson Ssemakadde",
+    "original_file": "Referee during a football match.jpg",
+    "license": "CC0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Referee_during_a_football_match.jpg",
+    "sha256": "146f4af19743dd45ed3143f361f86759acc8c335510b9ed4c7b0a8b7a5c55d19",
+    "source_type": "Wikimedia Commons; image is background illustration, not live news footage",
+    "source_checked_utc": "2026-11-18T05:17:34Z"
+  },
+  "audio": "Original synthesized tone from ffmpeg lavfi sine; no third-party music",
+  "visual_edit": "Original typographic video scenes with photo motion, tinted gradients, animated progress",
+  "license_note": "Original visuals with attribution as required.",
+  "sha256": "c58fe758f412b047a845d7c1d72468e84f785c9b77c53a8944cae53da4c9c516",
+  "publication_status": "ARCHIVED_NOT_PUBLISHED"
+}

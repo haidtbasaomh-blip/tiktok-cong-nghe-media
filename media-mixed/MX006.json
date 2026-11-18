@@ -1,0 +1,30 @@
+{
+  "video_id": "MX006",
+  "title": "Sa Pa: khám phá không chỉ là săn mây",
+  "topic": "Du lịch Việt Nam",
+  "video_file": "media-mixed/MX006.mp4",
+  "seconds": 30,
+  "resolution": "720x1280",
+  "fps": 24,
+  "source_story_url": "https://vietnam.travel/",
+  "original_script": [
+    "Sa Pa có cảnh quan núi và thung lũng đặc trưng.",
+    "Khám phá bản làng nên tôn trọng văn hóa địa phương.",
+    "Chuẩn bị trang phục và dự báo thời tiết trước chuyến đi."
+  ],
+  "image_rights": {
+    "creator": "Eerin25",
+    "original_file": "Rice terraces in Sapa, Vietnam.jpg",
+    "license": "CC0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Rice_terraces_in_Sapa,_Vietnam.jpg",
+    "sha256": "0fba49be9dda99d5d048bfb90152ac92348744a2977af0ffae4a649bc334256d",
+    "source_type": "Wikimedia Commons; image is background illustration, not live news footage",
+    "source_checked_utc": "2026-11-18T05:17:33Z"
+  },
+  "audio": "Original synthesized tone from ffmpeg lavfi sine; no third-party music",
+  "visual_edit": "Original typographic video scenes with photo motion, tinted gradients, animated progress",
+  "license_note": "Original visuals with attribution as required.",
+  "sha256": "ad2dc22ce84885f39a389115022f336d9533ee11711f0fb0ec44caa453582add",
+  "publication_status": "ARCHIVED_NOT_PUBLISHED"
+}
