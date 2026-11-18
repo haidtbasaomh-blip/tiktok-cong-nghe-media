@@ -6,7 +6,7 @@
   "no_fake_vlog_claim": true,
   "duration_seconds": 28.0,
   "video_file": "media-editorial/MC002.mp4",
-  "video_sha256": "aeabd5ef69e69db8a034b3b5cd5ecc1bc70ea672abaead2250ce4f1bd99d0a07",
+  "video_sha256": "036170e4eabf485f788c48be6369d59b7cb0dc6221d3783702a2e8eecc66f146",
   "licensed_image_sources": [
     {
       "image": "series/authentic_mucangchai/ref01.jpg",
@@ -61,10 +61,10 @@
   "passes_automated_technical_export": true,
   "passes_manual_editorial_review": false,
   "approved_for_buffer": false,
-  "generated_utc": "2026-11-18T15:09:21.556162+00:00",
+  "generated_utc": "2026-11-18T15:16:39.031294+00:00",
   "natural_narration": "SYNTHETIC_VIETNAMESE_TTS_PIPER_NOT_A_HUMAN_RECORDING",
-  "spoken_script": "Bạn đã từng thấy ruộng bậc thang Mù Cang Chải từ trên cao chưa? Những dải ruộng uốn theo sườn núi, thay đổi sắc màu theo mùa vụ. Vẻ đẹp ấy không chỉ nằm ở phong cảnh, mà còn ở công sức lao động của người dân vùng cao. Bạn muốn khám phá địa điểm nào tiếp theo?",
-  "voice_seconds": 12.921905,
+  "spoken_script": "Bạn đã từng thấy ruộng bậc thang Mù Cang Chải từ trên cao chưa? Những dải ruộng uốn theo sườn núi như những đường sóng, đổi màu theo mùa. Khi nước đổ vào ruộng, mặt đất có thể phản chiếu bầu trời. Đến mùa lúa chín, màu vàng trải dài khắp những triền núi. Phía sau khung cảnh ấy là công sức của bao thế hệ người dân vùng cao. Đây là những bức ảnh thật được tác giả chia sẻ theo giấy phép mở, không phải cảnh chúng tôi tự ghi hình. Bạn muốn khám phá địa điểm nào tiếp theo?",
+  "voice_seconds": 22.465306,
   "voice_model_source": "https://huggingface.co/rhasspy/piper-voices/blob/main/vi/vi_VN/vais1000/medium/MODEL_CARD",
   "voice_dataset_license": "CC BY 4.0 (VAIS-1000 corpus)",
   "voice_attribution_required": true,
