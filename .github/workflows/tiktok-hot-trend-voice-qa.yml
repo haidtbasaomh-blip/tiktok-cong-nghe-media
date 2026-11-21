@@ -1,0 +1,25 @@
+name: TikTok hot trend & humanlike narration editorial QA (offline)
+on:
+  push:
+    paths:
+      - 'tools/discover_topics.py'
+      - 'tools/daily_idea_lab.py'
+      - 'tests/test_trend_research.py'
+      - 'series/editorial_safety_policy.json'
+      - 'series/research_feeds.json'
+      - '.github/workflows/tiktok-hot-trend-voice-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline_editorial_qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static Python syntax validation
+        run: python3 -m py_compile tools/discover_topics.py tools/daily_idea_lab.py tests/test_trend_research.py
+      - name: Unit test current trends, expo topics, audio style, nonpublication
+        run: python3 -m unittest discover -s tests -p 'test_trend_research.py' -v
+      - name: Regression check existing news discovery and anti-viral-fabrication rules
+        run: python3 -m unittest discover -s tests -p 'test_daily_idea_lab.py' -v
