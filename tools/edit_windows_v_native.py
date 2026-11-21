@@ -64,7 +64,7 @@ def edit(source, capture, output, panel_crop, item, result_crop, line):
     scores = [(image_distance(f, popup, panel_crop), image_distance(f, result, panel_crop)) for f in images]
     history_start = next(i for i, (a,b) in enumerate(scores) if a < b and a < 10)
     result_start = next(i for i,(a,b) in enumerate(scores) if i > history_start+2 and b < a and b < 8)
-    history_frames = [slide(f,panel_crop,item if i >= history_start else None) for i, f in enumerate(images[:result_start])]
+    history_frames = [slide(f,panel_crop if i >= history_start else result_crop,item if i >= history_start else None) for i, f in enumerate(images[:result_start])]
     result_frames = [slide(f,result_crop,line,True) for f in images[result_start:]]
     result_still = slide(result,result_crop,line,True)
     clip = output.parent / "native-scenes.mp4"
