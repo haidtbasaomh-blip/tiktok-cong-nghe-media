@@ -1,0 +1,59 @@
+name: Archive verified Windows V review
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/archive-native-windows-v-review.yml
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: archive-native-windows-v-review
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-clipboard-review-frames
+          run-id: '44908082276'
+          github-token: ${{ github.token }}
+          path: verified-windows-capture
+      - name: Install edit dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python3 -m pip install 'Pillow>=10,<14'
+      - name: Replace only the two illustrated scenes and verify the MP4
+        run: |
+          set -eu
+          mkdir build
+          old=review/WINDOWS_V_58_GIAY_BAN_XEM_TRUOC.mp4
+          new=build/WINDOWS_V_58_GIAY_QUAY_THAT_CHO_DUYET.mp4
+          python3 tools/edit_windows_v_native.py "$old" verified-windows-capture "$new" \
+            --panel-crop 10 268 380 501 --item 28 401 360 486 \
+            --result-crop 0 62 320 186 --line 9 130 201 161
+          ffmpeg -v error -xerror -i "$new" -f null -
+          old_audio=$(ffmpeg -v error -i "$old" -map 0:a:0 -c:a copy -f md5 -)
+          new_audio=$(ffmpeg -v error -i "$new" -map 0:a:0 -c:a copy -f md5 -)
+          test "$old_audio" = "$new_audio"
+          ffprobe -v error -show_entries stream=codec_name,width,height:format=duration -of compact "$new"
+          mv "$new" review/
+          cat > review/WINDOWS_V_58_GIAY_QUAY_THAT_CHO_DUYET.md <<'DOC'
+          # Windows + V — 58 giây, chờ duyệt
+          Từ giây 35 đến 49,5 dùng chuỗi khung hình quay trên Windows 11. Video hiện danh sách bảng tạm, chọn mục cũ “Bao cao hom nay” rồi hiển thị mục đó ở dòng trống Notepad. Nội dung kết quả được đối chiếu với tệp Notepad vừa lưu.
+          Giữ nguyên luồng tiếng AAC từ bản Anh Khôi và nhạc nền của bản trước. Video dọc 720 × 1280. Trạng thái chờ duyệt.
+          Nguồn quay https://github.com/haidtbasaomh-blip/tiktok-cong-nghe-media/actions/runs/44908082276
+          DOC
+      - name: Save the review video in the repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add review/WINDOWS_V_58_GIAY_QUAY_THAT_CHO_DUYET.*
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Add Windows V sample with verified Windows 11 clipboard footage"
+          git pull --rebase origin main
+          git push origin HEAD:main
