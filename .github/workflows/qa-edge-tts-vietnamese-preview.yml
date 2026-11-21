@@ -1,0 +1,40 @@
+name: QA Vietnamese Edge voice for TikTok sample (test only)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/qa-edge-tts-vietnamese-preview.yml'
+permissions:
+  contents: read
+jobs:
+  voice_qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install TTS and FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install 'edge-tts>=7,<8'
+      - name: Generate Northern-style Vietnamese male preview (no upload)
+        run: |
+          python - <<'PY'
+          import asyncio
+          import edge_tts
+          async def main():
+              await edge_tts.Communicate("Xin chào. Đây là giọng nói tiếng Việt dùng để hướng dẫn thao tác trên Windows. Bạn nhấn phím Windows và chữ V nhé.",voice="vi-VN-NamMinhNeural").save("sample.mp3")
+          asyncio.run(main())
+          print("VOICE_MP3_GENERATED")
+          PY
+          ffprobe -v error -show_entries format=duration,size -of json sample.mp3
+          test "$(wc -c < sample.mp3)" -gt 10000
+      - uses: actions/upload-artifact@v4
+        with:
+          name: viet-namminh-voice-test-only
+          path: sample.mp3
+          if-no-files-found: error
+          retention-days: 2
