@@ -1,0 +1,65 @@
+name: Capture Windows clipboard review frames
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/capture-windows-clipboard-review.yml
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: windows-2025
+    timeout-minutes: 7
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install screen capture tools
+        run: python -m pip install pillow pyautogui
+      - name: Capture clipboard operation on the Windows desktop
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version
+          Get-Process explorer -ErrorAction Stop | Select-Object ProcessName, SessionId
+          $env:CLIPBOARD_REVIEW_OUTPUT = Join-Path $PWD 'clipboard-review'
+          @'
+          import os
+          import subprocess
+          import time
+          from pathlib import Path
+          import pyautogui as ui
+          from PIL import ImageGrab, ImageChops
+
+          output = Path(os.environ["CLIPBOARD_REVIEW_OUTPUT"])
+          output.mkdir(exist_ok=True)
+          if ui.size().width < 800:
+              raise RuntimeError("Windows desktop is unavailable or too small")
+
+          def snap(name):
+              time.sleep(0.65)
+              image = ImageGrab.grab().convert("RGB")
+              image.save(output / (name + ".png"))
+              return image
+
+          subprocess.Popen(["notepad.exe"])
+          time.sleep(3)
+          ui.hotkey("win", "up")
+          ui.press("escape")
+          ui.write("Bao cao hom nay\nKiem tra thiet bi", interval=0.045)
+          ui.press("enter")
+          before = snap("01-notepad-demo")
+          ui.hotkey("win", "v")
+          after = snap("02-clipboard-first-open")
+          change = ImageChops.difference(before, after).getbbox()
+          if not change or (change[2] - change[0]) < 100 or (change[3] - change[1]) < 100:
+              raise RuntimeError("Win+V did not visibly open the native clipboard panel")
+          '@ | Set-Content -Path capture_clipboard.py -Encoding utf8
+          python capture_clipboard.py
+      - name: Retain frames for human verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-clipboard-review-frames
+          path: clipboard-review/*.png
+          if-no-files-found: warn
+          retention-days: 7
