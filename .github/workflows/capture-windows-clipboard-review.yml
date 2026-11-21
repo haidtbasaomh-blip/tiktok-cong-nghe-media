@@ -136,13 +136,44 @@ jobs:
           snap("demo-04-select-second")
           ui.hotkey("ctrl", "c")
           ui.hotkey("ctrl", "end")
+
+          def restore_notepad():
+              popup = find_window("wsl.exe")
+              if popup:
+                  user32.PostMessageW(wintypes.HWND(popup), 0x10, 0, 0)
+                  time.sleep(.6)
+              user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-1), 0, 0, 0, 0, 0x43)
+              user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-2), 0, 0, 0, 0, 0x43)
+              if user32.GetForegroundWindow() != hwnd:
+                  raise RuntimeError("Notepad lost focus")
+
+          restore_notepad()
           blank = snap("demo-05-before-paste")
-          ui.hotkey("win", "v")
-          time.sleep(2)
-          history = snap("demo-06-history")
-          px, py = panel_origin(blank, history)
-          ui.click(px + 95, py + 240)
+          for attempt in range(3):
+              ui.hotkey("win", "v")
+              time.sleep(3)
+              if find_window("wsl.exe"):
+                  restore_notepad()
+                  continue
+              history = snap("demo-06-history")
+              try:
+                  px, py = panel_origin(blank, history)
+              except RuntimeError:
+                  continue
+              break
+          else:
+              raise RuntimeError("Unable to open Windows clipboard after copying")
+          # In the native flyout, the newest card is automatically above the older card.
+          ui.press("tab")
+          ui.press("down")
+          ui.press("enter")
+          time.sleep(.8)
           snap("demo-07-result")
+          ui.hotkey("ctrl", "a")
+          ui.hotkey("ctrl", "c")
+          pasted = subprocess.check_output(["powershell", "-NoProfile", "-Command", "Get-Clipboard -Raw"],text=True)
+          if pasted.count("Bao cao hom nay") != 2:
+              raise RuntimeError("Unable to verify that the older snippet was pasted")
           (output / "coordinates.txt").write_text(f"{x},{y}\n{px},{py}\n")
           '@ | Set-Content -Path capture_clipboard.py -Encoding utf8
           python capture_clipboard.py
