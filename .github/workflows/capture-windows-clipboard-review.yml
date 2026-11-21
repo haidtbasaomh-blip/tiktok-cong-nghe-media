@@ -39,7 +39,8 @@ jobs:
           def snap(name):
               time.sleep(0.65)
               image = ImageGrab.grab().convert("RGB")
-              image.save(output / (name + ".png"))
+              if name.startswith("demo-"):
+                  image.crop((0, 0, 1024, 690)).save(output / (name + ".png"))
               return image
 
           setup = snap("00-runner-desktop")
@@ -60,44 +61,58 @@ jobs:
                   ui.click(867, 657)
                   time.sleep(15)
                   snap("00-after-saving-privacy")
-          subprocess.Popen(["notepad.exe"])
-          time.sleep(7)
-          ui.hotkey("alt", "space")
-          ui.press("x")
-          ui.press("escape")
-          ui.write("Bao cao hom nay\nKiem tra thiet bi", interval=0.045)
-          ui.press("enter")
-          before = snap("01-notepad-demo")
+          demo = output.parent / "Demo.txt"
+          demo.write_text("Bao cao hom nay\nKiem tra thiet bi\n", encoding="utf-8")
+          subprocess.Popen(["notepad.exe", str(demo)])
+          time.sleep(8)
+          ui.doubleClick(440, 43, interval=.12)
+          time.sleep(1)
+          ui.click(110, 126)
+          ui.hotkey("ctrl", "home")
+          for _ in range(5):
+              ui.hotkey("ctrl", "+")
+          before = snap("demo-01-notepad")
           ui.hotkey("win", "v")
-          after = snap("02-clipboard-first-open")
-          ui.press("tab")
-          ui.press("enter")
+          time.sleep(4)
+          after = snap("demo-02-turn-on")
+
+          def panel_origin(base, visible):
+              delta = ImageChops.difference(base, visible).convert("L").crop((0, 90, 900, 650))
+              delta = delta.point(lambda v: 255 if v > 9 else 0)
+              counts = [delta.crop((0, y, 900, y+1)).histogram()[255] for y in range(delta.height)]
+              candidate = next((y for y, n in enumerate(counts) if n > 260), None)
+              if candidate is None:
+                  raise RuntimeError("Clipboard panel is not visible on the Windows desktop")
+              line = delta.crop((0, candidate+18, 900, candidate+19)).getbbox()
+              return line[0], candidate + 90
+
+          x, y = panel_origin(before, after)
+          ui.click(x + 180, y + 319)
           time.sleep(2)
-          snap("03-after-activate")
           ui.press("escape")
+          ui.click(105, 120)
           ui.hotkey("ctrl", "home")
           ui.keyDown("shift")
           ui.press("end")
           ui.keyUp("shift")
-          snap("04-select-first")
+          snap("demo-03-select-first")
           ui.hotkey("ctrl", "c")
           ui.press("down")
           ui.press("home")
           ui.keyDown("shift")
           ui.press("end")
           ui.keyUp("shift")
+          snap("demo-04-select-second")
           ui.hotkey("ctrl", "c")
-          snap("05-copy-second")
           ui.hotkey("ctrl", "end")
-          ui.press("enter")
+          blank = snap("demo-05-before-paste")
           ui.hotkey("win", "v")
-          snap("06-history")
-          ui.press("down")
-          ui.press("enter")
-          snap("07-paste-result")
-          change = ImageChops.difference(before, after).getbbox()
-          if not change or (change[2] - change[0]) < 100 or (change[3] - change[1]) < 100:
-              raise RuntimeError("Win+V did not visibly open the native clipboard panel")
+          time.sleep(2)
+          history = snap("demo-06-history")
+          px, py = panel_origin(blank, history)
+          ui.click(px + 95, py + 270)
+          snap("demo-07-result")
+          (output / "coordinates.txt").write_text(f"{x},{y}\n{px},{py}\n")
           '@ | Set-Content -Path capture_clipboard.py -Encoding utf8
           python capture_clipboard.py
       - name: Retain frames for human verification
@@ -105,6 +120,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-clipboard-review-frames
-          path: clipboard-review/*.png
+          path: |
+            clipboard-review/demo-*
+            clipboard-review/coordinates.txt
           if-no-files-found: warn
           retention-days: 7
