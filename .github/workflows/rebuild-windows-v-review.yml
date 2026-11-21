@@ -1,0 +1,170 @@
+name: Rebuild the Windows V review video
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/rebuild-windows-v-review.yml
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: windows-v-reviewed-draft
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-clipboard-review-frames
+          run-id: '44900031313'
+          github-token: ${{ github.token }}
+          path: review-frames
+      - name: Install the free rendering and voice tools
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          sudo apt-get install -y fonts-dejavu-core
+          python -m pip install 'vieneu==3.7.1'
+      - name: Render and check the review MP4
+        run: |
+          mkdir -p review work
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess as sp
+          import numpy as np
+          import soundfile as sf
+          from PIL import Image, ImageDraw, ImageFont
+          from vieneu import Vieneu
+
+          work = Path("work")
+          output = Path("review/WINDOWS_V_58_GIAY_BAN_XEM_TRUOC.mp4")
+          prior = "media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.mp4"
+          clips = [
+              (7, "Cần dán đoạn cũ?", "Lấy lại nội dung đã sao chép", "01-notepad", (0,0,424,200), (4,70,204,96), 2,
+               "Vừa sao chép một dòng mới, tưởng dòng cũ biến mất rồi? Trên Windows, bạn có thể mở lại danh sách để lấy đúng đoạn cần dán."),
+              (7, "Windows + V", "Mở lịch sử bảng tạm", None, (72,300,645,777), None, 9,
+               "Đặt con trỏ ở nơi bạn muốn dán. Giữ phím có biểu tượng Windows, rồi bấm chữ vê. Đây là lối tắt mở lịch sử bảng tạm."),
+              (7, "Bật lịch sử bảng tạm", "Chọn Turn on, tức là Bật", "02-turn-on", (4,91,369,494), (139,392,233,430), 15,
+               "Nếu mới dùng lần đầu, bạn sẽ thấy nút Bật. Chọn nút này trước khi sao chép các dòng cần giữ. Thao tác này chỉ cần làm một lần."),
+              (7, "Sao chép dòng đầu", "Bôi đen rồi nhấn Ctrl + C", "03-select-first", (0,0,405,198), (3,68,205,98), 25,
+               "Mở một tài liệu để thử. Bôi đen dòng Báo cáo hôm nay, rồi giữ phím Control và bấm chữ xê để sao chép."),
+              (7, "Sao chép dòng thứ hai", "Bôi đen rồi nhấn Ctrl + C lần nữa", "04-select-second", (0,0,405,198), (2,96,231,127), 33,
+               "Tiếp theo, bôi đen dòng Kiểm tra thiết bị, rồi sao chép thêm lần nữa. Windows lưu cả hai dòng trong lịch sử bảng tạm."),
+              (7.5, "Chọn lại đoạn cũ", "Mở Windows + V và chọn đoạn cần dán", None, (70,304,655,806), None, 39,
+               "Đặt con trỏ ở dòng trống, rồi nhấn Windows và chữ vê. Đoạn mới nằm phía trên. Bấm vào dòng cũ cần dán."),
+              (7, "Kiểm tra kết quả", "Nội dung xuất hiện ở vị trí con trỏ", None, (65,298,656,842), None, 47,
+               "Nhìn chỗ con trỏ vừa đứng: dòng bạn chọn đã xuất hiện. Bạn đã dán được đoạn cũ mà không phải quay lại tìm."),
+              (8.5, "Trên máy dùng chung", "Tránh sao chép mật khẩu vào bảng tạm", None, (72,306,652,805), None, 54,
+               "Trên máy dùng chung, tránh sao chép mật khẩu vào bảng tạm. Lưu mẹo này để lần sau cần dán nhiều đoạn, bạn nhớ ngay Windows cộng vê."),
+          ]
+          rate = 48000
+          total = sum(row[0] for row in clips)
+          voice_track = np.zeros(round(total * rate))
+          music = np.zeros_like(voice_track)
+          tts = Vieneu(precision="int8")
+          colors = ["#82e2d0", "#a9baff", "#ffd890", "#82e2d0"]
+          def call(*args):
+              sp.run(args,check=True)
+          def font(n):
+              return ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", n)
+          elapsed = 0
+          concat = []
+          for i, (duration, title, caption, shot, crop, mark, time, line) in enumerate(clips):
+              if shot:
+                  src = Path(f"review-frames/demo-{shot}.png")
+              else:
+                  src = work / f"old-{i}.png"
+                  call("ffmpeg","-v","error","-y","-ss",str(time),"-i",prior,"-frames:v","1",str(src))
+              original = Image.open(src).convert("RGB").crop(crop)
+              s = min(575 / original.width, 455 / original.height)
+              original = original.resize((round(original.width*s),round(original.height*s)),Image.Resampling.LANCZOS)
+              canvas = Image.new("RGB",(720,1280),"#101930")
+              d = ImageDraw.Draw(canvas)
+              accent = colors[i % len(colors)]
+              d.ellipse((420,-640,1540,355),fill="#1d3459")
+              d.polygon([(0,935),(720,1090),(720,1280),(0,1280)],fill="#1b2e52")
+              d.text((60,131),"GÓC CÔNG NGHỆ TIỆN ÍCH",font=font(22),fill=accent)
+              d.text((57,216),title,font=font(40),fill="#f4f9ff")
+              x,y=(662-original.width)//2,345+(465-original.height)//2
+              d.rounded_rectangle((x-5,y-5,x+original.width+5,y+original.height+5),12,fill="#647ca9")
+              canvas.paste(original,(x,y))
+              if mark:
+                  ax,ay,bx,by=[round(v*s)+offset for v,offset in zip((mark[0]-crop[0],mark[1]-crop[1],mark[2]-crop[0],mark[3]-crop[1]),(x,y,x,y))]
+                  d.rounded_rectangle((ax,ay,bx,by),7,outline="#ef2c46",width=6)
+                  cy=(ay+by)//2
+                  if ax>100:
+                      d.line((ax-37,cy+25,ax-1,cy),fill="#ef2c46",width=5)
+                      d.polygon([(ax-1,cy),(ax-19,cy+3),(ax-10,cy+17)],fill="#ef2c46")
+                  else:
+                      d.line((bx+37,cy+25,bx+1,cy),fill="#ef2c46",width=5)
+                      d.polygon([(bx+1,cy),(bx+19,cy+3),(bx+10,cy+17)],fill="#ef2c46")
+              d.text((62,830),"ẢNH CHỤP WINDOWS 11" if shot else "MINH HỌA", font=font(17),fill="#bbccec")
+              d.rounded_rectangle((58,876,612,954),17,fill="#283b60")
+              d.text((75,900),caption,font=font(23),fill="#f4f9ff")
+              d.rounded_rectangle((60,983,607,992),4,fill="#40547c")
+              d.rounded_rectangle((60,983,60+round(547*(i+1)/len(clips)),992),4,fill=accent)
+              frame = work / f"frame-{i}.png"
+              canvas.save(frame)
+              mp4 = work / f"part-{i}.mp4"
+              call("ffmpeg","-v","error","-y","-i",str(frame),"-vf",
+                   f"scale=1440:2560,zoompan=z='1+0.018*on/{int(duration*30)}':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d={int(duration*30)}:s=720x1280:fps=30",
+                   "-c:v","libx264","-preset","fast","-crf","19","-pix_fmt","yuv420p",str(mp4))
+              concat.append("file '"+mp4.name+"'")
+              vox = tts.infer(line,voice="Anh Khôi",temperature=0.75)
+              active = np.flatnonzero(np.abs(vox)>0.004)
+              assert len(active)>rate, f"Narration missing in scene {i}"
+              vox=vox[max(0,active[0]-960):min(len(vox),active[-1]+3840)]
+              max_length=round((duration-.35)*rate)
+              if len(vox)>max_length:
+                  ratio=len(vox)/max_length
+                  assert ratio<1.30, f"Narration too long in scene {i}"
+                  raw=sp.check_output(["ffmpeg","-v","error","-f","f32le","-ar",str(rate),"-ac","1","-i","pipe:0","-af",f"atempo={ratio:.4f}","-f","f32le","pipe:1"],input=np.asarray(vox,dtype="<f4").tobytes())
+                  vox=np.frombuffer(raw,dtype="<f4")
+              vox=vox[:max_length]
+              gain=min(.115/np.sqrt(np.mean(vox**2)),.75/max(np.max(np.abs(vox)),.01))
+              start=round((elapsed+.18)*rate)
+              voice_track[start:start+len(vox)]=vox*gain
+              if i:
+                  cursor=round(elapsed*rate)
+                  grid=np.arange(round(.22*rate))/rate
+                  music[cursor:cursor+len(grid)]+=.027*np.sin(2*np.pi*640*grid)*np.exp(-grid*12)*np.minimum(grid/.02,1)
+              elapsed+=duration
+          for i,start in enumerate(np.arange(0,total,.5)):
+              ix=round(start*rate)
+              waves=np.arange(min(round(.45*rate),len(music)-ix))/rate
+              freq=[130.81,196,261.63,329.63,146.83,220,293.66,349.23][i%8]
+              music[ix:ix+len(waves)]+=.011*np.sin(2*np.pi*freq*waves)*np.exp(-waves*9)*np.minimum(waves/.025,1)
+          mix = voice_track + music
+          sf.write(work/"mix.wav",np.column_stack((mix,mix)),rate)
+          (work/"chapters.txt").write_text("\n".join(concat)+"\n")
+          call("ffmpeg","-v","error","-y","-f","concat","-safe","0","-i",str(work/"chapters.txt"),"-i",str(work/"mix.wav"),"-map","0:v","-map","1:a","-c:v","copy","-c:a","aac","-b:a","160k","-movflags","+faststart","-t",str(total),str(output))
+          assert output.stat().st_size > 550000
+          PY
+          ffmpeg -v error -xerror -i review/WINDOWS_V_58_GIAY_BAN_XEM_TRUOC.mp4 -f null -
+          ffprobe -v error -show_entries stream=codec_name,width,height:format=duration -of compact review/WINDOWS_V_58_GIAY_BAN_XEM_TRUOC.mp4
+      - name: Write status beside the video
+        run: |
+          cat > review/WINDOWS_V_58_GIAY_BAN_XEM_TRUOC.md <<'NOTES'
+          # Windows + V — bản xem trước 58 giây
+          Chờ duyệt. Cấm đưa vào hàng đợi tự động. Hình ảnh thật từ Windows 11 cho màn hình bật Clipboard và hai bước chọn văn bản. Cảnh chọn đoạn cũ và dán kết quả vẫn là minh họa.
+          Giọng nam miền Bắc Anh Khôi, VieNeu-TTS v3 Turbo, preset Apache 2.0 cho phép sử dụng thương mại theo https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo. Nhạc nền và âm báo tạo riêng.
+          Tham chiếu thao tác https://support.microsoft.com/en-us/windows/apps/using-the-clipboard
+          NOTES
+      - name: Retain downloadable draft
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-v-58-giay-ban-xem-truoc
+          path: review/WINDOWS_V_58_GIAY_BAN_XEM_TRUOC.*
+      - name: Add only the review files to the media repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add review/WINDOWS_V_58_GIAY_BAN_XEM_TRUOC.*
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Archive the 58-second Windows V review draft"
+          git pull --rebase origin main
+          git push origin HEAD:main
