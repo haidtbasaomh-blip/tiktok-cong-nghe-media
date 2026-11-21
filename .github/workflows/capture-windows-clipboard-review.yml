@@ -8,12 +8,13 @@ permissions:
   contents: read
 jobs:
   capture:
-    runs-on: windows-2025
+    runs-on: windows-11-arm
     timeout-minutes: 7
     steps:
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
+          architecture: arm64
       - name: Install screen capture tools
         run: python -m pip install pillow pyautogui
       - name: Capture clipboard operation on the Windows desktop
@@ -50,6 +51,30 @@ jobs:
           before = snap("01-notepad-demo")
           ui.hotkey("win", "v")
           after = snap("02-clipboard-first-open")
+          ui.press("tab")
+          ui.press("enter")
+          snap("03-after-activate")
+          ui.press("escape")
+          ui.hotkey("ctrl", "home")
+          ui.keyDown("shift")
+          ui.press("end")
+          ui.keyUp("shift")
+          snap("04-select-first")
+          ui.hotkey("ctrl", "c")
+          ui.press("down")
+          ui.press("home")
+          ui.keyDown("shift")
+          ui.press("end")
+          ui.keyUp("shift")
+          ui.hotkey("ctrl", "c")
+          snap("05-copy-second")
+          ui.hotkey("ctrl", "end")
+          ui.press("enter")
+          ui.hotkey("win", "v")
+          snap("06-history")
+          ui.press("down")
+          ui.press("enter")
+          snap("07-paste-result")
           change = ImageChops.difference(before, after).getbbox()
           if not change or (change[2] - change[0]) < 100 or (change[3] - change[1]) < 100:
               raise RuntimeError("Win+V did not visibly open the native clipboard panel")
