@@ -47,8 +47,8 @@ def published(node: ET.Element) -> str | None:
 def classify_topic(headline: str, default_topic: str) -> str:
     """Mark tech exhibitions separately; never infer facts or publisher virality."""
     terms = (
-        r"\\bces\\s*20[2-9][0-9]\\b", r"\\bmwc\\b",
-        r"\\bcomputex\\b", r"\\bifa\\s+berlin\\b",
+        r"\bces\s*20[2-9][0-9]\b", r"\bmwc\b",
+        r"\bcomputex\b", r"\bifa\s+berlin\b",
         "triển lãm công nghệ", "hội chợ công nghệ", "technology expo",
         "consumer electronics show", "mobile world congress",
     )
