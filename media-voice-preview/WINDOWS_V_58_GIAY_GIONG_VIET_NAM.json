@@ -1,0 +1,29 @@
+{
+  "status": "AUDITION_ONLY_NOT_APPROVED_NOT_FOR_TIKTOK_AUTOPOST",
+  "duration_seconds": 58.5,
+  "source": "Original illustrated simulated Windows UI; not real screen capture",
+  "narration": "Microsoft Edge neural Vietnamese NamMinh voice; generated for technical preview, commercial reuse permission not verified",
+  "audio_original": "Original synthesized quiet musical bed; no third-party licensed music",
+  "storyboard": "Eight scenes, animated true-red rectangles and arrows pointing to simulated UI targets",
+  "output": "media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.mp4",
+  "qa": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 720,
+        "height": 1280
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio"
+      }
+    ],
+    "format": {
+      "duration": "58.500000",
+      "size": "1921356"
+    }
+  }
+}
