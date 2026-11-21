@@ -44,6 +44,18 @@ def published(node: ET.Element) -> str | None:
             except ValueError: pass
     return None
 
+def classify_topic(headline: str, default_topic: str) -> str:
+    """Mark tech exhibitions separately; never infer facts or publisher virality."""
+    terms = (
+        r"\\bces\\s*20[2-9][0-9]\\b", r"\\bmwc\\b",
+        r"\\bcomputex\\b", r"\\bifa\\s+berlin\\b",
+        "triển lãm công nghệ", "hội chợ công nghệ", "technology expo",
+        "consumer electronics show", "mobile world congress",
+    )
+    normalized = headline.casefold()
+    return "Triển lãm công nghệ" if any(re.search(t, normalized) for t in terms) else default_topic
+
+
 def collect(feed: dict) -> list[dict]:
     endpoint=normalize_url(feed["url"])
     if not endpoint: raise ValueError("Invalid feed URL")
@@ -74,7 +86,9 @@ def collect(feed: dict) -> list[dict]:
         if age < -3 or age > 96: continue
         out.append({
             "id":hashlib.sha256(link.encode()).hexdigest()[:16],
-            "topic":feed["topic"],
+            "topic":classify_topic(title, feed["topic"]),
+            "source_topic":feed["topic"],
+            "trend_source_signal":feed.get("signal","news_research"),
             "source_tag":feed["tag"],
             "headline_reference":title[:160],
             "source_url":link,
