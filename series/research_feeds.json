@@ -76,6 +76,18 @@
       "topic": "Công nghệ thế giới",
       "url": "https://techcrunch.com/feed/",
       "signal": "news_research"
+    },
+    {
+      "tag": "van_hoa_tuoitre",
+      "topic": "Văn hóa và nghệ thuật",
+      "url": "https://tuoitre.vn/van-hoa.rss",
+      "signal": "news_research"
+    },
+    {
+      "tag": "giai_tri_tuoitre",
+      "topic": "Văn hóa và nghệ thuật",
+      "url": "https://tuoitre.vn/giai-tri.rss",
+      "signal": "news_research"
     }
   ],
   "hot_news_requires": "Verify the event with at least two independent primary or reputable sources; high-risk events such as fires and disasters require authoritative updates and clear dates.",
