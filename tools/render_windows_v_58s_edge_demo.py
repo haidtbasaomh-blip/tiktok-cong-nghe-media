@@ -123,6 +123,7 @@ def illustrated(scene,phase):
        "ĐÃ DÁN ĐÚNG NỘI DUNG!","MẸO TIỆN NHƯNG AN TOÀN"][scene],28,WHITE,True)
     pulse=(phase%5)
     thick=6+2*(pulse%3)
+    rect(d,(42,888,679,1009),(17,35,75),16,(88,181,231),2)
     if scene==0:
         note_window(d)
         rect(d,(91,472,588,523),(232,208,251),11)
@@ -190,7 +191,6 @@ def illustrated(scene,phase):
         center(d,743,"LƯU VIDEO • THEO DÕI KÊNH",23,CYAN)
         label(d,["Bảo vệ thông tin cá nhân", "và chia sẻ mẹo hữu ích"])
     # Brand and on-screen indicators
-    rect(d,(42,888,679,1009),(17,35,75),16,(88,181,231),2)
     rect(d,(46,1111,675,1150),(14,36,71),12)
     text(d,(64,1120),"MÀN HÌNH MÔ PHỎNG • BẢN XEM TRƯỚC",16,PALE,True)
     start=sum(v[0] for v in SEGMENTS[:scene])
