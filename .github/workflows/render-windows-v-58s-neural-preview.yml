@@ -1,0 +1,80 @@
+name: TikTok Windows V 58.5s natural Vietnamese voice preview (never post)
+on:
+  push:
+    paths:
+      - 'tools/render_windows_v_58s_edge_demo.py'
+      - '.github/workflows/render-windows-v-58s-neural-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: winv-58-second-neural-preview
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original video tools and Vietnamese neural TTS
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install 'edge-tts>=7,<8' 'pillow>=10,<13' 'numpy>=1.26,<3'
+      - name: Check source script syntax without Buffer or TikTok token
+        run: python -m py_compile tools/render_windows_v_58s_edge_demo.py
+      - name: Generate 58.5s 9:16 animated video with audible Vietnamese narration
+        run: python tools/render_windows_v_58s_edge_demo.py
+      - name: Read-only QA real MP4 audio and video tracks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,subprocess
+          p=Path('media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.mp4')
+          data=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration,size:stream=codec_name,codec_type,width,height','-of','json',str(p)]))
+          dur=float(data['format']['duration'])
+          assert 57 <= dur < 60, f'Video not under 1 minute: {dur}'
+          tracks={s['codec_type']:s for s in data['streams']}
+          assert tracks['audio']['codec_name']=='aac'
+          assert tracks['video']['codec_name']=='h264'
+          assert (tracks['video']['width'],tracks['video']['height'])==(720,1280)
+          assert p.stat().st_size>500000
+          print('VIDEO_58S_WITH_AUDIO_VERIFIED',data['format'])
+          PY
+          ffmpeg -hide_banner -nostdin -loglevel error -i media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.mp4 -map 0:a:0 -af volumedetect -f null - 2>&1 | tail -6 || true
+      - name: Archive review video only, never change Buffer queue/TikTok
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.mp4 media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.json
+          if git diff --cached --quiet; then
+            echo "PREVIEW_ALREADY_PRESENT"
+            exit 0
+          fi
+          git commit -m "media(tiktok): archive 58s Vietnamese neural voice Windows V preview, no publishing"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "58_SECOND_VIDEO_WITH_SOUND_READY"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "::error::Preview archive failed, do not assume video exists online"
+          exit 1
+      - name: Retain playable MP4 even if Git commit encounters an issue
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-windows-v-58s-preview-with-audio
+          path: |
+            media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.mp4
+            media-voice-preview/WINDOWS_V_58_GIAY_GIONG_VIET_NAM.json
+          if-no-files-found: warn
+          retention-days: 21
