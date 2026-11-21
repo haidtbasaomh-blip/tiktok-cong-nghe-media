@@ -8,6 +8,7 @@ on:
       - tools/discover_topics.py
       - tools/daily_idea_lab.py
       - tests/test_daily_idea_lab.py
+      - tests/test_trend_research.py
       - series/global_tiktok_youtube_creator_inspiration.json
       - series/research_feeds.json
       - .github/workflows/discover-tiktok-topics.yml
@@ -23,6 +24,8 @@ jobs:
         run: python3 tools/discover_topics.py
       - name: Check that the creator-inspired lab does not publish or fabricate view counts
         run: python3 -m unittest discover -s tests -p test_daily_idea_lab.py -v
+      - name: Check trends, news categories and non-robotic audio direction offline
+        run: python3 -m unittest discover -s tests -p test_trend_research.py -v
       - name: Propose up to 25 different video ideas, each needing fact and rights verification
         run: python3 tools/daily_idea_lab.py
       - name: Save research candidates as an internal QA artifact, NOT a post
