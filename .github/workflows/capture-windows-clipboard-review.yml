@@ -98,20 +98,26 @@ jobs:
               ui.hotkey("ctrl", "=")
           before = snap("demo-01-notepad")
           ui.hotkey("win", "v")
-          time.sleep(4)
+          time.sleep(10)
           after = snap("demo-02-turn-on")
 
           def panel_origin(base, visible):
-              delta = ImageChops.difference(base, visible).convert("L").crop((0, 90, 900, 650))
+              delta = ImageChops.difference(base, visible).convert("L").crop((0, 55, 1024, 690))
               delta = delta.point(lambda v: 255 if v > 9 else 0)
-              counts = [delta.crop((0, y, 900, y+1)).histogram()[255] for y in range(delta.height)]
+              counts = [delta.crop((0, y, 1024, y+1)).histogram()[255] for y in range(delta.height)]
               candidate = next((y for y, n in enumerate(counts) if n > 260), None)
               if candidate is None:
                   raise RuntimeError("Clipboard panel is not visible on the Windows desktop")
-              line = delta.crop((0, candidate+18, 900, candidate+19)).getbbox()
-              return line[0], candidate + 90
+              line = delta.crop((0, candidate+18, 1024, candidate+19)).getbbox()
+              return line[0], candidate + 55
 
-          x, y = panel_origin(before, after)
+          try:
+              x, y = panel_origin(before, after)
+          except RuntimeError:
+              ui.hotkey("win", "v")
+              time.sleep(8)
+              after = snap("demo-02-turn-on")
+              x, y = panel_origin(before, after)
           ui.click(x + 180, y + 319)
           time.sleep(2)
           ui.press("escape")
@@ -135,7 +141,7 @@ jobs:
           time.sleep(2)
           history = snap("demo-06-history")
           px, py = panel_origin(blank, history)
-          ui.click(px + 95, py + 270)
+          ui.click(px + 95, py + 240)
           snap("demo-07-result")
           (output / "coordinates.txt").write_text(f"{x},{y}\n{px},{py}\n")
           '@ | Set-Content -Path capture_clipboard.py -Encoding utf8
