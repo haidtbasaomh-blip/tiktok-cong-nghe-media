@@ -119,6 +119,7 @@ jobs:
               after = snap("demo-02-turn-on")
               x, y = panel_origin(before, after)
           ui.click(x + 180, y + 319)
+          subprocess.run(["taskkill", "/F", "/IM", "wsl.exe"], capture_output=True)
           time.sleep(3)
           snap("demo-02-after-enable")
           ui.press("escape")
@@ -142,35 +143,21 @@ jobs:
                   raise RuntimeError("Notepad lost focus")
 
           restore_notepad()
-          desktop = ImageGrab.grab().convert("RGB")
-          # Classic and current Notepad use slightly different text positions.
-          # Identify the two visible lines from the dark text in the editor.
-          text_rows = [
-              row for row in range(72, 147)
-              if sum(max(desktop.getpixel((col, row))) < 90 for col in range(4, 240)) >= 12
-          ]
-          bands = []
-          for row in text_rows:
-              if not bands or row - bands[-1][-1] > 4:
-                  bands.append([])
-              bands[-1].append(row)
-          if len(bands) != 2:
-              desktop.crop((0, 0, 1024, 690)).save(output / "demo-diagnostics-editor.png")
-              raise RuntimeError(f"Expected two Notepad text rows, got {bands!r}")
-
           def copy_line(index, expected, shot):
-              y_pos = bands[index][len(bands[index]) // 2]
-              for attempt in range(3):
-                  restore_notepad()
-                  ui.moveTo(285, y_pos)
-                  ui.dragTo(4, y_pos, .35)
-                  image = snap(shot)
-                  if user32.GetForegroundWindow() == hwnd:
-                      ui.hotkey("ctrl", "c")
-                      if clipboard_text() == expected:
-                          return
-              image.crop((0, 0, 1024, 690)).save(output / f"demo-diagnostics-copy-{index}.png")
-              raise RuntimeError(f"Notepad line {index + 1} did not reach the clipboard")
+              restore_notepad()
+              ui.hotkey("ctrl", "home")
+              if index:
+                  ui.press("down", presses=index, interval=.15)
+              ui.press("home")
+              ui.keyDown("shift")
+              ui.press("end")
+              ui.keyUp("shift")
+              snap(shot)
+              ui.hotkey("ctrl", "c")
+              time.sleep(.6)
+              if clipboard_text() != expected:
+                  raise RuntimeError(f"Wrong text copied in Notepad row {index + 1}: {clipboard_text()!r}")
+              time.sleep(1)
 
           copy_line(0, "Bao cao hom nay", "demo-03-select-first")
           copy_line(1, "Kiem tra thiet bi", "demo-04-select-second")
@@ -184,7 +171,7 @@ jobs:
                   time.sleep(max(0, next_frame - time.monotonic()))
 
           original = ["Bao cao hom nay", "Kiem tra thiet bi"]
-          for offset in (205, 165, 235, 265, 185, 145, 295):
+          for offset in (207, 183, 226, 249, 157, 268, 293, 321):
               restore_notepad()
               ui.press("escape")
               ui.hotkey("ctrl", "end")
@@ -200,7 +187,7 @@ jobs:
               except (RuntimeError, TypeError):
                   continue
               # A real flyout is anchored by the left-aligned caret and spans 360 px.
-              if not (0 <= px < 40 and 65 <= py < 210):
+              if not (0 <= px < 40 and 55 <= py < 245):
                   continue
               click_x, click_y = px + 115, py + offset
               ui.moveTo(click_x, click_y, .2)
