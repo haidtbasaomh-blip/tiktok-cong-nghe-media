@@ -129,26 +129,6 @@ jobs:
                   text=True,
               ).strip()
 
-          ui.click(105, 120)
-          ui.hotkey("ctrl", "home")
-          ui.keyDown("shift")
-          ui.press("end")
-          ui.keyUp("shift")
-          snap("demo-03-select-first")
-          ui.hotkey("ctrl", "c")
-          if clipboard_text() != "Bao cao hom nay":
-              raise RuntimeError("The first Notepad selection did not reach the clipboard")
-          ui.press("down")
-          ui.press("home")
-          ui.keyDown("shift")
-          ui.press("end")
-          ui.keyUp("shift")
-          snap("demo-04-select-second")
-          ui.hotkey("ctrl", "c")
-          if clipboard_text() != "Kiem tra thiet bi":
-              raise RuntimeError("The second Notepad selection did not reach the clipboard")
-          ui.hotkey("ctrl", "end")
-
           def restore_notepad():
               # A runner startup prompt can appear in Windows Terminal after the copy steps.
               subprocess.run(["taskkill", "/F", "/IM", "wsl.exe"], capture_output=True)
@@ -160,6 +140,30 @@ jobs:
               user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-2), 0, 0, 0, 0x43)
               if user32.GetForegroundWindow() != hwnd:
                   raise RuntimeError("Notepad lost focus")
+
+          restore_notepad()
+          ui.click(105, 120)
+          ui.hotkey("ctrl", "home")
+          ui.keyDown("shift")
+          ui.press("end")
+          ui.keyUp("shift")
+          snap("demo-03-select-first")
+          ui.hotkey("ctrl", "c")
+          if clipboard_text() != "Bao cao hom nay":
+              raise RuntimeError("The first Notepad selection did not reach the clipboard")
+          restore_notepad()
+          ui.hotkey("ctrl", "home")
+          ui.press("down")
+          ui.press("home")
+          ui.keyDown("shift")
+          ui.press("end")
+          ui.keyUp("shift")
+          snap("demo-04-select-second")
+          restore_notepad()
+          ui.hotkey("ctrl", "c")
+          if clipboard_text() != "Kiem tra thiet bi":
+              raise RuntimeError("The second Notepad selection did not reach the clipboard")
+          ui.hotkey("ctrl", "end")
 
           def record(seconds, frames):
               deadline = time.monotonic() + seconds
