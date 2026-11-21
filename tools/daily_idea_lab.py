@@ -41,7 +41,10 @@ TOPIC_PRIORITIES={
  "Công nghệ Việt Nam":2.1,"Công nghệ thế giới":2.1,
  "Khoa học và vũ trụ":1.8,"Thời sự Việt Nam":1.6,
  "Thời sự quốc tế":1.4,"Thế giới":1.4,"Du lịch và Tây Bắc":1.5,
- "Thể thao":1.3,"Xã hội và đời sống":1.2
+ "Thể thao":1.7,"Xã hội và đời sống":1.2,
+ "Tin nổi bật Việt Nam":2.0,"Tin được đọc nhiều tại nguồn":2.0,
+ "Văn hóa và nghệ thuật":1.7,"Văn hóa nghệ thuật thế giới":1.5,
+ "Triển lãm công nghệ":2.25
 }
 SENSITIVE_TERMS=("bốc cháy","cháy","hỏa hoạn","thiệt mạng","tử vong","tai nạn",
                  "đánh bom","khủng bố","chiến tranh","nổ lớn","bạo lực","shooting",
@@ -58,15 +61,41 @@ SAFE_ASSET_CHOICES={
  "Thể thao":"sơ đồ động tác/tình huống tự dựng, không dùng clip bản quyền trận đấu",
  "Khoa học":"mô phỏng gốc; ảnh khoa học với điều kiện cấp phép xác thực",
  "Đời sống":"quay hoạt động tự làm hoặc có giấy phép của chủ sở hữu",
+ "Văn hóa":"cảnh sự kiện, sân khấu, triển lãm thật có phép, hoặc đồ họa tư liệu gốc",
+ "Nghệ thuật":"hình tác phẩm có quyền sử dụng và chú thích tác giả, tránh nhạc/clip trái phép",
+ "Triển lãm":"cảnh gian hàng chính thức với giấy phép quay/đăng, thiết bị thực và số liệu từ nguồn chính thức",
+ "Tin nổi bật":"cảnh nguồn xác minh/đồ họa mới tự tạo, không giả làm tin hiện trường",
+ "Tin được đọc nhiều":"cảnh tự dựng hoặc có phép; xem nhiều trên báo KHÔNG nghĩa là viral TikTok",
 }
 def safe_https(value):
     p=urlsplit(str(value or ""))
     return p.scheme=="https" and bool(p.hostname) and not p.username and not p.password
 
+FEATURED_HINTS = {
+    "publisher_most_read_not_tiktok_trend":1.1,
+    "editor_featured_not_platform_viral":0.7,
+}
+NEWSWORTHY_KEYWORDS = (
+    "triển lãm", "expo", "computex", "ces 20", "mwc", "robot", "ai", "trí tuệ nhân tạo",
+    "ra mắt", "phát minh", "phát hiện", "concert", "giải thưởng", "vô địch",
+    "kỷ lục", "đột phá", "công bố"
+)
+
+def is_editorial_hot_candidate(row):
+    """An editorial screening hint, NEVER a measured TikTok/YouTube trend."""
+    hours=float(row.get("age_hours") or 1000)
+    if hours < 0 or hours > 48:
+        return False
+    signal=row.get("trend_source_signal") or ""
+    title=str(row.get("headline_reference") or "").casefold()
+    return signal in FEATURED_HINTS or any(word in title for word in NEWSWORTHY_KEYWORDS)
+
 def rank(row):
     hours=float(row.get("age_hours") or 1000)
     topic=str(row.get("topic") or "")
-    return round(max(0,4-min(hours,96)/24)+TOPIC_PRIORITIES.get(topic,1),2)
+    hint=FEATURED_HINTS.get(str(row.get("trend_source_signal") or ""),0)
+    interest=0.35 if is_editorial_hot_candidate(row) else 0
+    return round(max(0,4-min(hours,96)/24)+TOPIC_PRIORITIES.get(topic,1)+hint+interest,2)
 
 def pick_candidates(rows,limit=MAX_PER_DAY):
     unique=[];seen_urls=set();seen_topics=set()
@@ -112,6 +141,23 @@ def create_drafts(candidates, sample_creator_names):
            "source_url":row["source_url"],
            "source_published_at_utc":row.get("published_at_utc"),
            "editorial_potential_score_not_view_count":rank(row),
+           "hot_topic_screening_not_verified_viral":{
+              "editorial_candidate":is_editorial_hot_candidate(row),
+              "rss_publisher_signal":row.get("trend_source_signal") or "general_news",
+              "published_age_hours":row.get("age_hours"),
+              "verified_tiktok_or_youtube_trend":False,
+              "independent_breaking_news_check_required":True
+           },
+           "target_video_seconds":60,
+           "voice_and_sound_direction":{
+              "narrator":"Nam giọng Bắc phổ thông, tự nhiên như người dẫn chương trình thật, rõ từng từ, giàu ngữ điệu",
+              "read_style":"Trò chuyện cuốn hút; câu ngắn, ngắt nghỉ hợp lý, nhấn thông tin quan trọng, không đọc đều như máy",
+              "no_cheap_robot_voice":"Không dùng eSpeak hoặc giọng tổng hợp khó nghe cho bản đăng",
+              "recorded_or_rights_cleared_tts":True,
+              "dynamic_audio":"Nhạc nền hợp từng cảnh, tự giảm khi có lời; âm môi trường thật có phép, SFX đúng sự kiện hình ảnh",
+              "human_audio_review_before_post":True
+           },
+           "real_visual_direction":"Tư liệu quay thật có quyền sử dụng hoặc ảnh/screen recording thật; zoom, bôi đỏ và mũi tên chính xác nếu hướng dẫn thao tác",
            "style_name":form["name"],
            "style_mechanism":form["id"],
            "opening_question_draft":form["opening"],
@@ -172,7 +218,8 @@ def main():
       "",
       f"Chốt lúc {output['checked_at_utc']}; {len(drafts)} đề tài khác nhau được chọn từ tin tham khảo.",
       "",
-      "**Không ghi nhận lượt xem viral thực tế của TikTok/YouTube tại bước này**; chỉ rút cách làm từ những kênh đã chọn. Mỗi ý tưởng cần xác minh thông tin và quyền hình/nhạc trước khi dựng.",
+      "**Không ghi nhận lượt xem viral thực tế của TikTok/YouTube tại bước này**; tín hiệu tin xem nhiều/tin nổi bật chỉ phản ánh nguồn báo. Ý tưởng được ưu tiên dựa trên độ mới (24–48h), độ đáng chú ý và đa dạng chủ đề; tin cần 2 nguồn độc lập.",
+      "**Chuẩn dựng đề xuất:** khoảng 60 giây, giọng nam Bắc tự nhiên rõ chữ, nhạc và âm hiện trường theo cảnh, hình quay thật/được phép, bước hướng dẫn có khoanh đỏ và mũi tên đúng mục. Không tự đăng khi chưa nghe/duyệt MP4.",
       "",
       "| # | Chủ đề | Tin dùng để nghiên cứu | Cấu trúc video mới | Điểm tiềm năng* |",
       "|---:|---|---|---|---:|"
