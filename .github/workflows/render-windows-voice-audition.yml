@@ -1,0 +1,80 @@
+name: Produce natural Northern Vietnamese voice audition MP4 (NEVER auto-post)
+on:
+  push:
+    paths:
+      - 'tools/render_windows_voice_preview.py'
+      - '.github/workflows/render-windows-voice-audition.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: windows-v-voice-audition-only
+  cancel-in-progress: false
+jobs:
+  make_sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install offline original video render dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pillow numpy
+      - name: Restore existing Northern voice sample from own staging branch (no secrets or APIs)
+        run: |
+          git fetch --depth=1 origin refs/heads/staging/tiktok-voice-bac-preview-20261121
+          git show FETCH_HEAD:draft/NGHE_THU_GIONG_NAM_BAC_KHANG_WINDOWS_V_20261121.mp3 > voice-sample.mp3
+          test "$(wc -c < voice-sample.mp3)" -gt 100000
+          ffprobe -v error -show_entries format=duration,size -of json voice-sample.mp3
+      - name: Render 9:16 original animated UI mock + real existing Northern TTS sample
+        run: |
+          python tools/render_windows_voice_preview.py \
+            --voice voice-sample.mp3 \
+            --output media-voice-preview/WINDOWS_V_GIONG_BAC_KHANG_NGHE_TRUC_TIEP.mp4
+      - name: Verify actual video/audio streams and HTTP playback format
+        run: |
+          ffprobe -v error -show_entries format=duration,size:stream=codec_type,codec_name,width,height -of json media-voice-preview/WINDOWS_V_GIONG_BAC_KHANG_NGHE_TRUC_TIEP.mp4
+          python - <<'PY'
+          import json, subprocess
+          p='media-voice-preview/WINDOWS_V_GIONG_BAC_KHANG_NGHE_TRUC_TIEP.mp4'
+          x=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration:stream=codec_type,codec_name,width,height','-of','json',p]))
+          assert 10<float(x['format']['duration'])<27
+          assert {z['codec_type'] for z in x['streams']}=={'audio','video'}
+          video=next(z for z in x['streams'] if z['codec_type']=='video')
+          assert (video['width'],video['height'])==(720,1280)
+          print('VIDEO_PREVIEW_WITH_NORTHERN_VOICE_VERIFIED', x['format']['duration'])
+          PY
+      - name: Archive only audition media; never send it to Buffer/TikTok
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add media-voice-preview/WINDOWS_V_GIONG_BAC_KHANG_NGHE_TRUC_TIEP.mp4
+          if git diff --cached --quiet; then
+            echo "VOICE_AUDITION_ALREADY_ARCHIVED"
+            exit 0
+          fi
+          git commit -m "media(tiktok): preview northern Khang voice with original animations; no posting"
+          for i in 1 2 3 4; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "VOICE_AUDITION_MP4_READY_TO_PLAY"
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
+      - name: Keep a downloadable audition MP4 for review, NOT publication
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-v-voice-audition-needs-review
+          path: media-voice-preview/WINDOWS_V_GIONG_BAC_KHANG_NGHE_TRUC_TIEP.mp4
+          retention-days: 21
+          if-no-files-found: warn
