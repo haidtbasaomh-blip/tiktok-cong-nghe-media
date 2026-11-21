@@ -88,6 +88,18 @@
       "topic": "Văn hóa và nghệ thuật",
       "url": "https://tuoitre.vn/giai-tri.rss",
       "signal": "news_research"
+    },
+    {
+      "tag": "van_hoa_vtv",
+      "topic": "Văn hóa và nghệ thuật",
+      "url": "https://vtv.vn/rss/van-hoa-giai-tri.rss",
+      "signal": "news_research"
+    },
+    {
+      "tag": "giai_tri_dantri",
+      "topic": "Văn hóa và nghệ thuật",
+      "url": "https://dantri.com.vn/rss/giai-tri.rss",
+      "signal": "news_research"
     }
   ],
   "hot_news_requires": "Verify the event with at least two independent primary or reputable sources; high-risk events such as fires and disasters require authoritative updates and clear dates.",
