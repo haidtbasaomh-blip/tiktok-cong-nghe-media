@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-18",
-  "purpose": "Research discovery only, never republish full RSS content, never download source article images or videos.",
+  "updated_at": "2026-11-21",
+  "purpose": "Headline metadata for independent editorial research. News feeds do not grant media reuse rights or prove TikTok view counts.",
   "feeds": [
     {
       "tag": "cong_nghe_vn",
@@ -46,8 +46,68 @@
       "tag": "khoa_hoc_nasa",
       "topic": "Khoa học và vũ trụ",
       "url": "https://www.nasa.gov/news-release/feed/"
+    },
+    {
+      "tag": "tin_noi_bat_vn",
+      "topic": "Tin nổi bật Việt Nam",
+      "url": "https://vnexpress.net/rss/tin-noi-bat.rss",
+      "signal": "editor_featured_not_platform_viral"
+    },
+    {
+      "tag": "tin_xem_nhieu_vn",
+      "topic": "Tin được đọc nhiều tại nguồn",
+      "url": "https://vnexpress.net/rss/tin-xem-nhieu.rss",
+      "signal": "publisher_most_read_not_tiktok_trend"
+    },
+    {
+      "tag": "giai_tri_vn",
+      "topic": "Văn hóa và nghệ thuật",
+      "url": "https://vnexpress.net/rss/giai-tri.rss",
+      "signal": "news_research"
+    },
+    {
+      "tag": "giai_tri_the_gioi",
+      "topic": "Văn hóa nghệ thuật thế giới",
+      "url": "https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
+      "signal": "news_research"
+    },
+    {
+      "tag": "cong_nghe_techcrunch",
+      "topic": "Công nghệ thế giới",
+      "url": "https://techcrunch.com/feed/",
+      "signal": "news_research"
     }
   ],
   "hot_news_requires": "Verify the event with at least two independent primary or reputable sources; high-risk events such as fires and disasters require authoritative updates and clear dates.",
-  "publishing_rule": "Discovery is NOT editorial clearance; candidates are NOT scripts, video files or publication permission."
+  "publishing_rule": "Discovery is NOT editorial clearance; candidates are NOT scripts, video files or publication permission.",
+  "trend_rules": {
+    "definition": "Trending suggestion, not proven virality: newly reported in last 48 hours plus publisher featured/most-read or topical significance; require independent corroboration before claiming hot.",
+    "breaking_ideal_max_hours": 48,
+    "high_risk_requires_two_independent_sources": true,
+    "never_claim_real_tiktok_trend_without_platform_analytics": true,
+    "do_not_download_or_republish_news_photos_videos": true,
+    "cultural_sports_technology_news_all_allowed": true
+  },
+  "exhibition_watchlist_manual_verify_not_rss": [
+    {
+      "name": "CES",
+      "official_url": "https://www.ces.tech/",
+      "scope": "AI, robotics, consumer technology, announcements"
+    },
+    {
+      "name": "MWC Barcelona",
+      "official_url": "https://www.mwcbarcelona.com/",
+      "scope": "phones, connectivity, 5G/6G and devices"
+    },
+    {
+      "name": "Computex Taipei",
+      "official_url": "https://www.computextaipei.com.tw/",
+      "scope": "PC, chips, AI hardware"
+    },
+    {
+      "name": "IFA Berlin",
+      "official_url": "https://www.ifa-berlin.com/",
+      "scope": "consumer electronics and appliances"
+    }
+  ]
 }
