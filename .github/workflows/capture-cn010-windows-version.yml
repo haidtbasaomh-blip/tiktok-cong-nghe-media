@@ -1,0 +1,118 @@
+name: Capture CN010 Windows version tutorial
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/capture-cn010-windows-version.yml
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: windows-11-arm
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          architecture: arm64
+      - name: Install screen capture tools
+        run: python -m pip install pillow pyautogui
+      - name: Capture native Windows Run and About Windows dialogs
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version
+          Get-Process explorer -ErrorAction Stop | Select-Object ProcessName, SessionId
+          $env:CLIPBOARD_REVIEW_OUTPUT = Join-Path $PWD 'cn010-frames'
+          @'
+          import os
+          import ctypes
+          from ctypes import wintypes
+          import subprocess
+          import time
+          from pathlib import Path
+          import pyautogui as ui
+          from PIL import ImageGrab, ImageChops
+
+          output = Path(os.environ["CLIPBOARD_REVIEW_OUTPUT"])
+          output.mkdir(exist_ok=True)
+          if ui.size().width < 800:
+              raise RuntimeError("Windows desktop is unavailable or too small")
+
+          def snap(name):
+              time.sleep(0.65)
+              image = ImageGrab.grab().convert("RGB")
+              return image
+
+          setup = snap("00-runner-desktop")
+          if setup.size == (1024, 768) and all(
+              setup.getpixel((x, y))[2] > 120 and setup.getpixel((x, y))[0] < 40
+              for x, y in ((560, 375), (560, 598), (829, 657))
+          ):
+              # On this disposable runner, opt out of optional location and typing telemetry.
+              ui.click(570, 375)
+              ui.click(570, 598)
+              ui.click(865, 653)
+              time.sleep(2)
+              privacy_more = snap("00-privacy-next")
+              if all(privacy_more.getpixel((x, y))[2] > 110 for x, y in ((560, 326), (560, 499), (829, 657))):
+                  for x, y in ((560, 326), (560, 499)):
+                      if privacy_more.getpixel((x, y))[0] < 40:
+                          ui.click(x, y)
+                  ui.click(867, 657)
+                  time.sleep(15)
+                  snap("00-after-saving-privacy")
+          def find_window(fragment):
+              matches = []
+              user32 = ctypes.windll.user32
+              callback_type = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+              @callback_type
+              def collect(hwnd, _):
+                  title = ctypes.create_unicode_buffer(200)
+                  user32.GetWindowTextW(hwnd, title, 200)
+                  if user32.IsWindowVisible(hwnd) and fragment.casefold() in title.value.casefold():
+                      matches.append(hwnd)
+                  return True
+              user32.EnumWindows(collect, 0)
+              return matches[0] if matches else 0
+
+          def wait_window(name):
+              for _ in range(30):
+                  handle = find_window(name)
+                  if handle:
+                      return handle
+                  time.sleep(.35)
+              raise RuntimeError(f"Windows dialog unavailable: {name}")
+
+          def capture_dialog(handle, name, top_height=None):
+              bounds = wintypes.RECT()
+              user32.GetWindowRect(wintypes.HWND(handle), ctypes.byref(bounds))
+              left, top, right, bottom = bounds.left, bounds.top, bounds.right, bounds.bottom
+              if top_height:
+                  bottom = min(bottom, top + top_height)
+              if not (0 <= left < right <= 1024 and 0 <= top < bottom <= 768):
+                  raise RuntimeError("Unexpected window bounds")
+              time.sleep(.7)
+              ImageGrab.grab(bbox=(left, top, right, bottom)).convert("RGB").save(output / name)
+
+          user32 = ctypes.windll.user32
+          ui.press("escape")
+          subprocess.run(["taskkill", "/F", "/IM", "wsl.exe"],capture_output=True)
+          ui.hotkey("win","r")
+          handle = wait_window("Run")
+          ui.write("winver", interval=.17)
+          capture_dialog(handle,"01-run-winver.png")
+          ui.press("enter")
+          about = wait_window("About Windows")
+          capture_dialog(about,"02-about-windows.png",235)
+          print("Native Windows dialog was opened by winver using the Run box.")
+          '@ | Set-Content -Path capture_clipboard.py -Encoding utf8
+          python capture_clipboard.py
+      - name: Retain frames for human verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-cn010-frames-frames
+          path: |
+            cn010-frames/*.png
+          if-no-files-found: warn
+          retention-days: 7
