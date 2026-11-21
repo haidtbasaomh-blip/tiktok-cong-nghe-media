@@ -9,7 +9,7 @@ permissions:
 jobs:
   capture:
     runs-on: windows-11-arm
-    timeout-minutes: 7
+    timeout-minutes: 12
     steps:
       - uses: actions/setup-python@v5
         with:
@@ -135,46 +135,75 @@ jobs:
           ui.keyUp("shift")
           snap("demo-04-select-second")
           ui.hotkey("ctrl", "c")
+          time.sleep(.7)
           ui.hotkey("ctrl", "end")
 
           def restore_notepad():
+              # A runner startup prompt can appear in Windows Terminal after the copy steps.
+              subprocess.run(["taskkill", "/F", "/IM", "wsl.exe"], capture_output=True)
               popup = find_window("wsl.exe")
               if popup:
                   user32.PostMessageW(wintypes.HWND(popup), 0x10, 0, 0)
                   time.sleep(.6)
-              user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-1), 0, 0, 0, 0, 0x43)
-              user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-2), 0, 0, 0, 0, 0x43)
+              user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-1), 0, 0, 0, 0x43)
+              user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-2), 0, 0, 0, 0x43)
               if user32.GetForegroundWindow() != hwnd:
                   raise RuntimeError("Notepad lost focus")
 
-          restore_notepad()
-          blank = snap("demo-05-before-paste")
-          for attempt in range(3):
+          def record(seconds, frames):
+              deadline = time.monotonic() + seconds
+              while time.monotonic() < deadline:
+                  next_frame = time.monotonic() + .125
+                  frames.append(ImageGrab.grab().convert("RGB").crop((0, 0, 1024, 690)))
+                  time.sleep(max(0, next_frame - time.monotonic()))
+
+          original = ["Bao cao hom nay", "Kiem tra thiet bi"]
+          for offset in (205, 165, 235, 265, 185, 145, 295):
+              restore_notepad()
+              ui.press("escape")
+              ui.hotkey("ctrl", "end")
+              blank = snap("demo-05-before-paste")
+              frames = []
+              record(.5, frames)
               ui.hotkey("win", "v")
-              time.sleep(3)
-              if find_window("wsl.exe"):
-                  restore_notepad()
-                  continue
-              history = snap("demo-06-history")
+              record(1.4, frames)
+              history = ImageGrab.grab().convert("RGB")
               try:
                   px, py = panel_origin(blank, history)
-              except RuntimeError:
+              except (RuntimeError, TypeError):
                   continue
-              break
+              # A real flyout is anchored by the left-aligned caret and spans 360 px.
+              if not (0 <= px < 40 and 65 <= py < 210):
+                  continue
+              click_x, click_y = px + 115, py + offset
+              ui.moveTo(click_x, click_y, .2)
+              record(.65, frames)
+              ui.click()
+              record(1.15, frames)
+              result = ImageGrab.grab().convert("RGB")
+              ui.press("escape")
+              if user32.GetForegroundWindow() != hwnd:
+                  continue
+              ui.hotkey("ctrl", "s")
+              time.sleep(.35)
+              actual = demo.read_text(encoding="utf-8-sig").splitlines()
+              if actual == [*original, original[0]]:
+                  history.crop((0, 0, 1024, 690)).save(output / "demo-06-history.png")
+                  result.crop((0, 0, 1024, 690)).save(output / "demo-07-result.png")
+                  for i, frame in enumerate(frames):
+                      frame.save(output / f"native-{i:03d}.png")
+                  (output / "coordinates.txt").write_text(f"{x},{y}\n{px},{py}\n{click_x},{click_y}\n")
+                  print("Verified in the saved Notepad document: clipboard history pasted the older snippet.")
+                  break
+              if actual != original:
+                  ui.hotkey("ctrl", "z")
+                  ui.hotkey("ctrl", "s")
+                  time.sleep(.35)
+                  if demo.read_text(encoding="utf-8-sig").splitlines() != original:
+                      raise RuntimeError("Unable to restore the original Notepad document")
+              print(f"Clipboard option at offset {offset}: {actual!r}")
           else:
-              raise RuntimeError("Unable to open Windows clipboard after copying")
-          # In the native flyout, the newest card is automatically above the older card.
-          ui.press("tab")
-          ui.press("down")
-          ui.press("enter")
-          time.sleep(.8)
-          snap("demo-07-result")
-          ui.hotkey("ctrl", "a")
-          ui.hotkey("ctrl", "c")
-          pasted = subprocess.check_output(["powershell", "-NoProfile", "-Command", "Get-Clipboard -Raw"],text=True)
-          if pasted.count("Bao cao hom nay") != 2:
-              raise RuntimeError("Unable to verify that the older snippet was pasted")
-          (output / "coordinates.txt").write_text(f"{x},{y}\n{px},{py}\n")
+              raise RuntimeError("Unable to verify the older clipboard item was pasted into Notepad")
           '@ | Set-Content -Path capture_clipboard.py -Encoding utf8
           python capture_clipboard.py
       - name: Retain frames for human verification
@@ -184,6 +213,7 @@ jobs:
           name: windows-clipboard-review-frames
           path: |
             clipboard-review/demo-*
+            clipboard-review/native-*
             clipboard-review/coordinates.txt
           if-no-files-found: warn
           retention-days: 7
