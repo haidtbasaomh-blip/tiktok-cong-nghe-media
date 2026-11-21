@@ -5,6 +5,7 @@ on:
     paths:
       - 'TikTok_100_Video_Thu_Thuat_Cong_Nghe.zip'
       - 'media-parts/**'
+      - 'media-voice-preview/**'
       - '.github/workflows/deploy-media-pages.yml'
   workflow_dispatch:
 permissions:
@@ -62,6 +63,35 @@ jobs:
           (public / 'index.html').write_text('<!doctype html><meta charset="utf-8"><title>TikTok tech video media</title><p>100 public MP4 videos for Buffer</p>',encoding='utf-8')
           print('VERIFIED_AND_EXTRACTED_100_PUBLIC_MP4')
           PY
+      - name: Include one voice-audition playback page (original 100 public MP4 files unchanged)
+        run: |
+          mkdir -p _site/previews
+          test -s media-voice-preview/WINDOWS_V_GIONG_BAC_KHANG_NGHE_TRUC_TIEP.mp4
+          cp media-voice-preview/WINDOWS_V_GIONG_BAC_KHANG_NGHE_TRUC_TIEP.mp4 _site/previews/windows-v-giong-bac.mp4
+          cat > _site/previews/windows-v.html <<'HTML'
+          <!doctype html>
+          <html lang="vi"><head><meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Video thử giọng Bắc • Góc Công Nghệ Tiện Ích</title>
+          <style>
+            body{margin:0;background:linear-gradient(135deg,#071334,#282069);font:16px system-ui,sans-serif;color:#f5f9ff;text-align:center}
+            main{max-width:470px;margin:0 auto;padding:24px 16px 48px}
+            h1{font-size:23px;line-height:1.25;margin:8px 0 18px}
+            video{background:#071533;width:min(100%,340px);aspect-ratio:9/16;border-radius:17px;border:2px solid #42d7f0;box-shadow:0 16px 44px #0008}
+            p{font-size:14px;line-height:1.5;color:#deecff}
+            a{color:#ffe16a}
+          </style></head>
+          <body><main>
+            <h1>GÓC CÔNG NGHỆ TIỆN ÍCH</h1>
+            <video controls playsinline preload="auto" aria-label="Video có giọng Bắc nghe thử">
+              <source src="./windows-v-giong-bac.mp4" type="video/mp4">
+              Trình duyệt không hỗ trợ video MP4.
+            </video>
+            <p>Nhấn nút phát và bật âm lượng để nghe giọng nam miền Bắc.<br>
+               Bản thử âm thanh 11,5 giây • Giao diện Windows mô phỏng • Chưa đăng TikTok.</p>
+            <a href="./windows-v-giong-bac.mp4">Mở hoặc tải MP4</a>
+          </main></body></html>
+          HTML
       - name: Configure GitHub Pages automatically where allowed
         uses: actions/configure-pages@v5
         with:
