@@ -76,7 +76,7 @@ FEATURED_HINTS = {
     "editor_featured_not_platform_viral":0.7,
 }
 NEWSWORTHY_KEYWORDS = (
-    "triển lãm", "expo", "computex", "ces 20", "mwc", "robot", "ai", "trí tuệ nhân tạo",
+    "triển lãm", "expo", "computex", "ces 20", "mwc", "robot", "trí tuệ nhân tạo",
     "ra mắt", "phát minh", "phát hiện", "concert", "giải thưởng", "vô địch",
     "kỷ lục", "đột phá", "công bố"
 )
@@ -124,6 +124,9 @@ def pick_candidates(rows,limit=MAX_PER_DAY):
     return unique[:limit]
 
 def visual_method(topic):
+    # Avoid generic "Công nghệ" fallback hiding the specific expo camera plan.
+    if "triển lãm" in topic.casefold():
+        return SAFE_ASSET_CHOICES["Triển lãm"]
     for keyword, method in SAFE_ASSET_CHOICES.items():
         if keyword.casefold() in topic.casefold():
             return method
