@@ -25,6 +25,8 @@ jobs:
           $env:CLIPBOARD_REVIEW_OUTPUT = Join-Path $PWD 'clipboard-review'
           @'
           import os
+          import ctypes
+          from ctypes import wintypes
           import subprocess
           import time
           from pathlib import Path
@@ -39,7 +41,7 @@ jobs:
           def snap(name):
               time.sleep(0.65)
               image = ImageGrab.grab().convert("RGB")
-              if name.startswith("demo-"):
+              if name.startswith("demo-") and find_window("Demo"):
                   image.crop((0, 0, 1024, 690)).save(output / (name + ".png"))
               return image
 
@@ -61,16 +63,39 @@ jobs:
                   ui.click(867, 657)
                   time.sleep(15)
                   snap("00-after-saving-privacy")
+          def find_window(fragment):
+              matches = []
+              user32 = ctypes.windll.user32
+              callback_type = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+              @callback_type
+              def collect(hwnd, _):
+                  title = ctypes.create_unicode_buffer(200)
+                  user32.GetWindowTextW(hwnd, title, 200)
+                  if user32.IsWindowVisible(hwnd) and fragment.casefold() in title.value.casefold():
+                      matches.append(hwnd)
+                  return True
+              user32.EnumWindows(collect, 0)
+              return matches[0] if matches else 0
+
+          ui.press("escape")
           demo = output.parent / "Demo.txt"
           demo.write_text("Bao cao hom nay\nKiem tra thiet bi\n", encoding="utf-8")
           subprocess.Popen(["notepad.exe", str(demo)])
-          time.sleep(8)
-          ui.doubleClick(440, 43, interval=.12)
+          time.sleep(10)
+          hwnd = find_window("Demo")
+          if not hwnd:
+              raise RuntimeError("Notepad test document window not found")
+          user32 = ctypes.windll.user32
+          user32.ShowWindow(wintypes.HWND(hwnd), 3)
+          user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-1), 0, 0, 0, 0, 0x43)
           time.sleep(1)
-          ui.click(110, 126)
+          ui.click(110, 130)
+          user32.SetWindowPos(wintypes.HWND(hwnd), wintypes.HWND(-2), 0, 0, 0, 0, 0x43)
+          if user32.GetForegroundWindow() != hwnd:
+              raise RuntimeError("Notepad could not be brought to the foreground")
           ui.hotkey("ctrl", "home")
           for _ in range(5):
-              ui.hotkey("ctrl", "+")
+              ui.hotkey("ctrl", "=")
           before = snap("demo-01-notepad")
           ui.hotkey("win", "v")
           time.sleep(4)
