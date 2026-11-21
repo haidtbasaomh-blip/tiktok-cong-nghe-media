@@ -1,6 +1,6 @@
 {
   "channel": "@goccongnghetienich",
-  "updated_at": "2026-11-18",
+  "updated_at": "2026-11-21",
   "status": "editorial_review_gate_enforced_for_mixed_topics",
   "notes": "This policy is for new mixed-topic videos (MX codes). It does not alter the existing CN001-CN100 Buffer scheduling workflow.",
   "topics": [
@@ -17,12 +17,15 @@
     "Ô tô, giao thông và di sản",
     "Nghệ thuật và âm nhạc",
     "Thí nghiệm và mẹo đời sống",
-    "Môi trường và kiến trúc"
+    "Môi trường và kiến trúc",
+    "Công nghệ mới và triển lãm quốc tế",
+    "Tin nổi bật và chủ đề được quan tâm (chưa mặc định là viral TikTok)",
+    "Văn hóa, nghệ thuật và biểu diễn"
   ],
   "editorial": {
     "target_seconds": [
-      24,
-      35
+      50,
+      90
     ],
     "visual_principles": [
       "Visual B-roll or original animated demonstrations matching the topic",
@@ -35,7 +38,9 @@
       "breaking_max_hours": 48,
       "breaking_min_independent_sources": 2,
       "never_say_latest_without_dates": true,
-      "never_present_unverified_as_confirmed": true
+      "never_present_unverified_as_confirmed": true,
+      "hot_editorial_candidate_max_hours": 48,
+      "hot_does_not_mean_verified_tiktok_views": true
     },
     "accuracy": [
       "Time-zone aware event dates",
@@ -81,7 +86,7 @@
       "zero_autopublish_on_push": true,
       "never_duplicate_already_posted": true,
       "hard_max_daily_posts": 5,
-      "scaling_policy": "Start at 3/day across all formats. Consider 5/day only after at least 7 days of live public-post and account-quality checks; never 25/day automatically. No quality guarantee from frequency alone."
+      "scaling_policy": "At most 3/day while new content quality is unverified; consider 4-5/day only after multiple 50-90s clips pass individual full MP4, natural voice, licensed footage/music, nonduplication and live audience-quality checks. Never treat 25 ideas/day as 25 publishable videos."
     },
     "checklists": [
       "video_qa_ok",
@@ -99,7 +104,14 @@
       "no_creator_video_frames_or_screenshots_reused",
       "independent_original_storyboard_verified",
       "no_disguised_unlicensed_video_or_watermark_removal",
-      "global_idea_not_reproduced_as_original_creator_footage"
+      "global_idea_not_reproduced_as_original_creator_footage",
+      "northern_vietnamese_voice_intelligibility_review",
+      "soundtrack_matches_each_scene",
+      "voice_above_music_and_sfx",
+      "no_robotic_espeak_voice",
+      "real_licensed_ambient_sound_or_original_sfx",
+      "no_unverified_viral_label",
+      "duration_50_to_90_seconds"
     ],
     "human_first_style": {
       "creative_goal": "Tự nhiên như vlog/phóng sự quay thật; ưu tiên hình ảnh có người, hoạt động và cảnh đời sống, không làm slideshow chữ hoặc clip AI giả thực tế.",
@@ -147,6 +159,19 @@
       ],
       "separate_metadata_from_assets": true,
       "reference_catalog": "series/broad_inspiration_24_topics.json"
+    },
+    "audio_quality": {
+      "target": "Lời thuyết minh như trò chuyện thực, rõ ràng, có ngữ điệu; ưu tiên giọng nam phổ thông miền Bắc",
+      "permitted_narration": "Người thật thu âm được phép hoặc TTS chất lượng cao có quyền thương mại; không sao chép/giả mạo giọng cá nhân",
+      "no_robotic_voice": "Không dùng eSpeak, giọng méo/đều cứng/đọc sai dấu cho bản đăng",
+      "delivery": "Câu ngắn; tốc độ vừa; dừng trước và sau hướng dẫn; nhấn đúng từ khóa; không phóng đại tin nóng",
+      "music": "Original/verified commercial-use music, mixed at least ~12 dB below voice while spoken, automatic ducking",
+      "ambience": "Natural location ambience or actual captured device sounds where licensed and relevant; no fabricated emergency sound to suggest real footage",
+      "sfx": "Subtle exact-timed clicks, whooshes and confirmations, not repeated nonstop",
+      "qa": "Editor listens on phone speakers and earphones at moderate volume; fail if words unclear, mispronounced or music masks narration",
+      "tts_transparency": "Never claim AI voice was recorded by a real human; disclose synthetic content when platform rules require it",
+      "audio_peak": "Final limiter at -1 dBTP; target integrated loudness suitable for social playback without clipping, checked with actual meter",
+      "final_video": "Narration, screenshots, arrows, captions and music must synchronize; final 50-90s MP4 reviewed before approval"
     }
   },
   "approval_policy": "NO video in MX queue may be published until all checks pass, QA flags are true and associated actual MP4 exists. Content drafts do not represent publishing authorization.",
