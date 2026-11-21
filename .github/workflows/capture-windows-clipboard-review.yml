@@ -42,6 +42,17 @@ jobs:
               image.save(output / (name + ".png"))
               return image
 
+          setup = snap("00-runner-desktop")
+          if setup.size == (1024, 768) and all(
+              setup.getpixel((x, y))[2] > 120 and setup.getpixel((x, y))[0] < 40
+              for x, y in ((560, 375), (560, 598), (829, 657))
+          ):
+              # On this disposable runner, opt out of optional location and typing telemetry.
+              ui.click(570, 375)
+              ui.click(570, 598)
+              ui.click(865, 653)
+              time.sleep(2)
+              snap("00-privacy-next")
           subprocess.Popen(["notepad.exe"])
           time.sleep(3)
           ui.hotkey("win", "up")
