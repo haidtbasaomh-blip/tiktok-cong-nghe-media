@@ -119,8 +119,16 @@ jobs:
               after = snap("demo-02-turn-on")
               x, y = panel_origin(before, after)
           ui.click(x + 180, y + 319)
-          time.sleep(2)
+          time.sleep(3)
+          snap("demo-02-after-enable")
           ui.press("escape")
+
+          def clipboard_text():
+              return subprocess.check_output(
+                  ["powershell", "-NoProfile", "-Command", "Get-Clipboard -Raw"],
+                  text=True,
+              ).strip()
+
           ui.click(105, 120)
           ui.hotkey("ctrl", "home")
           ui.keyDown("shift")
@@ -128,6 +136,8 @@ jobs:
           ui.keyUp("shift")
           snap("demo-03-select-first")
           ui.hotkey("ctrl", "c")
+          if clipboard_text() != "Bao cao hom nay":
+              raise RuntimeError("The first Notepad selection did not reach the clipboard")
           ui.press("down")
           ui.press("home")
           ui.keyDown("shift")
@@ -135,7 +145,8 @@ jobs:
           ui.keyUp("shift")
           snap("demo-04-select-second")
           ui.hotkey("ctrl", "c")
-          time.sleep(.7)
+          if clipboard_text() != "Kiem tra thiet bi":
+              raise RuntimeError("The second Notepad selection did not reach the clipboard")
           ui.hotkey("ctrl", "end")
 
           def restore_notepad():
@@ -168,6 +179,7 @@ jobs:
               ui.hotkey("win", "v")
               record(1.4, frames)
               history = ImageGrab.grab().convert("RGB")
+              history.crop((0, 0, 1024, 690)).save(output / f"demo-diagnostics-history-{offset}.png")
               try:
                   px, py = panel_origin(blank, history)
               except (RuntimeError, TypeError):
@@ -181,6 +193,7 @@ jobs:
               ui.click()
               record(1.15, frames)
               result = ImageGrab.grab().convert("RGB")
+              result.crop((0, 0, 1024, 690)).save(output / f"demo-diagnostics-result-{offset}.png")
               ui.press("escape")
               if user32.GetForegroundWindow() != hwnd:
                   continue
