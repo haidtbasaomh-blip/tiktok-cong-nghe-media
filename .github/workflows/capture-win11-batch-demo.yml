@@ -236,18 +236,17 @@ jobs:
                   maximize()
                   time.sleep(8)
                   save_proof(folder, "storage")
-                  if not locate("Temporary files") and locate("Show more categories"):
-                      click_control("Show more categories")
-                      time.sleep(3)
-                      save_proof(folder, "categories")
-                  for _ in range(5):
-                      if locate("Temporary files"):
-                          break
-                      ui.moveTo(826, 490)
-                      ui.scroll(-2)
-                      time.sleep(.5)
-                  click_control("Temporary files", timeout=15)
-                  time.sleep(5)
+                  if tuple(ui.size()) != (1024, 768):
+                      raise RuntimeError("Unexpected demo desktop size for the Storage capture")
+                  # The demo image displays its Temporary files tile at x325–1002, y208–282.
+                  ui.moveTo(460, 237, .5)
+                  time.sleep(.5)
+                  ui.click()
+                  time.sleep(1)
+                  if "Settings" not in foreground_title():
+                      raise RuntimeError("Settings lost the foreground during capture")
+                  save_proof(folder, "temporary-files-opening")
+                  time.sleep(13)
                   save_proof(folder, "temporary-files")
                   time.sleep(1)
           
@@ -276,7 +275,7 @@ jobs:
           
           prepare()
           summary = {}
-          for name, capture in [("05-storage", storage), ("03-startup-apps", startup)]:
+          for name, capture in [("05-storage", storage)]:
               folder = OUTPUT / name
               folder.mkdir(exist_ok=True)
               try:
