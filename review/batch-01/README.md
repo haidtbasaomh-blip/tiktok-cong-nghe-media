@@ -14,4 +14,6 @@ Kiểm tra mô phỏng phần mô tả mở với vùng dưới từ y=900, và 
 
 Ba lời đọc đã có trong [kịch bản](https://github.com/haidtbasaomh-blip/pc-gia-tot/blob/viglacera-review-20261122/reports/tiktok-batch-5-windows-20261122.md). Ba clip gốc không có track âm thanh. Ba bản mới xuất bản hình trước, chưa có lời dẫn Anh Khôi, nhạc nền hoặc tiếng thao tác. Ba bản ráp cũ vẫn lưu để đối chiếu.
 
+Đã chuẩn bị [nhạc nền 58 giây](WIN11_BATCH01_NHAC_NEN_58_GIAY.m4a) để phối dưới lời dẫn cho ba bản quay thật. Bản nhạc được tạo riêng và lưu tách khỏi MP4; ba MP4 quay thật hiện chưa có âm thanh. Hai MP4 v2 có AAC stereo. Cả năm bản giải mã được ở 720×1280, 58 giây. Chưa nghe trên loa điện thoại hoặc kiểm tra phụ đề trong TikTok thật.
+
 Không tạo lịch hay bài đăng TikTok. Giữ `PUBLISH_ENABLED=false` và `DRY_RUN=true`. AUTO 4 KÊNH theo dõi riêng ở mốc 71/117.
