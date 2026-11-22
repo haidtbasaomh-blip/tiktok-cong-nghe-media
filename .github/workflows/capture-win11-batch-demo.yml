@@ -54,7 +54,7 @@ jobs:
               if ($info.IsOffscreen -or -not $info.IsEnabled -or -not $info.Name) { continue }
               $name = $info.Name.Trim()
               if ($name -ieq $Label) { $rank = 0 }
-              elseif ($name.StartsWith($Label + ' ', [StringComparison]::OrdinalIgnoreCase)) { $rank = 10 }
+              elseif ($name.StartsWith($Label, [StringComparison]::OrdinalIgnoreCase)) { $rank = 10 }
               else { continue }
               $type = $info.ControlType.ProgrammaticName
               if ($type -match '(Button|ListItem|TabItem|DataItem|Hyperlink|TreeItem)$') { $rank -= 2 }
@@ -172,8 +172,10 @@ jobs:
                   save_proof(folder, "startup-list")
                   candidate = locate("Demo Startup App") or locate("notepad")
                   if candidate:
-                      click_control(candidate["name"])
-                      click_control("Disable", timeout=7)
+                      ui.moveTo(130, candidate["y"], .35)
+                      ui.click()
+                      time.sleep(.7)
+                      click_control("Disable", timeout=12)
                       time.sleep(1)
                       save_proof(folder, "disabled")
                   else:
@@ -219,6 +221,11 @@ jobs:
           
           
           def storage(folder):
+              print(ps("Get-Service StorSvc | Select-Object Name,Status,StartType | Format-List; "
+                       "$svc=Get-Service StorSvc; if ($svc.StartType -eq 'Disabled') "
+                       "{ Set-Service StorSvc -StartupType Manual }; Start-Service StorSvc -ErrorAction Continue; "
+                       "Get-Volume -DriveLetter C | Select-Object DriveLetter,Size,SizeRemaining | Format-List"), flush=True)
+              time.sleep(6)
               with Recording(folder):
                   time.sleep(.7)
                   ui.hotkey("win", "r")
@@ -227,9 +234,12 @@ jobs:
                   ui.press("enter")
                   wait_title("Settings")
                   maximize()
-                  click_control("Show more categories", timeout=30)
-                  time.sleep(1.5)
+                  time.sleep(8)
                   save_proof(folder, "storage")
+                  if not locate("Temporary files") and locate("Show more categories"):
+                      click_control("Show more categories")
+                      time.sleep(3)
+                      save_proof(folder, "categories")
                   for _ in range(5):
                       if locate("Temporary files"):
                           break
@@ -266,7 +276,7 @@ jobs:
           
           prepare()
           summary = {}
-          for name, capture in [("03-startup-apps", startup), ("04-snipping-tool", snip), ("05-storage", storage)]:
+          for name, capture in [("05-storage", storage), ("03-startup-apps", startup)]:
               folder = OUTPUT / name
               folder.mkdir(exist_ok=True)
               try:
