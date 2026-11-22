@@ -170,9 +170,9 @@ jobs:
                   click_control("Startup apps")
                   time.sleep(1.5)
                   save_proof(folder, "startup-list")
-                  candidate = locate("Demo Startup App")
+                  candidate = locate("Demo Startup App") or locate("notepad")
                   if candidate:
-                      click_control("Demo Startup App")
+                      click_control(candidate["name"])
                       click_control("Disable", timeout=7)
                       time.sleep(1)
                       save_proof(folder, "disabled")
@@ -199,10 +199,10 @@ jobs:
                   time.sleep(1.7)
                   save_proof(folder, "toolbar")
                   ui.moveTo(10, 70, .35)
-                  ui.dragTo(580, 253, 1.3)
+                  ui.dragTo(580, 201, 1.3)
                   time.sleep(1.6)
                   bitmap = ImageGrab.grabclipboard()
-                  if not isinstance(bitmap, Image.Image) or abs(bitmap.width - 570) > 12 or abs(bitmap.height - 183) > 12:
+                  if not isinstance(bitmap, Image.Image) or abs(bitmap.width - 570) > 12 or abs(bitmap.height - 131) > 12:
                       raise RuntimeError("Clipboard does not contain the expected rectangular screenshot")
                   actual = bitmap.convert("RGB")
                   actual.save(folder / "proof-clipboard.jpg", quality=95)
@@ -210,7 +210,10 @@ jobs:
                   clipboard_file = OUTPUT.parent / "SnipResult.png"
                   actual.save(clipboard_file)
                   os.startfile(clipboard_file)
-                  time.sleep(3)
+                  wait_title("SnipResult")
+                  maximize()
+                  ui.moveTo(614, 325)
+                  time.sleep(1.5)
                   save_proof(folder, "result")
                   time.sleep(1)
           
@@ -224,9 +227,16 @@ jobs:
                   ui.press("enter")
                   wait_title("Settings")
                   maximize()
-                  time.sleep(2)
+                  click_control("Show more categories", timeout=30)
+                  time.sleep(1.5)
                   save_proof(folder, "storage")
-                  click_control("Temporary files", timeout=24)
+                  for _ in range(5):
+                      if locate("Temporary files"):
+                          break
+                      ui.moveTo(826, 490)
+                      ui.scroll(-2)
+                      time.sleep(.5)
+                  click_control("Temporary files", timeout=15)
                   time.sleep(5)
                   save_proof(folder, "temporary-files")
                   time.sleep(1)
@@ -288,6 +298,8 @@ jobs:
         with:
           name: win11-raw-frames
           path: frames
+      - name: Install FFmpeg
+        run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y ffmpeg)
       - name: Encode and verify the original captures
         run: |
           set -euo pipefail
