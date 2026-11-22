@@ -43,14 +43,7 @@ jobs:
           param([string]$Label)
           Add-Type -AssemblyName UIAutomationClient
           Add-Type -AssemblyName UIAutomationTypes
-          Add-Type @'
-          using System;
-          using System.Runtime.InteropServices;
-          public static class ActiveWindow {
-              [DllImport("user32.dll")]
-              public static extern IntPtr GetForegroundWindow();
-          }
-          '@
+          Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public static class ActiveWindow { [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow(); }'
           $root = [Windows.Automation.AutomationElement]::FromHandle([ActiveWindow]::GetForegroundWindow())
           $elements = $root.FindAll([Windows.Automation.TreeScope]::Descendants,
               [Windows.Automation.Condition]::TrueCondition)
