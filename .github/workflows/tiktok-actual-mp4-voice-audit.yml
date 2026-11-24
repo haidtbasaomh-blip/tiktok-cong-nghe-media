@@ -1,0 +1,33 @@
+name: TikTok actual archived MP4 voice audit (review only)
+on:
+  push:
+    branches:
+      - 'qa/tiktok-voice-actual-mp4-20261124'
+    paths:
+      - 'tools/audit_actual_tiktok_voice.py'
+      - '.github/workflows/tiktok-actual-mp4-voice-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install open source media inspection tools
+        run: |
+          command -v ffmpeg >/dev/null || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+          command -v ffprobe
+      - name: Decode archived legacy and review MP4 and measure audio
+        run: python3 tools/audit_actual_tiktok_voice.py
+      - name: Archive evidence and listen-only review copies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiktok-actual-mp4-voice-audit
+          path: out/voice-audit-20261124/
+          retention-days: 30
+          if-no-files-found: error
