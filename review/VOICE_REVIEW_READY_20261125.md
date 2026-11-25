@@ -16,3 +16,9 @@ Kiểm tra Buffer 25/11: https://github.com/haidtbasaomh-blip/pc-gia-tot/actions
 - Kiểm tra phụ đề/vùng che trên màn hình TikTok, đúng thao tác và mũi tên.
 - Xác minh nhạc nền và quyền thương mại, đối chiếu SHA của đúng tệp được duyệt.
 - Chủ kênh duyệt cụ thể bản nào; không tự gán sign-off. Không đăng lặp CN010 hoặc tự đổi trạng thái Buffer.
+
+## Bổ sung đối chiếu nguồn âm thanh — 25/11/2026
+- Windows + V, SHA-256 `0d51da672891a48830250c6668016a2515bbd1bc39b9cf73b079fa997bbd778a`: workflow dựng gốc [44905430563](https://github.com/haidtbasaomh-blip/tiktok-cong-nghe-media/actions/runs/44905430563) tạo lời bằng preset Anh Khôi và tạo toàn bộ nhạc/âm báo bằng các sóng sin, bao biên suy giảm trong mã Python; phối `voice_track + music`, không sử dụng tệp nhạc bên thứ ba. [Mã workflow](../.github/workflows/rebuild-windows-v-review.yml).
+- Workflow lưu bản quay thật [44908431720](https://github.com/haidtbasaomh-blip/tiktok-cong-nghe-media/actions/runs/44908431720) kiểm tra MD5 của luồng AAC cũ/mới trùng nhau trước khi lưu. Kiểm tra trực tiếp lại ở [45427429365](https://github.com/haidtbasaomh-blip/tiktok-cong-nghe-media/actions/runs/45427429365) cho kết quả audio packet MD5 `19effb4009c93d76630ec61e5f1535ab`, `matchesLicensedPresetSourceAudioPackets=true`. Do đó nguồn nhạc tự tạo của bản dựng gốc được liên kết tới đúng tệp quay thật đã kiểm tra.
+- CN010 winver: tài liệu ghi lời Anh Khôi và nhạc nền; chưa có mã dựng hoặc luồng âm thanh gốc để chứng minh nguồn nhạc. Không áp dụng bằng chứng của Windows + V sang CN010.
+- Giữ chốt nghe trực tiếp, duyệt đúng tệp và kiểm tra phát âm, hình ảnh, bản quyền preset theo điều khoản của nhà phát triển trước khi đăng. Không đổi cờ approved, không lập lịch hoặc đăng lại CN010.
