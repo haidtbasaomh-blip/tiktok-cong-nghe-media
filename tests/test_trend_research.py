@@ -2,6 +2,9 @@
 import importlib.util
 import unittest
 from pathlib import Path
+from unittest.mock import patch
+from urllib.error import HTTPError
+from email.message import Message
 
 def load(name, path):
     spec=importlib.util.spec_from_file_location(name,Path(path))
@@ -59,6 +62,28 @@ class TrendResearchTests(unittest.TestCase):
         self.assertTrue(v["human_audio_review_before_post"])
         self.assertIn("eSpeak",v["no_cheap_robot_voice"])
         self.assertTrue(d["asset_rights_verification_needed"])
+
+    def test_transient_timeout_recovers_once(self):
+        with patch.object(discover,"collect",side_effect=[TimeoutError(),[{"id":"recovered"}]]) as fn, patch.object(discover.time,"sleep"):
+            result=discover.collect_with_retry({"tag":"test"})
+        self.assertEqual(fn.call_count,2)
+        self.assertEqual(result,{"tag":"test","rows":[{"id":"recovered"}],"attempts":2,"error_type":None})
+
+    def test_persistent_timeout_is_disclosed(self):
+        with patch.object(discover,"collect",side_effect=TimeoutError()) as fn, patch.object(discover.time,"sleep"):
+            result=discover.collect_with_retry({"tag":"test"})
+        self.assertEqual(fn.call_count,2)
+        self.assertEqual(result["error_type"],"TimeoutError")
+        self.assertEqual(result["attempts"],2)
+
+    def test_rate_limit_and_denial_not_retried(self):
+        for status in (403,429):
+            err=HTTPError("https://example.org/rss",status,"",Message(),None)
+            with patch.object(discover,"collect",side_effect=err) as fn, patch.object(discover.time,"sleep"):
+                result=discover.collect_with_retry({"tag":"test"})
+            self.assertEqual(fn.call_count,1)
+            self.assertEqual(result["attempts"],1)
+            self.assertEqual(result["error_type"],"HTTPError")
 
 if __name__=="__main__":
     unittest.main(verbosity=2)
