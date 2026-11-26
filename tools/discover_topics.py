@@ -14,6 +14,9 @@ import json
 import re
 import urllib.parse
 import urllib.request
+import urllib.error
+import time
+from concurrent.futures import ThreadPoolExecutor
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -99,17 +102,39 @@ def collect(feed: dict) -> list[dict]:
         if len(out)>=LIMIT_PER_FEED:break
     return out
 
+def collect_with_retry(feed: dict) -> dict:
+    """At most one retry for transient transport/server errors.
+    Do not retry access denial or rate limiting. No alternate unverified feeds."""
+    for attempt in (1, 2):
+        try:
+            return {"tag":feed["tag"], "rows":collect(feed), "attempts":attempt, "error_type":None}
+        except Exception as exc:
+            retryable = isinstance(exc, TimeoutError)
+            if isinstance(exc, urllib.error.HTTPError):
+                retryable = exc.code in (500,502,503,504) and not exc.headers.get("Retry-After")
+            elif isinstance(exc, urllib.error.URLError):
+                retryable = isinstance(exc.reason, TimeoutError)
+            if attempt == 1 and retryable:
+                time.sleep(2)
+                continue
+            return {"tag":feed["tag"], "rows":[], "attempts":attempt, "error_type":type(exc).__name__}
+    raise AssertionError("Unreachable retry state")
+
 def main() -> None:
     config=json.loads(CONFIG.read_text(encoding="utf-8"))
-    rows=[]; failures=[]
-    for feed in config["feeds"]:
-        try:
-            data=collect(feed)
-            rows.extend(data)
-            print("FEED_OK:",feed["tag"],"candidates:",len(data),flush=True)
-        except (Exception) as exc:
-            failures.append({"tag":feed["tag"],"error_type":type(exc).__name__})
-            print("FEED_ERROR:",feed["tag"],type(exc).__name__,flush=True)
+    rows=[]; failures=[]; recovered=[]
+    # Bounded concurrency avoids serial timeout starvation; map retains source order.
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        outcomes=list(pool.map(collect_with_retry,config["feeds"]))
+    for result in outcomes:
+        tag=result["tag"]
+        if result["error_type"]:
+            failures.append({"tag":tag,"error_type":result["error_type"],"attempts":result["attempts"]})
+            print("FEED_ERROR:",tag,result["error_type"],"attempts:",result["attempts"],flush=True)
+        else:
+            rows.extend(result["rows"])
+            if result["attempts"]==2:recovered.append(tag)
+            print("FEED_OK:",tag,"candidates:",len(result["rows"]),"attempts:",result["attempts"],flush=True)
     if not rows:raise SystemExit("NO_FRESH_RSS_METADATA_CAPTURED; NO_PUBLISHING")
     seen=set();unique=[]
     for row in rows:
@@ -119,11 +144,12 @@ def main() -> None:
         "last_collected_utc":dt.datetime.now(dt.timezone.utc).isoformat(),
         "items":unique,
         "feed_failures":failures,
+        "recovered_after_retry":recovered,
         "publish_permitted":False,
         "note":"Research metadata ONLY. No articles copied. No assets acquired. No videos published."
     }
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("RESEARCH_CANDIDATES:",len(unique),"FAILED_FEEDS:",len(failures),"PUBLISH_PERMITTED: false")
+    print("RESEARCH_CANDIDATES:",len(unique),"FAILED_FEEDS:",len(failures),"RECOVERED_AFTER_RETRY:",len(recovered),"PUBLISH_PERMITTED: false")
 if __name__=="__main__":
     main()
