@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:07,000
+Cần gửi ảnh một lỗi máy tính? Đừng chụp cả màn hình nếu chỉ cần một vùng nhỏ.
+
+2
+00:00:07,000 --> 00:00:18,000
+Nhấn phím Windows, Shift và chữ ét. Chọn chế độ hình chữ nhật trên thanh công cụ.
+
+3
+00:00:18,000 --> 00:00:31,000
+Kéo chuột quanh phần muốn chụp. Nhớ để đủ tiêu đề và nội dung lỗi, nhưng bỏ những thông tin không cần thiết.
+
+4
+00:00:31,000 --> 00:00:46,000
+Ảnh được đưa vào bảng tạm. Bạn có thể dán bằng Control V, hoặc mở thông báo của Snipping Tool để kiểm tra rồi lưu.
+
+5
+00:00:46,000 --> 00:00:58,000
+Trước khi gửi, kiểm tra lại ảnh. Không để lộ tên người dùng, số hồ sơ hay thông tin riêng. Chỉ gửi đúng phần người nhận cần xem.

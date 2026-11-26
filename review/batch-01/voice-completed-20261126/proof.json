@@ -1,0 +1,227 @@
+{
+  "mode": "REVIEW_ONLY",
+  "videos": [
+    {
+      "id": "WIN11_03_STARTUP_APPS",
+      "input": "WIN11_03_STARTUP_APPS_58_GIAY_QUAY_THAT.mp4",
+      "inputGitBlob": "dce712d67200c55178ac2640e555b37ce9f8cbe6",
+      "inputSha256": "1b17346618c38232a16bf4f892f88b30ab90f9aa469eec4e0653ff3553f6eb93",
+      "videoPacketMd5": "MD5=9ccacfa97700a2b5d51d514b0c5282a8",
+      "videoPacketsUnchanged": true,
+      "output": "WIN11_03_STARTUP_APPS_58_GIAY_GIONG_ANH_KHOI_CHO_DUYET.mp4",
+      "sha256": "42620a439e3618a0e0b4138270ac979eaf57d0ed6a7c4196d93a05f1779e4525",
+      "seconds": 58.0,
+      "resolution": "720x1280",
+      "voicePreset": "Anh Khôi",
+      "ttsSdk": "vieneu==3.7.1",
+      "voiceLicense": "Apache-2.0; bundled preset commercial use per model card",
+      "voiceLicenseUrl": "https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo",
+      "sourceReference": "https://support.microsoft.com/en-us/windows/experience/startup-boot/configure-startup-applications-in-windows",
+      "music": "original generated sine-note bed, no stock music",
+      "sourceMusicReused": false,
+      "voiceOverMusicDb": 38.26,
+      "integratedLufs": -17.54,
+      "truePeakDbTP": -2.18,
+      "sceneProof": [
+        {
+          "scene": 1,
+          "start": 0,
+          "end": 6,
+          "rawVoiceSeconds": 3.737,
+          "voiceSeconds": 3.737,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 2,
+          "start": 6,
+          "end": 16,
+          "rawVoiceSeconds": 3.598,
+          "voiceSeconds": 3.598,
+          "tempo": 1,
+          "voiceRmsDb": -20.25
+        },
+        {
+          "scene": 3,
+          "start": 16,
+          "end": 28,
+          "rawVoiceSeconds": 5.913,
+          "voiceSeconds": 5.913,
+          "tempo": 1,
+          "voiceRmsDb": -19.99
+        },
+        {
+          "scene": 4,
+          "start": 28,
+          "end": 45,
+          "rawVoiceSeconds": 7.599,
+          "voiceSeconds": 7.599,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 5,
+          "start": 45,
+          "end": 58,
+          "rawVoiceSeconds": 7.419,
+          "voiceSeconds": 7.419,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        }
+      ],
+      "status": "WAITING_HUMAN_LISTEN_AND_VISUAL_REVIEW",
+      "approvedForPublication": false,
+      "approvedForBuffer": false
+    },
+    {
+      "id": "WIN11_04_SNIPPING_TOOL",
+      "input": "WIN11_04_SNIPPING_TOOL_58_GIAY_QUAY_THAT.mp4",
+      "inputGitBlob": "f814eb9dad10295b4a43d963d1184c0a6a0a88a6",
+      "inputSha256": "fde2d3ca8b6a9204ee88a275df913aa95e5421ce99e8a47cbd9ba01fc8f6cbc2",
+      "videoPacketMd5": "MD5=e0ab0f96c84a5f938c5a04c4beb6390c",
+      "videoPacketsUnchanged": true,
+      "output": "WIN11_04_SNIPPING_TOOL_58_GIAY_GIONG_ANH_KHOI_CHO_DUYET.mp4",
+      "sha256": "4d5757a5fc0acdd589fa347f3c5486e723801052a9db9e688d1fa508417c741b",
+      "seconds": 58.0,
+      "resolution": "720x1280",
+      "voicePreset": "Anh Khôi",
+      "ttsSdk": "vieneu==3.7.1",
+      "voiceLicense": "Apache-2.0; bundled preset commercial use per model card",
+      "voiceLicenseUrl": "https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo",
+      "sourceReference": "https://support.microsoft.com/en-us/windows/apps/use-snipping-tool-to-capture-screenshots",
+      "music": "original generated sine-note bed, no stock music",
+      "sourceMusicReused": false,
+      "voiceOverMusicDb": 38.22,
+      "integratedLufs": -17.67,
+      "truePeakDbTP": -2.19,
+      "sceneProof": [
+        {
+          "scene": 1,
+          "start": 0,
+          "end": 7,
+          "rawVoiceSeconds": 3.943,
+          "voiceSeconds": 3.943,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 2,
+          "start": 7,
+          "end": 18,
+          "rawVoiceSeconds": 4.303,
+          "voiceSeconds": 4.303,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 3,
+          "start": 18,
+          "end": 31,
+          "rawVoiceSeconds": 5.36,
+          "voiceSeconds": 5.36,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 4,
+          "start": 31,
+          "end": 46,
+          "rawVoiceSeconds": 6.335,
+          "voiceSeconds": 6.335,
+          "tempo": 1,
+          "voiceRmsDb": -20.58
+        },
+        {
+          "scene": 5,
+          "start": 46,
+          "end": 58,
+          "rawVoiceSeconds": 6.56,
+          "voiceSeconds": 6.56,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        }
+      ],
+      "status": "WAITING_HUMAN_LISTEN_AND_VISUAL_REVIEW",
+      "approvedForPublication": false,
+      "approvedForBuffer": false
+    },
+    {
+      "id": "WIN11_05_STORAGE_TEMPORARY_FILES",
+      "input": "WIN11_05_STORAGE_TEMPORARY_FILES_58_GIAY_QUAY_THAT.mp4",
+      "inputGitBlob": "ce0c3781ab9006787b389fe369d2b54fdfe0c253",
+      "inputSha256": "3d5ef4f05fd0d228f3d3d8eff372211bf10de2e851ecc0a6b59d7637ec9c4056",
+      "videoPacketMd5": "MD5=a4e63972d5445f9666c6239c80565f54",
+      "videoPacketsUnchanged": true,
+      "output": "WIN11_05_STORAGE_TEMPORARY_FILES_58_GIAY_GIONG_ANH_KHOI_CHO_DUYET.mp4",
+      "sha256": "4f114d2e101aafb887025c1932521fe089d3b9de820c6f083d54a1b919969b62",
+      "seconds": 58.0,
+      "resolution": "720x1280",
+      "voicePreset": "Anh Khôi",
+      "ttsSdk": "vieneu==3.7.1",
+      "voiceLicense": "Apache-2.0; bundled preset commercial use per model card",
+      "voiceLicenseUrl": "https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo",
+      "sourceReference": "https://support.microsoft.com/en-us/windows/experience/storage-filemanagement/storage-settings-in-windows",
+      "music": "original generated sine-note bed, no stock music",
+      "sourceMusicReused": false,
+      "voiceOverMusicDb": 38.13,
+      "integratedLufs": -17.47,
+      "truePeakDbTP": -2.13,
+      "sceneProof": [
+        {
+          "scene": 1,
+          "start": 0,
+          "end": 7,
+          "rawVoiceSeconds": 4.0,
+          "voiceSeconds": 4.0,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 2,
+          "start": 7,
+          "end": 18,
+          "rawVoiceSeconds": 4.56,
+          "voiceSeconds": 4.56,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 3,
+          "start": 18,
+          "end": 31,
+          "rawVoiceSeconds": 5.28,
+          "voiceSeconds": 5.28,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 4,
+          "start": 31,
+          "end": 46,
+          "rawVoiceSeconds": 6.88,
+          "voiceSeconds": 6.88,
+          "tempo": 1,
+          "voiceRmsDb": -19.58
+        },
+        {
+          "scene": 5,
+          "start": 46,
+          "end": 58,
+          "rawVoiceSeconds": 6.698,
+          "voiceSeconds": 6.698,
+          "tempo": 1,
+          "voiceRmsDb": -19.82
+        }
+      ],
+      "status": "WAITING_HUMAN_LISTEN_AND_VISUAL_REVIEW",
+      "approvedForPublication": false,
+      "approvedForBuffer": false
+    }
+  ],
+  "completedAudioExports": 3,
+  "oldFilesModified": 0,
+  "published": 0,
+  "scheduled": 0,
+  "humanListeningVerified": false,
+  "actualTikTokOverlayVerified": false
+}

@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:06,000
+Vừa vào máy đã có nhiều ứng dụng tự mở? Kiểm tra mục khởi động trước nhé.
+
+2
+00:00:06,000 --> 00:00:16,000
+Nhấn Control, Shift và Escape cùng lúc để mở Task Manager.
+
+3
+00:00:16,000 --> 00:00:28,000
+Chọn Startup apps. Xem cột trạng thái và mức ảnh hưởng khi khởi động. Đừng tắt vội ứng dụng bạn chưa nhận ra.
+
+4
+00:00:28,000 --> 00:00:45,000
+Chọn ứng dụng cá nhân không cần tự mở, rồi chọn Disable. Giữ nguyên phần mềm bảo mật, trình điều khiển và công cụ cơ quan nếu chưa rõ chức năng.
+
+5
+00:00:45,000 --> 00:00:58,000
+Khi trạng thái là Disabled, ứng dụng không tự chạy ở lần đăng nhập sau. Muốn bật lại, chọn Enable. Bạn vẫn mở ứng dụng bằng tay bình thường.

@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:07,000
+Ổ C sắp đầy? Hãy kiểm tra mục nào chiếm nhiều dung lượng trước khi xóa.
+
+2
+00:00:07,000 --> 00:00:18,000
+Mở Settings, vào System, rồi chọn Storage. Chờ Windows tính xong dung lượng.
+
+3
+00:00:18,000 --> 00:00:31,000
+Nhìn các nhóm chiếm nhiều chỗ. Mở Temporary files để xem danh sách tệp tạm và dung lượng từng mục.
+
+4
+00:00:31,000 --> 00:00:46,000
+Đọc kỹ từng mô tả. Bỏ chọn Downloads nếu chưa kiểm tra thư mục đó. Xem cả Thùng rác và tổng dung lượng đã chọn trước khi dọn.
+
+5
+00:00:46,000 --> 00:00:58,000
+Đừng xóa ngay nếu chưa chắc dữ liệu nào cần giữ. Trên máy cơ quan, làm theo quy định lưu trữ trước khi bật chế độ tự dọn.
