@@ -12,7 +12,7 @@ concurrency:
 jobs:
   render:
     if: ${{ github.repository == 'haidtbasaomh-blip/tiktok-cong-nghe-media' && github.ref == 'refs/heads/win11-batch-5-review-20261122' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,10 @@ jobs:
           python-version: '3.12'
       - name: Install existing local free voice and rendering dependencies
         run: |
-          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
           python -m pip install 'vieneu==3.7.1'
       - name: Render three exact captured videos with narration and low music
         run: |
