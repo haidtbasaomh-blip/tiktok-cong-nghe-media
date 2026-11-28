@@ -18,7 +18,7 @@ Kênh: https://www.tiktok.com/@goccongnghetienich
 
 ## Nguyên tắc nghiệm thu trước khi mở tự động đăng MX
 
-1. Có MP4 9:16 ≥ 540×960, độ dài 24–35 giây, nhịp dựng, giọng đọc/âm thanh có quyền sử dụng.
+1. Có MP4 9:16 ≥ 540×960, độ dài 55–59 giây, giọng nam miền Bắc Anh Khôi có quyền sử dụng và nhạc nền nhỏ hơn lời dẫn. Xác nhận giọng, mức nhạc và SHA-256 của đúng tệp MP4 trong hồ sơ duyệt.
 2. Có hình ảnh minh họa hấp dẫn, phù hợp chủ đề, chữ quan trọng nằm vùng an toàn TikTok; không sử dụng video kiểu slide tĩnh che chữ.
 3. Có kịch bản viết mới, nội dung đã xác minh, ngày sự kiện rõ, thông tin nguồn còn truy cập được.
 4. Mỗi ảnh/video/nhạc bên thứ ba có giấy phép cho mục đích sử dụng, tác giả, đường dẫn, tệp kiểm tra và mã checksum; không giả mạo quyền sở hữu.
