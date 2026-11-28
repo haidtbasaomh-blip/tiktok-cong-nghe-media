@@ -6,8 +6,12 @@ TikTok/Buffer. Only an item with actual MP4 + cleared source licenses + source
 validation + scene/audio QC + explicit approval may be marked publish_ready.
 """
 from __future__ import annotations
+import hashlib
 import json
+import math
 import re
+import subprocess
+from fractions import Fraction
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -26,31 +30,52 @@ def is_https(url):
     except ValueError:
         return False
 
-def mp4_quality(path, min_sec=24, max_sec=35):
-    if not path.exists() or path.stat().st_size < 80000:
+def mp4_quality(path, duration_range):
+    if not path.is_file() or path.stat().st_size < 80000:
         return ["mp4_missing_or_too_small"]
-    issues=[]
     try:
-        import imageio_ffmpeg
-        reader=imageio_ffmpeg.read_frames(str(path))
-        try:
-            result=next(reader)
-        finally:
-            reader.close()
-        width,height=map(int,result.get("size") or (0,0))
-        if width<540 or height<960 or height<=width:
-            issues.append("not_portrait_9_16_hd")
-        duration=float(result.get("duration") or 0)
-        if not min_sec<=duration<=max_sec:
-            issues.append("duration_outside_24_35")
-        if float(result.get("fps") or 0)<24:
-            issues.append("framerate_below_24fps")
-    except (OSError,ValueError,RuntimeError):
-        issues.append("mp4_probe_unavailable")
+        probe = subprocess.run(
+            [
+                "ffprobe", "-v", "error", "-show_entries",
+                "stream=codec_type,width,height,avg_frame_rate,duration:format=duration",
+                "-of", "json", str(path),
+            ],
+            capture_output=True, text=True, check=True, timeout=15,
+        )
+        metadata = json.loads(probe.stdout)
+        streams = metadata["streams"]
+        video = next(stream for stream in streams if stream["codec_type"] == "video")
+        width, height = video["width"], video["height"]
+        duration = float(metadata["format"]["duration"])
+        video_duration = float(video["duration"])
+        fps = Fraction(video["avg_frame_rate"])
+    except (KeyError, OSError, StopIteration, TypeError, ValueError, ZeroDivisionError, subprocess.SubprocessError):
+        return ["mp4_probe_unavailable"]
+
+    minimum, maximum = duration_range
+    issues = []
+    if width < 540 or height < 960 or width * 16 != height * 9:
+        issues.append("not_portrait_9_16_hd")
+    if not (minimum <= duration <= maximum and minimum <= video_duration <= maximum):
+        issues.append(f"duration_outside_{minimum}_{maximum}")
+    if fps < 24:
+        issues.append("framerate_below_24fps")
+    if not any(stream["codec_type"] == "audio" and usable_audio(stream) for stream in streams):
+        issues.append("audio_track_missing")
     return issues
+
+
+def usable_audio(stream):
+    try:
+        duration = float(stream["duration"])
+    except (KeyError, TypeError, ValueError):
+        return False
+    return math.isfinite(duration) and duration > 0
+
 
 def main():
     cfg=json.loads(CONFIG.read_text(encoding="utf8"))
+    duration_range = cfg["editorial"]["target_seconds"]
     drafts=json.loads(DRAFTS.read_text(encoding="utf8"))
     rights=json.loads(RIGHTS.read_text(encoding="utf8")) if RIGHTS.exists() else {"candidates":[]}
     approvals=json.loads(APPROVALS.read_text(encoding="utf8")) if APPROVALS.exists() else {"approved":[]}
@@ -68,10 +93,19 @@ def main():
         if not is_https(obj.get("source","")):
             issues.append("missing_fact_source")
         asset=MEDIA/(vid+".mp4")
-        issues+=mp4_quality(asset)
+        issues += mp4_quality(asset, duration_range)
         approval=approved.get(vid) or {}
         if approval.get("status")!="approved":
             issues.append("not_editorially_approved")
+        elif asset.is_file():
+            with asset.open("rb") as video_file:
+                actual_hash = hashlib.file_digest(video_file, "sha256").hexdigest()
+            if approval.get("expected_video_sha256") != actual_hash:
+                issues.append("approval_video_checksum_mismatch")
+        if approval.get("anh_khoi_narration_verified") is not True:
+            issues.append("anh_khoi_narration_not_verified")
+        if approval.get("voice_above_music_verified") is not True:
+            issues.append("voice_music_balance_not_verified")
         if approval.get("visual_qa_pass") is not True:
             issues.append("visual_qa_not_approved")
         if approval.get("original_script_pass") is not True:

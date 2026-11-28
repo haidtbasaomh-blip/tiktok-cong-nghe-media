@@ -1,6 +1,11 @@
 name: TikTok mixed-content editorial preflight (read-only)
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - series/editorial_safety_policy.json
+      - tools/verify_mixed_preflight.py
+      - .github/workflows/verify-tiktok-mixed.yml
   push:
     paths:
       - series/editorial_safety_policy.json
@@ -17,8 +22,10 @@ jobs:
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
-      - name: Install portable FFmpeg metadata checker
-        run: python3 -m pip install --user imageio-ffmpeg
+      - name: Check FFprobe and Python versions
+        run: |
+          ffprobe -version
+          python3 --version
       - name: Perform fail-closed rights, publication, and visual preflight
         run: python3 tools/verify_mixed_preflight.py
       - name: Save report without publishing anything

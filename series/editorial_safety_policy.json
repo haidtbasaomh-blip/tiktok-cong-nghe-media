@@ -24,8 +24,8 @@
   ],
   "editorial": {
     "target_seconds": [
-      50,
-      90
+      55,
+      59
     ],
     "visual_principles": [
       "Visual B-roll or original animated demonstrations matching the topic",
@@ -86,7 +86,7 @@
       "zero_autopublish_on_push": true,
       "never_duplicate_already_posted": true,
       "hard_max_daily_posts": 5,
-      "scaling_policy": "At most 3/day while new content quality is unverified; consider 4-5/day only after multiple 50-90s clips pass individual full MP4, natural voice, licensed footage/music, nonduplication and live audience-quality checks. Never treat 25 ideas/day as 25 publishable videos."
+      "scaling_policy": "At most 3/day while new content quality is unverified; consider 4-5/day only after multiple 55-59s clips pass individual full MP4, natural voice, licensed footage/music, nonduplication and live audience-quality checks. Never treat 25 ideas/day as 25 publishable videos."
     },
     "checklists": [
       "video_qa_ok",
@@ -111,7 +111,7 @@
       "no_robotic_espeak_voice",
       "real_licensed_ambient_sound_or_original_sfx",
       "no_unverified_viral_label",
-      "duration_50_to_90_seconds"
+      "duration_55_to_59_seconds"
     ],
     "human_first_style": {
       "creative_goal": "Tự nhiên như vlog/phóng sự quay thật; ưu tiên hình ảnh có người, hoạt động và cảnh đời sống, không làm slideshow chữ hoặc clip AI giả thực tế.",
@@ -171,7 +171,7 @@
       "qa": "Editor listens on phone speakers and earphones at moderate volume; fail if words unclear, mispronounced or music masks narration",
       "tts_transparency": "Never claim AI voice was recorded by a real human; disclose synthetic content when platform rules require it",
       "audio_peak": "Final limiter at -1 dBTP; target integrated loudness suitable for social playback without clipping, checked with actual meter",
-      "final_video": "Narration, screenshots, arrows, captions and music must synchronize; final 50-90s MP4 reviewed before approval"
+      "final_video": "Narration, screenshots, arrows, captions and music must synchronize; final 55-59s MP4 reviewed before approval"
     }
   },
   "approval_policy": "NO video in MX queue may be published until all checks pass, QA flags are true and associated actual MP4 exists. Content drafts do not represent publishing authorization.",
