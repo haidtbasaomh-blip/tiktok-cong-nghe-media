@@ -14,6 +14,8 @@
       "audio_license_checked": true,
       "facts_checked": true,
       "visual_and_audio_reviewed": true,
+      "anh_khoi_narration_verified": true,
+      "voice_above_music_verified": true,
       "no_duplicate": true,
       "publisher_authorized": true
     },
@@ -24,6 +26,7 @@
   "policies": [
     "Each approved video must have 2+ independent checks as appropriate",
     "Confirm original script, footage, voice licence, no unlicensed music, frame and audio QA",
+    "Check the exported MP4 is 9:16 and 55–59 seconds, with Anh Khôi narration louder than background music",
     "Never auto-populate signoff fields after rendering",
     "No duplicate Buffer/TikTok uploads",
     "Global posting cap shared with CN queue, currently 3/day",
